@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ page.title }} | {{ site.title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Main stylesheet -->
+
+  <link rel="stylesheet" href="{{ site.baseurl }}/style.css">
+</head>
+
+<body>
+  <header class="site-header">
+    <nav class="top-nav">
+      <a class="brand" href="{{ site.baseurl }}/">
+        <img src="{{ site.baseurl }}/assets/images/LabLOGO.png" alt="Piganelli Lab logo">
+        <span>The Piganelli Lab</span>
+      </a>
+
+```
+  <div class="nav-tabs">
+    <a href="{{ site.baseurl }}/">Home</a>
+    <a href="{{ site.baseurl }}/research.html">Research</a>
+    <a href="{{ site.baseurl }}/people.html">People</a>
+    <a href="{{ site.baseurl }}/publications.html">Publications</a>
+    <a href="{{ site.baseurl }}/gallery.html">Gallery</a>
+    <a href="{{ site.baseurl }}/lab-values.html">Lab Values</a>
+    <a href="{{ site.baseurl }}/contact.html">Contact</a>
+  </div>
+</nav>
+```
+
+  </header>
+
+  <main>
+    {{ content }}
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-card">
+      <p><strong>A Piganelli Lab Production</strong></p>
+      <p>Redox Immunology • T Cell Metabolism • Type 1 Diabetes</p>
+      <p>Indiana University School of Medicine</p>
+    </div>
+  </footer>
+</body>
+</html>
+
