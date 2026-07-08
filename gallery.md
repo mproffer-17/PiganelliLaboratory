@@ -173,7 +173,7 @@ A behind-the-scenes look at the Piganelli Lab — our science, our people, our a
 
   <div>
     <img src="assets/images/IUSM.png" alt="Indiana University School of Medicine">
-    <p><strong>Indiana University School of Medicine</strong></p>
+    <p><strong>IUSM</strong></p>
   </div>
 
   <div>
