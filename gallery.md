@@ -86,7 +86,7 @@ A behind-the-scenes look at the Piganelli Lab — our science, our people, our a
   </div>
 
   <div>
-    <img src="assets/images/Lab-PreMP.heic" alt="Lab photo before MP">
+    <img src="assets/images/Lab-PreMP.jpg" alt="Lab photo before MP">
     <p><strong>Lab Pre-MP</strong></p>
   </div>
 
