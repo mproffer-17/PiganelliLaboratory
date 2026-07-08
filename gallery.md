@@ -182,7 +182,7 @@ A behind-the-scenes look at the Piganelli Lab — our science, our people, our a
   </div>
 
   <div>
-    <img src="assets/images/CDMD.png" alt="Center for Diabetes and Metabolic Diseases">
+    <img src="assets/images/cdmd.png" alt="Center for Diabetes and Metabolic Diseases">
     <p><strong>CDMD</strong></p>
   </div>
 </div>
