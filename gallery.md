@@ -137,11 +137,6 @@ A behind-the-scenes look at the Piganelli Lab — our science, our people, our a
 ## Research in Action
 
 <div class="gallery-grid">
-
-  <div>
-    <img src="assets/images/mouse-house.png" alt="Mouse facility or mouse housing">
-    <p><strong>Mouse House</strong></p>
-  </div>
   
   <div>
     <img src="assets/images/bands.png" alt="Band-themed lab image">
@@ -166,16 +161,6 @@ A behind-the-scenes look at the Piganelli Lab — our science, our people, our a
   <div>
     <img src="assets/images/blood.png" alt="Blood sample or blood collection workflow">
     <p><strong>Blood Collection</strong></p>
-  </div>
-
-  <div>
-    <img src="assets/images/mice-meg.png" alt="Megan working with mice">
-    <p><strong>Mouse Work</strong></p>
-  </div>
-
-  <div>
-    <img src="assets/images/baby-mouse.png" alt="Baby mouse">
-    <p><strong>Baby Mouse</strong></p>
   </div>
 
 </div>
