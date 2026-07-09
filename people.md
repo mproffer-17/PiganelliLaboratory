@@ -2,7 +2,7 @@
 
 layout: default
 title: People
--------------
+---
 
 # Production Crew
 
