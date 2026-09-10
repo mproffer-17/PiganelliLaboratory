@@ -1,1 +1,272 @@
+---
+layout: default
+title: Autoimmune Arcade
+---
 
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/game/arcade.css">
+
+<section class="aa-page" aria-labelledby="arcade-title">
+  <div class="aa-hero">
+    <div>
+      <span class="aa-kicker">A Piganelli Lab Interactive</span>
+      <h1 id="arcade-title">Autoimmune Arcade</h1>
+      <p class="aa-subtitle">Beta Cell Breakdown</p>
+      <p class="aa-lede">
+        Guide an autoreactive CD4+ T cell through a pancreatic beta cell, collect beta cell
+        antigens, evade immune regulatory cells, and use inflammatory cytokine boosts to
+        drive the response toward beta cell destruction.
+      </p>
+    </div>
+
+    <div class="aa-science-note">
+      <strong>Educational arcade analogy</strong>
+      <span>
+        This game is a simplified visualization of immune concepts and is not a quantitative
+        model of type 1 diabetes pathogenesis.
+      </span>
+    </div>
+  </div>
+
+  <div class="aa-shell">
+    <div class="aa-hud" aria-label="Game status">
+      <div class="aa-stat">
+        <span class="aa-stat-label">Score</span>
+        <strong id="aa-score">000000</strong>
+      </div>
+
+      <div class="aa-stat">
+        <span class="aa-stat-label">High score</span>
+        <strong id="aa-high-score">000000</strong>
+      </div>
+
+      <div class="aa-stat aa-stat-wide">
+        <div class="aa-stat-heading">
+          <span class="aa-stat-label">T cell state</span>
+          <strong id="aa-activation-label">Naive</strong>
+        </div>
+        <div class="aa-meter" aria-hidden="true">
+          <span id="aa-activation-bar"></span>
+        </div>
+      </div>
+
+      <div class="aa-stat aa-stat-wide">
+        <div class="aa-stat-heading">
+          <span class="aa-stat-label">Beta cell function</span>
+          <strong id="aa-beta-label">100%</strong>
+        </div>
+        <div class="aa-meter aa-beta-meter" aria-hidden="true">
+          <span id="aa-beta-bar"></span>
+        </div>
+      </div>
+
+      <div class="aa-stat">
+        <span class="aa-stat-label">Lives</span>
+        <strong id="aa-lives" class="aa-lives" aria-label="3 T cell lives"></strong>
+      </div>
+
+      <div class="aa-stat">
+        <span class="aa-stat-label">Current antigen</span>
+        <strong id="aa-stage-label">IAPP-HIP</strong>
+      </div>
+    </div>
+
+    <div class="aa-game-frame">
+      <canvas
+        id="betaCellGame"
+        width="864"
+        height="672"
+        tabindex="0"
+        aria-label="Autoimmune Arcade maze game. Use arrow keys or WASD to move."
+      ></canvas>
+
+      <div id="aa-overlay" class="aa-overlay">
+        <div class="aa-overlay-card">
+          <span class="aa-overlay-kicker">AUTOIMMUNE ARCADE</span>
+          <h2 id="aa-overlay-title">Beta Cell Breakdown</h2>
+          <p id="aa-overlay-text">
+            Clear the beta cell antigen field while avoiding immune regulatory cells.
+            Cytokine bonus items temporarily amplify your T cell response.
+          </p>
+
+          <div id="aa-start-legend" class="aa-start-legend">
+            <span><i class="aa-dot aa-dot-iapp"></i>IAPP-HIP</span>
+            <span><i class="aa-dot aa-dot-chga"></i>ChgA-HIP</span>
+            <span><i class="aa-dot aa-dot-insb"></i>InsB:9-23</span>
+          </div>
+
+          <button id="aa-primary-button" class="aa-game-button" type="button">
+            Start experiment
+          </button>
+
+          <p class="aa-key-hint">
+            Move: Arrow keys / WASD &nbsp;•&nbsp;
+            Pause: P &nbsp;•&nbsp;
+            Sound: M
+          </p>
+        </div>
+      </div>
+
+      <div id="aa-stage-banner" class="aa-stage-banner" aria-live="polite"></div>
+    </div>
+
+    <div class="aa-control-row">
+      <button id="aa-pause" class="aa-small-button" type="button">
+        Pause
+      </button>
+
+      <button
+        id="aa-sound"
+        class="aa-small-button"
+        type="button"
+        aria-pressed="false"
+      >
+        Sound: on
+      </button>
+
+      <button id="aa-restart" class="aa-small-button" type="button">
+        Restart
+      </button>
+    </div>
+
+    <div class="aa-touch-controls" aria-label="Touch controls">
+      <button
+        class="aa-touch aa-up"
+        data-dir="up"
+        type="button"
+        aria-label="Move up"
+      >
+        ▲
+      </button>
+
+      <button
+        class="aa-touch aa-left"
+        data-dir="left"
+        type="button"
+        aria-label="Move left"
+      >
+        ◀
+      </button>
+
+      <button
+        class="aa-touch aa-down"
+        data-dir="down"
+        type="button"
+        aria-label="Move down"
+      >
+        ▼
+      </button>
+
+      <button
+        class="aa-touch aa-right"
+        data-dir="right"
+        type="button"
+        aria-label="Move right"
+      >
+        ▶
+      </button>
+    </div>
+  </div>
+
+  <section class="aa-guide" aria-labelledby="aa-guide-title">
+    <div class="aa-guide-heading">
+      <h2 id="aa-guide-title">The immunology behind the arcade</h2>
+      <span class="aa-kicker aa-guide-kicker">What the game represents</span>
+    </div>
+
+    <div class="aa-guide-grid">
+
+      <article class="aa-guide-card">
+        <canvas
+          id="aa-guide-tcell-canvas"
+          class="aa-guide-canvas"
+          width="300"
+          height="116"
+          aria-hidden="true"
+        ></canvas>
+
+        <h3>Autoreactive CD4+ T cell</h3>
+
+        <p>
+          You control the T cell. Antigen encounters and cytokine boosts raise its activation
+          state from <strong>Naive</strong> to <strong>Activated</strong>,
+          <strong>Expanded</strong>, and <strong>Effector</strong>.
+        </p>
+      </article>
+
+      <article class="aa-guide-card">
+        <canvas
+          id="aa-guide-antigen-canvas"
+          class="aa-guide-canvas"
+          width="300"
+          height="116"
+          aria-hidden="true"
+        ></canvas>
+
+        <h3>Beta cell antigens</h3>
+
+        <p>
+          Antigen dots are color coded exactly as they appear on the board:
+          <strong>IAPP-HIP</strong> is yellow,
+          <strong>ChgA-HIP</strong> is pink, and
+          <strong>InsB:9-23</strong> is blue.
+          Clearing all antigen dots reduces simulated beta cell function to 0%.
+        </p>
+      </article>
+
+      <article class="aa-guide-card">
+        <canvas
+          id="aa-guide-ghost-canvas"
+          class="aa-guide-canvas"
+          width="360"
+          height="126"
+          aria-hidden="true"
+        ></canvas>
+
+        <h3>Immune regulation</h3>
+
+        <p>
+          Regulatory T cells and suppressive or tolerogenic antigen presenting cells act as
+          the maze antagonists. Contact lowers activation and costs a T cell life.
+        </p>
+      </article>
+
+      <article class="aa-guide-card aa-guide-card-boosts">
+        <canvas
+          id="aa-guide-boost-canvas"
+          class="aa-guide-canvas aa-guide-boost-canvas"
+          width="420"
+          height="150"
+          aria-hidden="true"
+        ></canvas>
+
+        <h3>Inflammatory boosts</h3>
+
+        <p>
+          Cytokine bonus items temporarily increase T cell performance and make regulatory
+          enemies vulnerable. Their point values follow the classic escalating arcade bonus
+          progression.
+        </p>
+
+        <div class="aa-boost-points" aria-label="Cytokine bonus point values">
+          <span><strong>IL-2</strong> 100</span>
+          <span><strong>IL-12</strong> 300</span>
+          <span><strong>IFNγ</strong> 500</span>
+          <span><strong>IL-21</strong> 700</span>
+          <span><strong>IL-18</strong> 1,000</span>
+          <span><strong>TNFα</strong> 2,000</span>
+          <span><strong>IL-1β</strong> 3,000</span>
+          <span><strong>Type I IFN</strong> 5,000</span>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="aa-win-rule">
+      <strong>Win condition:</strong>
+      clear all beta cell antigen dots, reduce simulated beta cell function to 0%, and trigger
+      the final <span>DIABETES ONSET</span> sequence.
+    </div>
+  </section>
+</section>
+
+<script src="{{ site.baseurl }}/assets/game/arcade.js"></script>
