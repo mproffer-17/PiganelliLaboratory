@@ -2,7 +2,7 @@
   "use strict";
 
   /* =========================================================
-     AUTOIMMUNE ARCADE: BETA CELL BREAKDOWN — V4
+     AUTOIMMUNE ARCADE: BETA CELL BREAKDOWN — V5
      Performance build with:
      - fixed step tile movement
      - cached static beta cell board
@@ -42,17 +42,13 @@
 
   const W = canvas.width;
   const H = canvas.height;
-
   const COLS = 27;
   const ROWS = 21;
   const TILE = 30;
-
   const BOARD_W = COLS * TILE;
   const BOARD_H = ROWS * TILE;
-
   const OFFSET_X = (W - BOARD_W) / 2;
   const OFFSET_Y = (H - BOARD_H) / 2;
-
   const FIXED_STEP = 1 / 60;
   const MAX_UPDATES_PER_FRAME = 4;
   const RENDER_INTERVAL = 1000 / 60;
@@ -63,11 +59,9 @@
     wall: "#2459ff",
     wallDark: "#07123e",
     wallGlow: "rgba(81,126,244,0.60)",
-
     iapp: "#FFE84A",
     chga: "#FF6AA9",
     insb: "#58E5FF",
-
     player: "#FFFF00",
     muted: "#8792ac",
     dangerous: "#ff4d67",
@@ -75,75 +69,25 @@
   };
 
   const DIRECTIONS = {
-    left: {
-      x: -1,
-      y: 0,
-      angle: Math.PI
-    },
-
-    right: {
-      x: 1,
-      y: 0,
-      angle: 0
-    },
-
-    up: {
-      x: 0,
-      y: -1,
-      angle: -Math.PI / 2
-    },
-
-    down: {
-      x: 0,
-      y: 1,
-      angle: Math.PI / 2
-    },
-
-    none: {
-      x: 0,
-      y: 0,
-      angle: 0
-    }
+    left:  { x: -1, y:  0, angle: Math.PI },
+    right: { x:  1, y:  0, angle: 0 },
+    up:    { x:  0, y: -1, angle: -Math.PI / 2 },
+    down:  { x:  0, y:  1, angle: Math.PI / 2 },
+    none:  { x:  0, y:  0, angle: 0 }
   };
 
-  const DIR_NAMES = [
-    "left",
-    "right",
-    "up",
-    "down"
-  ];
-
-  /* =========================================================
-     BETA CELL ANTIGENS
-     ========================================================= */
+  const DIR_NAMES = ["left", "right", "up", "down"];
 
   const ANTIGENS = [
-    {
-      name: "IAPP-HIP",
-      color: COLORS.iapp
-    },
-
-    {
-      name: "ChgA-HIP",
-      color: COLORS.chga
-    },
-
-    {
-      name: "InsB:9-23",
-      color: COLORS.insb
-    }
+    { name: "IAPP-HIP", color: COLORS.iapp },
+    { name: "ChgA-HIP", color: COLORS.chga },
+    { name: "InsB:9-23", color: COLORS.insb }
   ];
 
-  /* =========================================================
-     CYTOKINE BOOSTERS
-
-     The point progression is inspired by the classic arcade
-     bonus progression, but the icons themselves are original
-     circular cytokine symbols.
-
-     Each cytokine receives one distinct color inspired by a
-     prominent color found in the corresponding bonus object.
-     ========================================================= */
+  /* Point values follow the classic Pac-Man bonus progression requested.
+     The booster icons are original circular symbols that keep the arcade
+     color schemes while matching the round icon language used elsewhere
+     in this game. */
 
   const BOOSTERS = [
     {
@@ -153,7 +97,6 @@
       effect: "Expansion boost",
       main: "#FE3030"
     },
-
     {
       name: "IL-12",
       arcadeRef: "Strawberry",
@@ -161,7 +104,6 @@
       effect: "Effector boost",
       main: "#FF73B7"
     },
-
     {
       name: "IFNγ",
       arcadeRef: "Orange",
@@ -169,7 +111,6 @@
       effect: "Inflammatory boost",
       main: "#FFA23A"
     },
-
     {
       name: "IL-21",
       arcadeRef: "Apple",
@@ -177,7 +118,6 @@
       effect: "Persistence boost",
       main: "#6BEA63"
     },
-
     {
       name: "IL-18",
       arcadeRef: "Melon",
@@ -185,7 +125,6 @@
       effect: "Activation boost",
       main: "#67E3B8"
     },
-
     {
       name: "TNFα",
       arcadeRef: "Galaxian",
@@ -193,7 +132,6 @@
       effect: "Inflammatory boost",
       main: "#4D79FF"
     },
-
     {
       name: "IL-1β",
       arcadeRef: "Bell",
@@ -201,7 +139,6 @@
       effect: "Danger signal boost",
       main: "#FFE04E"
     },
-
     {
       name: "Type I IFN",
       arcadeRef: "Key",
@@ -211,193 +148,60 @@
     }
   ];
 
-  /* =========================================================
-     BETA CELL INTERNAL STRUCTURES
-     ========================================================= */
-
   const STRUCTURES = [
-    {
-      x: 5,
-      y: 3,
-      w: 4,
-      h: 2,
-      label: "MITOCHONDRIA"
-    },
-
-    {
-      x: 11,
-      y: 2,
-      w: 5,
-      h: 2,
-      label: "ER"
-    },
-
-    {
-      x: 18,
-      y: 3,
-      w: 4,
-      h: 2,
-      label: "GRANULES"
-    },
-
-    {
-      x: 3,
-      y: 7,
-      w: 4,
-      h: 2,
-      label: "ER"
-    },
-
-    {
-      x: 9,
-      y: 6,
-      w: 3,
-      h: 4,
-      label: "MITOCHONDRIA"
-    },
-
-    {
-      x: 15,
-      y: 6,
-      w: 3,
-      h: 4,
-      label: "GRANULES"
-    },
-
-    {
-      x: 20,
-      y: 7,
-      w: 4,
-      h: 2,
-      label: "MITOCHONDRIA"
-    },
-
-    {
-      x: 5,
-      y: 11,
-      w: 4,
-      h: 3,
-      label: "GRANULES"
-    },
-
-    {
-      x: 11,
-      y: 11,
-      w: 5,
-      h: 2,
-      label: "ER"
-    },
-
-    {
-      x: 18,
-      y: 11,
-      w: 4,
-      h: 3,
-      label: "ER"
-    },
-
-    {
-      x: 3,
-      y: 16,
-      w: 5,
-      h: 2,
-      label: "MITOCHONDRIA"
-    },
-
-    {
-      x: 10,
-      y: 15,
-      w: 3,
-      h: 3,
-      label: "GRANULES"
-    },
-
-    {
-      x: 14,
-      y: 15,
-      w: 3,
-      h: 3,
-      label: "ER"
-    },
-
-    {
-      x: 19,
-      y: 16,
-      w: 5,
-      h: 2,
-      label: "MITOCHONDRIA"
-    }
+    { x: 5,  y: 3,  w: 4, h: 2, label: "MITOCHONDRIA" },
+    { x: 11, y: 2,  w: 5, h: 2, label: "ER" },
+    { x: 18, y: 3,  w: 4, h: 2, label: "GRANULES" },
+    { x: 3,  y: 7,  w: 4, h: 2, label: "ER" },
+    { x: 9,  y: 6,  w: 3, h: 4, label: "MITOCHONDRIA" },
+    { x: 15, y: 6,  w: 3, h: 4, label: "GRANULES" },
+    { x: 20, y: 7,  w: 4, h: 2, label: "MITOCHONDRIA" },
+    { x: 5,  y: 11, w: 4, h: 3, label: "GRANULES" },
+    { x: 11, y: 11, w: 5, h: 2, label: "ER" },
+    { x: 18, y: 11, w: 4, h: 3, label: "ER" },
+    { x: 3,  y: 16, w: 5, h: 2, label: "MITOCHONDRIA" },
+    { x: 10, y: 15, w: 3, h: 3, label: "GRANULES" },
+    { x: 14, y: 15, w: 3, h: 3, label: "ER" },
+    { x: 19, y: 16, w: 5, h: 2, label: "MITOCHONDRIA" }
   ];
 
-  const enemyHome = {
-    col: 13,
-    row: 10
-  };
-
-  const playerHome = {
-    col: 13,
-    row: 18
-  };
-
-  /* =========================================================
-     GAME STATE
-     ========================================================= */
+  const enemyHome = { col: 13, row: 10 };
+  const playerHome = { col: 13, row: 18 };
 
   let grid = [];
-
   let pellets = [];
   let pelletGrid = [];
-
   let antigenTotals = [0, 0, 0];
   let antigenRemaining = [0, 0, 0];
-
   let totalPellets = 0;
   let remainingPellets = 0;
-
   let powerUps = [];
   let powerGrid = [];
-
   let player = null;
   let enemies = [];
-
   let floatingScores = [];
 
   let state = "ready";
-
   let score = 0;
   let highScore = readHighScore();
-
   let lives = 3;
-
   let activation = 8;
   let betaFunction = 100;
-
   let currentAntigen = 0;
   let totalCollected = 0;
-
   let boostTimer = 0;
   let boostName = "";
-
   let enemyEatChain = 0;
-
   let recoveryTimer = 0;
   let bannerTimer = 0;
-
   let mouthPhase = 0;
-
   let soundEnabled = true;
   let audioContext = null;
 
   let lastFrameTime = 0;
   let accumulator = 0;
-
   let lastRenderTime = 0;
   let forceRender = true;
-
-  /* =========================================================
-     UI CACHE
-     Prevents DOM elements from being rewritten every frame.
-     ========================================================= */
 
   const uiCache = {
     score: null,
@@ -409,89 +213,46 @@
     antigen: null
   };
 
-  /* =========================================================
-     STATIC OFFSCREEN CANVAS
-
-     The beta cell membrane, organelles and structure outlines
-     are rendered once here rather than recreated every frame.
-     ========================================================= */
-
   const staticLayer = document.createElement("canvas");
-
   staticLayer.width = W;
   staticLayer.height = H;
 
-  const sctx = staticLayer.getContext(
-    "2d",
-    {
-      alpha: false
-    }
-  );
-
-  /* =========================================================
-     HIGH SCORE STORAGE
-     ========================================================= */
+  const sctx = staticLayer.getContext("2d", {
+    alpha: false
+  });
 
   function readHighScore() {
     try {
-
       const value = Number(
-        window.localStorage.getItem(
-          "autoimmuneArcadeHighScore"
-        ) || 0
+        window.localStorage.getItem("autoimmuneArcadeHighScore") || 0
       );
 
-      return Number.isFinite(value)
-        ? value
-        : 0;
-
+      return Number.isFinite(value) ? value : 0;
     } catch (_) {
-
       return 0;
-
     }
   }
 
   function persistHighScore() {
     try {
-
       window.localStorage.setItem(
         "autoimmuneArcadeHighScore",
         String(highScore)
       );
-
     } catch (_) {
-
-      /*
-       Local file previews or privacy settings may block
-       storage. This does not affect gameplay.
-      */
-
+      // Storage may be unavailable in local previews or privacy modes.
     }
   }
 
-  /* =========================================================
-     TILE HELPERS
-     ========================================================= */
-
   function tileCenterX(col) {
-
-    return OFFSET_X
-      + col * TILE
-      + TILE / 2;
-
+    return OFFSET_X + col * TILE + TILE / 2;
   }
 
   function tileCenterY(row) {
-
-    return OFFSET_Y
-      + row * TILE
-      + TILE / 2;
-
+    return OFFSET_Y + row * TILE + TILE / 2;
   }
 
   function isOpen(col, row) {
-
     return (
       row >= 0 &&
       row < ROWS &&
@@ -499,99 +260,50 @@
       col < COLS &&
       grid[row][col] === 0
     );
-
   }
 
   function opposite(dir) {
-
     return {
       left: "right",
       right: "left",
       up: "down",
       down: "up"
     }[dir] || "none";
-
   }
 
-  /* =========================================================
-     BUILD BETA CELL GAME GRID
-     ========================================================= */
-
   function buildGrid() {
-
     grid = Array.from(
-      {
-        length: ROWS
-      },
-
-      () =>
-        Array(COLS).fill(-1)
+      { length: ROWS },
+      () => Array(COLS).fill(-1)
     );
 
     const cx = (COLS - 1) / 2;
     const cy = (ROWS - 1) / 2;
-
     const rx = 12.4;
     const ry = 9.5;
 
-    /*
-     Build the roughly elliptical beta cell perimeter.
-    */
+    for (let row = 0; row < ROWS; row++) {
+      for (let col = 0; col < COLS; col++) {
+        const dx = (col - cx) / rx;
+        const dy = (row - cy) / ry;
 
-    for (
-      let row = 0;
-      row < ROWS;
-      row++
-    ) {
-
-      for (
-        let col = 0;
-        col < COLS;
-        col++
-      ) {
-
-        const dx =
-          (col - cx) / rx;
-
-        const dy =
-          (row - cy) / ry;
-
-        if (
-          dx * dx +
-          dy * dy <= 1
-        ) {
-
+        if (dx * dx + dy * dy <= 1) {
           grid[row][col] = 0;
-
         }
       }
     }
 
-    /*
-     Add intracellular structures as collision barriers.
-    */
-
-    for (
-      const structure
-      of STRUCTURES
-    ) {
-
+    for (const structure of STRUCTURES) {
       for (
         let row = structure.y;
-        row <
-          structure.y +
-          structure.h;
+        row < structure.y + structure.h;
         row++
       ) {
-
         for (
           let col = structure.x;
-          col <
-            structure.x +
-            structure.w;
+          col < structure.x + structure.w;
           col++
         ) {
-
           if (
             row >= 0 &&
             row < ROWS &&
@@ -599,18 +311,11 @@
             col < COLS &&
             grid[row][col] === 0
           ) {
-
             grid[row][col] = 1;
-
           }
         }
       }
     }
-
-    /*
-     Guarantee the central corridors and spawn areas
-     remain accessible.
-    */
 
     const guaranteedOpen = [
       [13, 4],
@@ -628,95 +333,49 @@
       [13, 16],
       [13, 17],
       [13, 18],
-
       [12, 10],
       [14, 10],
-
       [12, 18],
       [14, 18]
     ];
 
-    guaranteedOpen.forEach(
-      ([col, row]) => {
-
-        if (
-          grid[row] &&
-          grid[row][col] !== -1
-        ) {
-
-          grid[row][col] = 0;
-
-        }
+    guaranteedOpen.forEach(([col, row]) => {
+      if (grid[row] && grid[row][col] !== -1) {
+        grid[row][col] = 0;
       }
-    );
+    });
   }
 
-  /* =========================================================
-     FIND NEAREST OPEN TILE
-     ========================================================= */
-
-  function nearestOpen(
-    preferredCol,
-    preferredRow,
-    used
-  ) {
-
+  function nearestOpen(preferredCol, preferredRow, used) {
     if (
-      isOpen(
-        preferredCol,
-        preferredRow
-      ) &&
-      !used.has(
-        `${preferredCol},${preferredRow}`
-      )
+      isOpen(preferredCol, preferredRow) &&
+      !used.has(`${preferredCol},${preferredRow}`)
     ) {
-
       return {
         col: preferredCol,
         row: preferredRow
       };
     }
 
-    for (
-      let radius = 1;
-      radius < 8;
-      radius++
-    ) {
-
-      for (
-        let dr = -radius;
-        dr <= radius;
-        dr++
-      ) {
-
-        for (
-          let dc = -radius;
-          dc <= radius;
-          dc++
-        ) {
-
+    for (let radius = 1; radius < 8; radius++) {
+      for (let dr = -radius; dr <= radius; dr++) {
+        for (let dc = -radius; dc <= radius; dc++) {
           if (
             Math.max(
               Math.abs(dc),
               Math.abs(dr)
             ) !== radius
           ) {
-
             continue;
-
           }
 
-          const col =
-            preferredCol + dc;
-
-          const row =
-            preferredRow + dr;
+          const col = preferredCol + dc;
+          const row = preferredRow + dr;
 
           if (
             isOpen(col, row) &&
             !used.has(`${col},${row}`)
           ) {
-
             return {
               col,
               row
@@ -729,106 +388,64 @@
     return null;
   }
 
-  /* =========================================================
-     CYTOKINE BOOSTER LOCATIONS
-     ========================================================= */
-
   function generatePowerUps() {
-
     powerUps = [];
 
     powerGrid = Array.from(
-      {
-        length: ROWS
-      },
-
-      () =>
-        Array(COLS).fill(null)
+      { length: ROWS },
+      () => Array(COLS).fill(null)
     );
 
     const preferred = [
       [4, 10],
       [22, 10],
-
       [13, 5],
       [13, 17],
-
       [7, 15],
       [19, 15],
-
       [7, 5],
       [19, 5]
     ];
 
     const used = new Set();
 
-    preferred.forEach(
-      ([col, row], type) => {
+    preferred.forEach(([col, row], type) => {
+      const position = nearestOpen(
+        col,
+        row,
+        used
+      );
 
-        const position =
-          nearestOpen(
-            col,
-            row,
-            used
-          );
+      if (!position) return;
 
-        if (!position) {
-          return;
-        }
+      used.add(
+        `${position.col},${position.row}`
+      );
 
-        used.add(
-          `${position.col},${position.row}`
-        );
+      const power = {
+        col: position.col,
+        row: position.row,
+        type,
+        eaten: false,
+        x: tileCenterX(position.col),
+        y: tileCenterY(position.row)
+      };
 
-        const power = {
+      powerUps.push(power);
 
-          col: position.col,
-          row: position.row,
-
-          type,
-
-          eaten: false,
-
-          x:
-            tileCenterX(
-              position.col
-            ),
-
-          y:
-            tileCenterY(
-              position.row
-            )
-        };
-
-        powerUps.push(power);
-
-        powerGrid[
-          power.row
-        ][
-          power.col
-        ] = power;
-      }
-    );
+      powerGrid[
+        power.row
+      ][
+        power.col
+      ] = power;
+    });
   }
 
-  /* =========================================================
-     OPEN NEIGHBOR COUNT
-     ========================================================= */
-
-  function openNeighborCount(
-    col,
-    row
-  ) {
-
+  function openNeighborCount(col, row) {
     let count = 0;
 
-    for (
-      const name
-      of DIR_NAMES
-    ) {
-
-      const d =
-        DIRECTIONS[name];
+    for (const name of DIR_NAMES) {
+      const d = DIRECTIONS[name];
 
       if (
         isOpen(
@@ -836,171 +453,84 @@
           row + d.y
         )
       ) {
-
         count++;
-
       }
     }
 
     return count;
   }
 
-  /* =========================================================
-     GENERATE BETA CELL ANTIGENS
-
-     Antigens use all three colors simultaneously:
-     yellow = IAPP-HIP
-     pink   = ChgA-HIP
-     blue   = InsB:9-23
-     ========================================================= */
-
   function generatePellets() {
-
     pellets = [];
 
-    pelletGrid =
-      Array.from(
-        {
-          length: ROWS
-        },
+    pelletGrid = Array.from(
+      { length: ROWS },
+      () => Array(COLS).fill(null)
+    );
 
-        () =>
-          Array(COLS).fill(null)
-      );
-
-    antigenTotals =
-      [0, 0, 0];
+    antigenTotals = [0, 0, 0];
 
     const candidates = [];
 
-    for (
-      let row = 1;
-      row < ROWS - 1;
-      row++
-    ) {
-
-      for (
-        let col = 1;
-        col < COLS - 1;
-        col++
-      ) {
+    for (let row = 1; row < ROWS - 1; row++) {
+      for (let col = 1; col < COLS - 1; col++) {
+        if (!isOpen(col, row)) continue;
+        if (powerGrid[row][col]) continue;
 
         if (
-          !isOpen(col, row)
+          Math.abs(col - enemyHome.col) <= 1 &&
+          Math.abs(row - enemyHome.row) <= 1
         ) {
-
           continue;
-
         }
 
         if (
-          powerGrid[row][col]
+          Math.abs(col - playerHome.col) <= 1 &&
+          Math.abs(row - playerHome.row) <= 1
         ) {
-
           continue;
-
-        }
-
-        if (
-          Math.abs(
-            col -
-            enemyHome.col
-          ) <= 1 &&
-          Math.abs(
-            row -
-            enemyHome.row
-          ) <= 1
-        ) {
-
-          continue;
-
-        }
-
-        if (
-          Math.abs(
-            col -
-            playerHome.col
-          ) <= 1 &&
-          Math.abs(
-            row -
-            playerHome.row
-          ) <= 1
-        ) {
-
-          continue;
-
         }
 
         if (
           (col + row) % 2 !== 0 &&
-          openNeighborCount(
-            col,
-            row
-          ) < 3
+          openNeighborCount(col, row) < 3
         ) {
-
           continue;
-
         }
 
-        candidates.push(
-          {
-            col,
-            row
-          }
-        );
+        candidates.push({
+          col,
+          row
+        });
       }
     }
 
-    candidates.forEach(
-      (position, index) => {
+    candidates.forEach((position, index) => {
+      const antigen =
+        (index + position.row) %
+        ANTIGENS.length;
 
-        const antigen =
-          (
-            index +
-            position.row
-          ) %
-          ANTIGENS.length;
+      const pellet = {
+        col: position.col,
+        row: position.row,
+        antigen,
+        eaten: false,
+        x: tileCenterX(position.col),
+        y: tileCenterY(position.row)
+      };
 
-        const pellet = {
+      pellets.push(pellet);
 
-          col:
-            position.col,
+      pelletGrid[
+        pellet.row
+      ][
+        pellet.col
+      ] = pellet;
 
-          row:
-            position.row,
-
-          antigen,
-
-          eaten: false,
-
-          x:
-            tileCenterX(
-              position.col
-            ),
-
-          y:
-            tileCenterY(
-              position.row
-            )
-        };
-
-        pellets.push(
-          pellet
-        );
-
-        pelletGrid[
-          pellet.row
-        ][
-          pellet.col
-        ] =
-          pellet;
-
-        antigenTotals[
-          antigen
-        ]++;
-      }
-    );
+      antigenTotals[
+        antigen
+      ]++;
+    });
 
     antigenRemaining =
       antigenTotals.slice();
@@ -1012,73 +542,40 @@
       totalPellets;
   }
 
-  /* =========================================================
-     CREATE MOVING ENTITY
-     ========================================================= */
-
-  function makeEntity(
-    col,
-    row,
-    tilesPerSecond
-  ) {
-
+  function makeEntity(col, row, tilesPerSecond) {
     return {
-
       col,
       row,
-
       dir: "none",
       queuedDir: "none",
-
       progress: 0,
-
       tilesPerSecond,
-
-      x:
-        tileCenterX(col),
-
-      y:
-        tileCenterY(row),
-
-      radius:
-        TILE * 0.38
+      x: tileCenterX(col),
+      y: tileCenterY(row),
+      radius: TILE * 0.38
     };
   }
 
-  function updateEntityPixel(
-    entity
-  ) {
-
+  function updateEntityPixel(entity) {
     const d =
-      DIRECTIONS[
-        entity.dir
-      ] ||
+      DIRECTIONS[entity.dir] ||
       DIRECTIONS.none;
 
     entity.x =
-      tileCenterX(
-        entity.col
-      ) +
+      tileCenterX(entity.col) +
       d.x *
       TILE *
       entity.progress;
 
     entity.y =
-      tileCenterY(
-        entity.row
-      ) +
+      tileCenterY(entity.row) +
       d.y *
       TILE *
       entity.progress;
   }
 
-  function canLeaveTile(
-    entity,
-    dir
-  ) {
-
-    const d =
-      DIRECTIONS[dir];
+  function canLeaveTile(entity, dir) {
+    const d = DIRECTIONS[dir];
 
     return (
       !!d &&
@@ -1090,31 +587,19 @@
     );
   }
 
-  /* =========================================================
-     RESET PLAYER + REGULATORY CELLS
-     ========================================================= */
-
   function resetEntities() {
-
-    player =
-      makeEntity(
-        playerHome.col,
-        playerHome.row,
-        7.2
-      );
-
-    player.dir =
-      "left";
-
-    player.queuedDir =
-      "left";
-
-    updateEntityPixel(
-      player
+    player = makeEntity(
+      playerHome.col,
+      playerHome.row,
+      7.2
     );
 
-    const starts = [
+    player.dir = "left";
+    player.queuedDir = "left";
 
+    updateEntityPixel(player);
+
+    const starts = [
       {
         col: 12,
         row: 10,
@@ -1123,7 +608,6 @@
         personality: "chase",
         speed: 4.25
       },
-
       {
         col: 14,
         row: 10,
@@ -1132,7 +616,6 @@
         personality: "ambush",
         speed: 4.45
       },
-
       {
         col: 13,
         row: 9,
@@ -1141,7 +624,6 @@
         personality: "patrol",
         speed: 4.15
       },
-
       {
         col: 13,
         row: 11,
@@ -1152,108 +634,82 @@
       }
     ];
 
-    enemies =
-      starts.map(
-        (s, i) => {
-
-          const enemy =
-            makeEntity(
-              s.col,
-              s.row,
-              s.speed
-            );
-
-          enemy.name =
-            s.name;
-
-          enemy.color =
-            s.color;
-
-          enemy.personality =
-            s.personality;
-
-          enemy.dir =
-            i % 2
-              ? "right"
-              : "left";
-
-          enemy.home = {
-            col: s.col,
-            row: s.row
-          };
-
-          enemy.scatter = {
-
-            col:
-              i < 2
-                ? (
-                  i === 0
-                    ? 3
-                    : 23
-                )
-                : (
-                  i === 2
-                    ? 4
-                    : 22
-                ),
-
-            row:
-              i < 2
-                ? 4
-                : 17
-          };
-
-          if (
-            !canLeaveTile(
-              enemy,
-              enemy.dir
-            )
-          ) {
-
-            enemy.dir =
-              chooseEnemyDirection(
-                enemy
-              );
-          }
-
-          updateEntityPixel(
-            enemy
-          );
-
-          return enemy;
-        }
+    enemies = starts.map((s, i) => {
+      const enemy = makeEntity(
+        s.col,
+        s.row,
+        s.speed
       );
+
+      enemy.name =
+        s.name;
+
+      enemy.color =
+        s.color;
+
+      enemy.personality =
+        s.personality;
+
+      enemy.dir =
+        i % 2
+          ? "right"
+          : "left";
+
+      enemy.home = {
+        col: s.col,
+        row: s.row
+      };
+
+      enemy.scatter = {
+        col:
+          i < 2
+            ? (
+              i === 0
+                ? 3
+                : 23
+            )
+            : (
+              i === 2
+                ? 4
+                : 22
+            ),
+        row:
+          i < 2
+            ? 4
+            : 17
+      };
+
+      if (
+        !canLeaveTile(
+          enemy,
+          enemy.dir
+        )
+      ) {
+        enemy.dir =
+          chooseEnemyDirection(enemy);
+      }
+
+      updateEntityPixel(enemy);
+
+      return enemy;
+    });
 
     forceRender = true;
   }
 
-  /* =========================================================
-     RESET GAME
-     ========================================================= */
-
-  function resetGame(
-    full = true
-  ) {
-
+  function resetGame(full = true) {
     if (full) {
-
       score = 0;
       lives = 3;
-
       activation = 8;
       betaFunction = 100;
-
       currentAntigen = 0;
       totalCollected = 0;
-
       boostTimer = 0;
       boostName = "";
-
       enemyEatChain = 0;
-
       recoveryTimer = 0;
       bannerTimer = 0;
-
       floatingScores = [];
 
       antigenRemaining =
@@ -1262,100 +718,60 @@
       remainingPellets =
         totalPellets;
 
-      pellets.forEach(
-        p => {
-          p.eaten = false;
-        }
-      );
+      pellets.forEach(p => {
+        p.eaten = false;
+      });
 
-      powerUps.forEach(
-        p => {
-          p.eaten = false;
-        }
-      );
+      powerUps.forEach(p => {
+        p.eaten = false;
+      });
     }
 
     resetEntities();
-
     updateUI(true);
   }
 
-  /* =========================================================
-     T CELL ACTIVATION STATE
-     ========================================================= */
-
   function activationState() {
-
-    if (
-      activation < 25
-    ) {
-
+    if (activation < 25) {
       return "Naive";
-
     }
 
-    if (
-      activation < 50
-    ) {
-
+    if (activation < 50) {
       return "Activated";
-
     }
 
-    if (
-      activation < 75
-    ) {
-
+    if (activation < 75) {
       return "Expanded";
-
     }
 
     return "Effector";
   }
 
-  /* =========================================================
-     UPDATE HEADS-UP DISPLAY
-     ========================================================= */
-
-  function updateUI(
-    force = false
-  ) {
-
-    if (
-      score > highScore
-    ) {
-
+  function updateUI(force = false) {
+    if (score > highScore) {
       highScore = score;
-
     }
 
     const actState =
       activationState();
 
     const actRounded =
-      Math.round(
-        activation
-      );
+      Math.round(activation);
 
     const betaRounded =
-      Math.round(
-        betaFunction
-      );
+      Math.round(betaFunction);
 
     if (
       force ||
       uiCache.score !== score
     ) {
-
       UI.score.textContent =
-        String(score)
-          .padStart(
-            6,
-            "0"
-          );
+        String(score).padStart(
+          6,
+          "0"
+        );
 
-      uiCache.score =
-        score;
+      uiCache.score = score;
     }
 
     if (
@@ -1363,13 +779,11 @@
       uiCache.highScore !==
         highScore
     ) {
-
       UI.highScore.textContent =
-        String(highScore)
-          .padStart(
-            6,
-            "0"
-          );
+        String(highScore).padStart(
+          6,
+          "0"
+        );
 
       uiCache.highScore =
         highScore;
@@ -1380,7 +794,6 @@
       uiCache.activationState !==
         actState
     ) {
-
       UI.activationLabel.textContent =
         actState;
 
@@ -1393,7 +806,6 @@
       uiCache.activationRounded !==
         actRounded
     ) {
-
       UI.activationBar.style.width =
         `${Math.max(
           0,
@@ -1412,7 +824,6 @@
       uiCache.betaRounded !==
         betaRounded
     ) {
-
       UI.betaLabel.textContent =
         `${Math.max(
           0,
@@ -1437,7 +848,6 @@
       uiCache.antigen !==
         currentAntigen
     ) {
-
       UI.stageLabel.textContent =
         ANTIGENS[
           currentAntigen
@@ -1459,7 +869,6 @@
       uiCache.lives !==
         lives
     ) {
-
       UI.lives.replaceChildren();
 
       for (
@@ -1467,7 +876,6 @@
         i < lives;
         i++
       ) {
-
         const dot =
           document.createElement(
             "span"
@@ -1476,9 +884,7 @@
         dot.className =
           "aa-life-dot";
 
-        UI.lives.appendChild(
-          dot
-        );
+        UI.lives.appendChild(dot);
       }
 
       UI.lives.setAttribute(
@@ -1495,17 +901,12 @@
     }
   }
 
-  /* =========================================================
-     OVERLAYS
-     ========================================================= */
-
   function showOverlay(
     title,
     text,
     buttonText,
     showLegend = false
   ) {
-
     UI.overlayTitle.textContent =
       title;
 
@@ -1526,23 +927,16 @@
   }
 
   function hideOverlay() {
-
     UI.overlay.classList.add(
       "is-hidden"
     );
 
     try {
-
-      canvas.focus(
-        {
-          preventScroll: true
-        }
-      );
-
+      canvas.focus({
+        preventScroll: true
+      });
     } catch (_) {
-
       canvas.focus();
-
     }
   }
 
@@ -1551,7 +945,6 @@
     color,
     seconds = 1.25
   ) {
-
     UI.stageBanner.textContent =
       text;
 
@@ -1568,7 +961,6 @@
   }
 
   function hideStageBanner() {
-
     UI.stageBanner.classList.remove(
       "is-visible"
     );
@@ -1581,30 +973,19 @@
      ========================================================= */
 
   function ensureAudio() {
-
-    if (
-      !soundEnabled
-    ) {
-
+    if (!soundEnabled) {
       return null;
-
     }
 
     try {
-
-      if (
-        !audioContext
-      ) {
-
+      if (!audioContext) {
         const AC =
           window.AudioContext ||
           window.webkitAudioContext;
 
         if (AC) {
-
           audioContext =
             new AC();
-
         }
       }
 
@@ -1613,17 +994,12 @@
         audioContext.state ===
           "suspended"
       ) {
-
         audioContext.resume();
-
       }
 
       return audioContext;
-
     } catch (_) {
-
       return null;
-
     }
   }
 
@@ -1634,16 +1010,11 @@
     volume = 0.02,
     slide = 0
   ) {
+    const ac = ensureAudio();
 
-    const ac =
-      ensureAudio();
-
-    if (!ac) {
-      return;
-    }
+    if (!ac) return;
 
     try {
-
       const osc =
         ac.createOscillator();
 
@@ -1662,13 +1033,10 @@
       );
 
       if (slide) {
-
-        osc.frequency
-          .linearRampToValueAtTime(
-            freq + slide,
-            now + duration
-          );
-
+        osc.frequency.linearRampToValueAtTime(
+          freq + slide,
+          now + duration
+        );
       }
 
       gain.gain.setValueAtTime(
@@ -1676,36 +1044,22 @@
         now
       );
 
-      gain.gain
-        .exponentialRampToValueAtTime(
-          0.0001,
-          now + duration
-        );
-
-      osc.connect(gain);
-      gain.connect(
-        ac.destination
-      );
-
-      osc.start(now);
-
-      osc.stop(
+      gain.gain.exponentialRampToValueAtTime(
+        0.0001,
         now + duration
       );
 
-    } catch (_) {
+      osc.connect(gain);
+      gain.connect(ac.destination);
 
-      /*
-       Ignore unsupported audio behavior.
-      */
-
-    }
+      osc.start(now);
+      osc.stop(now + duration);
+    } catch (_) {}
   }
 
   let lastPelletSoundAt = 0;
 
   function soundCollect() {
-
     const now =
       performance.now();
 
@@ -1714,9 +1068,7 @@
       lastPelletSoundAt <
       45
     ) {
-
       return;
-
     }
 
     lastPelletSoundAt =
@@ -1724,10 +1076,8 @@
 
     beep(
       520 +
-      (
-        totalCollected % 5
-      ) * 40,
-
+      (totalCollected % 5) *
+      40,
       0.028,
       "square",
       0.014
@@ -1735,7 +1085,6 @@
   }
 
   function soundPower() {
-
     beep(
       360,
       0.07,
@@ -1757,7 +1106,6 @@
   }
 
   function soundHit() {
-
     beep(
       180,
       0.22,
@@ -1768,7 +1116,6 @@
   }
 
   function soundWin() {
-
     [
       523,
       659,
@@ -1790,48 +1137,32 @@
   }
 
   /* =========================================================
-     PLAYER MOVEMENT
+     TILE MOVEMENT
      ========================================================= */
 
   function choosePlayerDirectionAtCenter() {
-
     if (
       canLeaveTile(
         player,
         player.queuedDir
       )
     ) {
-
       player.dir =
         player.queuedDir;
-
     } else if (
       !canLeaveTile(
         player,
         player.dir
       )
     ) {
-
       player.dir =
         "none";
-
     }
   }
 
-  /* =========================================================
-     ENEMY TARGETING
-     ========================================================= */
-
-  function targetForEnemy(
-    enemy
-  ) {
-
-    if (
-      boostTimer > 0
-    ) {
-
+  function targetForEnemy(enemy) {
+    if (boostTimer > 0) {
       return enemy.scatter;
-
     }
 
     const pd =
@@ -1862,37 +1193,30 @@
       enemy.personality ===
       "chase"
     ) {
-
       return {
         col: playerCol,
         row: playerRow
       };
-
     }
 
     if (
       enemy.personality ===
       "ambush"
     ) {
-
       return {
-
         col:
           playerCol +
           pd.x * 4,
-
         row:
           playerRow +
           pd.y * 4
       };
-
     }
 
     if (
       enemy.personality ===
       "shy"
     ) {
-
       const dx =
         enemy.col -
         playerCol;
@@ -1929,10 +1253,7 @@
       : enemy.scatter;
   }
 
-  function legalEnemyDirections(
-    enemy
-  ) {
-
+  function legalEnemyDirections(enemy) {
     const available = [];
 
     const reverse =
@@ -1944,18 +1265,13 @@
       const name
       of DIR_NAMES
     ) {
-
       if (
         canLeaveTile(
           enemy,
           name
         )
       ) {
-
-        available.push(
-          name
-        );
-
+        available.push(name);
       }
     }
 
@@ -1972,27 +1288,16 @@
       : available;
   }
 
-  function chooseEnemyDirection(
-    enemy
-  ) {
-
+  function chooseEnemyDirection(enemy) {
     const options =
-      legalEnemyDirections(
-        enemy
-      );
+      legalEnemyDirections(enemy);
 
-    if (
-      !options.length
-    ) {
-
+    if (!options.length) {
       return "none";
-
     }
 
     const target =
-      targetForEnemy(
-        enemy
-      );
+      targetForEnemy(enemy);
 
     let best =
       options[0];
@@ -2000,11 +1305,7 @@
     let bestDistance =
       Infinity;
 
-    for (
-      const name
-      of options
-    ) {
-
+    for (const name of options) {
       const d =
         DIRECTIONS[name];
 
@@ -2028,7 +1329,6 @@
         distanceSq <
         bestDistance
       ) {
-
         bestDistance =
           distanceSq;
 
@@ -2040,16 +1340,11 @@
     return best;
   }
 
-  /* =========================================================
-     FIXED TILE MOVEMENT
-     ========================================================= */
-
   function advanceEntity(
     entity,
     dt,
     isPlayer
   ) {
-
     let travel =
       entity.tilesPerSecond *
       dt;
@@ -2058,13 +1353,10 @@
       isPlayer &&
       boostTimer > 0
     ) {
-
       travel *= 1.10;
-
     }
 
     if (!isPlayer) {
-
       const progress =
         totalPellets
           ? totalCollected /
@@ -2089,25 +1381,17 @@
       travel > 0.000001 &&
       safety++ < 4
     ) {
-
       if (
         entity.progress <=
         0.000001
       ) {
-
         entity.progress = 0;
 
         if (isPlayer) {
-
           choosePlayerDirectionAtCenter();
-
         } else {
-
           entity.dir =
-            chooseEnemyDirection(
-              entity
-            );
-
+            chooseEnemyDirection(entity);
         }
 
         if (
@@ -2118,9 +1402,7 @@
             entity.dir
           )
         ) {
-
           break;
-
         }
       }
 
@@ -2144,7 +1426,6 @@
         entity.progress >=
         0.999999
       ) {
-
         const d =
           DIRECTIONS[
             entity.dir
@@ -2159,25 +1440,18 @@
         entity.progress = 0;
 
         if (isPlayer) {
-
           collectAtTile(
             entity.col,
             entity.row
           );
-
         }
       }
     }
 
-    updateEntityPixel(
-      entity
-    );
+    updateEntityPixel(entity);
   }
 
-  function movePlayer(
-    dt
-  ) {
-
+  function movePlayer(dt) {
     advanceEntity(
       player,
       dt,
@@ -2188,26 +1462,21 @@
       dt * 12;
   }
 
-  function moveEnemies(
-    dt
-  ) {
-
+  function moveEnemies(dt) {
     for (
       const enemy
       of enemies
     ) {
-
       advanceEntity(
         enemy,
         dt,
         false
       );
-
     }
   }
 
   /* =========================================================
-     FLOATING SCORE TEXT
+     GAME RULES
      ========================================================= */
 
   function addFloatingScore(
@@ -2216,27 +1485,16 @@
     text,
     color
   ) {
-
-    floatingScores.push(
-      {
-        x,
-        y,
-        text,
-        color,
-        time: 1.1
-      }
-    );
+    floatingScores.push({
+      x,
+      y,
+      text,
+      color,
+      time: 1.1
+    });
   }
 
-  /* =========================================================
-     COLLECT ANTIGENS AND CYTOKINES
-     ========================================================= */
-
-  function collectAtTile(
-    col,
-    row
-  ) {
-
+  function collectAtTile(col, row) {
     let changed = false;
 
     const pellet =
@@ -2250,7 +1508,6 @@
       pellet &&
       !pellet.eaten
     ) {
-
       pellet.eaten =
         true;
 
@@ -2305,7 +1562,6 @@
       power &&
       !power.eaten
     ) {
-
       power.eaten =
         true;
 
@@ -2351,7 +1607,6 @@
     }
 
     if (changed) {
-
       updateUI();
 
       forceRender =
@@ -2363,21 +1618,11 @@
         0 &&
       state === "running"
     ) {
-
       winGame();
-
     }
   }
 
-  /* =========================================================
-     COLLISION DETECTION
-     ========================================================= */
-
-  function collisionDistanceSq(
-    a,
-    b
-  ) {
-
+  function collisionDistanceSq(a, b) {
     const dx =
       a.x -
       b.x;
@@ -2393,7 +1638,6 @@
   }
 
   function handleEnemyCollisions() {
-
     const threshold =
       TILE * 0.64;
 
@@ -2405,7 +1649,6 @@
       const enemy
       of enemies
     ) {
-
       if (
         collisionDistanceSq(
           player,
@@ -2413,15 +1656,10 @@
         ) >
         thresholdSq
       ) {
-
         continue;
-
       }
 
-      if (
-        boostTimer > 0
-      ) {
-
+      if (boostTimer > 0) {
         enemyEatChain++;
 
         const bonus =
@@ -2462,9 +1700,7 @@
         enemy.dir =
           "none";
 
-        updateEntityPixel(
-          enemy
-        );
+        updateEntityPixel(enemy);
 
         beep(
           760,
@@ -2475,11 +1711,8 @@
         );
 
         updateUI();
-
       } else {
-
         loseLife();
-
       }
 
       forceRender =
@@ -2489,19 +1722,11 @@
     }
   }
 
-  /* =========================================================
-     LOSE LIFE
-     ========================================================= */
-
   function loseLife() {
-
     if (
-      state !==
-      "running"
+      state !== "running"
     ) {
-
       return;
-
     }
 
     lives--;
@@ -2514,30 +1739,22 @@
 
     boostTimer = 0;
     boostName = "";
-
     enemyEatChain = 0;
 
     soundHit();
 
     updateUI(true);
 
-    if (
-      lives <= 0
-    ) {
-
+    if (lives <= 0) {
       state =
         "lost";
 
       persistHighScore();
 
       showOverlay(
-
         "T cell response suppressed",
-
         "Immune regulation stopped the autoreactive response before the simulated beta cell was destroyed.<br><strong>Try again and clear the complete antigen field.</strong>",
-
         "Restart experiment",
-
         false
       );
 
@@ -2553,21 +1770,13 @@
     resetEntities();
 
     showStageBanner(
-
       "REGULATORY CONTACT — activation reduced",
-
       COLORS.dangerous,
-
       1.05
     );
   }
 
-  /* =========================================================
-     WIN
-     ========================================================= */
-
   function winGame() {
-
     state =
       "won";
 
@@ -2587,13 +1796,9 @@
     soundWin();
 
     showOverlay(
-
       "DIABETES ONSET",
-
       "<strong>Beta cell function ↓ &nbsp; • &nbsp; Insulin production ↓ &nbsp; • &nbsp; Blood glucose ↑</strong><br><br>All beta cell antigen dots were cleared and the simulated beta cell destruction threshold was reached.",
-
       "Play again",
-
       false
     );
 
@@ -2601,21 +1806,14 @@
       true;
   }
 
-  /* =========================================================
-     START GAME
-     ========================================================= */
-
   function startGame() {
-
     ensureAudio();
 
     if (
       state === "won" ||
       state === "lost"
     ) {
-
       resetGame(true);
-
     }
 
     state =
@@ -2639,17 +1837,10 @@
       true;
   }
 
-  /* =========================================================
-     PAUSE
-     ========================================================= */
-
   function togglePause() {
-
     if (
-      state ===
-      "running"
+      state === "running"
     ) {
-
       state =
         "paused";
 
@@ -2659,25 +1850,18 @@
         "Resume";
 
       showOverlay(
-
         "Experiment paused",
-
         `Current response: <strong>${activationState()}</strong>${
           boostTimer > 0
             ? ` • ${boostName} boost active`
             : ""
         }`,
-
         "Resume",
-
         false
       );
-
     } else if (
-      state ===
-      "paused"
+      state === "paused"
     ) {
-
       state =
         "running";
 
@@ -2694,12 +1878,7 @@
     }
   }
 
-  /* =========================================================
-     RESTART
-     ========================================================= */
-
   function restartGame() {
-
     persistHighScore();
 
     resetGame(true);
@@ -2708,13 +1887,9 @@
       "ready";
 
     showOverlay(
-
       "Beta Cell Breakdown",
-
       "Clear the yellow, pink, and blue beta cell antigen dots while avoiding immune regulatory cells. Cytokine bonus items temporarily amplify your T cell response.",
-
       "Start experiment",
-
       true
     );
 
@@ -2730,7 +1905,7 @@
   }
 
   /* =========================================================
-     FLOATING CHARACTER LABEL
+     SHARED SPRITE DRAWING
      ========================================================= */
 
   function drawFloatingLabel(
@@ -2740,7 +1915,6 @@
     text,
     fontSize = 13
   ) {
-
     target.save();
 
     target.font =
@@ -2779,10 +1953,6 @@
     target.restore();
   }
 
-  /* =========================================================
-     CD4 T CELL SPRITE
-     ========================================================= */
-
   function drawTCellSprite(
     target,
     x,
@@ -2792,7 +1962,6 @@
     radius,
     boosted = false
   ) {
-
     target.save();
 
     target.translate(
@@ -2804,12 +1973,7 @@
       angle
     );
 
-    /*
-     White activation halo during cytokine boost.
-    */
-
     if (boosted) {
-
       target.strokeStyle =
         "rgba(255,255,255,0.86)";
 
@@ -2828,10 +1992,6 @@
 
       target.stroke();
     }
-
-    /*
-     Yellow Pac-Man-inspired CD4 T cell.
-    */
 
     target.fillStyle =
       COLORS.player;
@@ -2856,11 +2016,6 @@
 
     target.fill();
 
-    /*
-     Small receptor-like surface lines distinguish the T cell
-     from the original arcade character.
-    */
-
     target.strokeStyle =
       "#FFF6A4";
 
@@ -2875,7 +2030,6 @@
       i <= 2;
       i++
     ) {
-
       const a =
         Math.PI +
         i * 0.42;
@@ -2883,22 +2037,18 @@
       target.beginPath();
 
       target.moveTo(
-
         Math.cos(a) *
         radius *
         0.74,
-
         Math.sin(a) *
         radius *
         0.74
       );
 
       target.lineTo(
-
         Math.cos(a) *
         radius *
         1.03,
-
         Math.sin(a) *
         radius *
         1.03
@@ -2910,10 +2060,6 @@
     target.restore();
   }
 
-  /* =========================================================
-     REGULATORY CELL / GHOST SPRITE
-     ========================================================= */
-
   function drawGhostSprite(
     target,
     x,
@@ -2924,7 +2070,6 @@
     vulnerable = false,
     flash = false
   ) {
-
     const r =
       radius * 0.92;
 
@@ -2946,10 +2091,6 @@
 
     target.fillStyle =
       body;
-
-    /*
-     Rounded ghost body.
-    */
 
     target.beginPath();
 
@@ -2995,10 +2136,6 @@
 
     target.fill();
 
-    /*
-     Eyes.
-    */
-
     target.fillStyle =
       "#DEDEDE";
 
@@ -3040,29 +2177,21 @@
     target.beginPath();
 
     target.arc(
-
       -r * 0.35 +
       d.x * 2,
-
       -r * 0.18 +
       d.y * 2,
-
       r * 0.1,
-
       0,
       Math.PI * 2
     );
 
     target.arc(
-
       r * 0.35 +
       d.x * 2,
-
       -r * 0.18 +
       d.y * 2,
-
       r * 0.1,
-
       0,
       Math.PI * 2
     );
@@ -3072,10 +2201,6 @@
     target.restore();
   }
 
-  /* =========================================================
-     ANTIGEN DOT SPRITE
-     ========================================================= */
-
   function drawAntigenDot(
     target,
     x,
@@ -3083,7 +2208,6 @@
     color,
     radius = 4
   ) {
-
     target.save();
 
     target.fillStyle =
@@ -3125,17 +2249,6 @@
     target.restore();
   }
 
-  /* =========================================================
-     CYTOKINE BOOSTER SPRITE
-
-     These are deliberately CIRCULAR.
-
-     They use the same basic glowing circular design language
-     as the antigen dots, but are larger and contain a small
-     central white marker to distinguish cytokines from
-     antigens.
-     ========================================================= */
-
   function drawBonusSprite(
     target,
     x,
@@ -3143,7 +2256,6 @@
     item,
     scale = 1
   ) {
-
     const s =
       scale;
 
@@ -3162,10 +2274,6 @@
       x,
       y
     );
-
-    /*
-     Main cytokine circle.
-    */
 
     target.shadowColor =
       glow;
@@ -3187,10 +2295,6 @@
     );
 
     target.fill();
-
-    /*
-     Outer matching colored ring.
-    */
 
     target.shadowBlur =
       0;
@@ -3216,10 +2320,6 @@
 
     target.stroke();
 
-    /*
-     Small upper highlight.
-    */
-
     target.globalAlpha =
       0.22;
 
@@ -3237,11 +2337,6 @@
     );
 
     target.fill();
-
-    /*
-     Central dot visually distinguishes a cytokine booster
-     from an antigen dot.
-    */
 
     target.globalAlpha =
       1;
@@ -3267,13 +2362,10 @@
   }
 
   /* =========================================================
-     DRAW HOLLOW ORGANELLE STRUCTURE
+     STATIC BOARD RENDERING
      ========================================================= */
 
-  function drawStructureStatic(
-    structure
-  ) {
-
+  function drawStructureStatic(structure) {
     const left =
       tileCenterX(
         structure.x
@@ -3294,11 +2386,6 @@
       structure.h *
       TILE;
 
-    /*
-     Slight dark interior so the structure name remains easy
-     to read.
-    */
-
     sctx.save();
 
     sctx.fillStyle =
@@ -3310,10 +2397,6 @@
       width - 14,
       height - 14
     );
-
-    /*
-     Only the perimeter tiles are drawn.
-    */
 
     sctx.shadowColor =
       COLORS.wallGlow;
@@ -3331,7 +2414,6 @@
         structure.h;
       row++
     ) {
-
       for (
         let col = structure.x;
         col <
@@ -3339,20 +2421,13 @@
           structure.w;
         col++
       ) {
-
         const perimeter =
-
-          row ===
-            structure.y ||
-
+          row === structure.y ||
           row ===
             structure.y +
             structure.h -
             1 ||
-
-          col ===
-            structure.x ||
-
+          col === structure.x ||
           col ===
             structure.x +
             structure.w -
@@ -3362,9 +2437,7 @@
           !perimeter ||
           grid[row]?.[col] !== 1
         ) {
-
           continue;
-
         }
 
         const cx =
@@ -3377,13 +2450,8 @@
           15;
 
         sctx.fillRect(
-
-          cx -
-          size / 2,
-
-          cy -
-          size / 2,
-
+          cx - size / 2,
+          cy - size / 2,
           size,
           size
         );
@@ -3391,10 +2459,6 @@
     }
 
     sctx.restore();
-
-    /*
-     Large structure label centered in the hollow region.
-    */
 
     const centerX =
       left +
@@ -3417,14 +2481,12 @@
       sctx.measureText(
         structure.label
       ).width >
-        width - 22
+      width - 22
     ) {
-
       fontSize--;
 
       sctx.font =
         `900 ${fontSize}px "Courier New", monospace`;
-
     }
 
     sctx.textAlign =
@@ -3460,16 +2522,7 @@
     sctx.restore();
   }
 
-  /* =========================================================
-     RENDER STATIC BETA CELL
-     ========================================================= */
-
   function renderStaticLayer() {
-
-    /*
-     Background.
-    */
-
     sctx.fillStyle =
       COLORS.bg;
 
@@ -3491,10 +2544,6 @@
 
     const ry =
       BOARD_H * 0.48;
-
-    /*
-     Outer beta cell membrane.
-    */
 
     sctx.save();
 
@@ -3526,10 +2575,6 @@
 
     sctx.restore();
 
-    /*
-     Inner membrane line.
-    */
-
     sctx.strokeStyle =
       "rgba(125,160,255,0.34)";
 
@@ -3550,10 +2595,6 @@
 
     sctx.stroke();
 
-    /*
-     Faint cell interior.
-    */
-
     sctx.fillStyle =
       "rgba(81,126,244,0.05)";
 
@@ -3571,34 +2612,18 @@
 
     sctx.fill();
 
-    /*
-     Hollow ER / mitochondria / granule structures.
-    */
-
     for (
       const structure
       of STRUCTURES
     ) {
-
-      drawStructureStatic(
-        structure
-      );
-
+      drawStructureStatic(structure);
     }
 
-    /*
-     Central nucleus.
-    */
-
     const nx =
-      tileCenterX(
-        13
-      );
+      tileCenterX(13);
 
     const ny =
-      tileCenterY(
-        9.6
-      );
+      tileCenterY(9.6);
 
     sctx.save();
 
@@ -3608,13 +2633,10 @@
     sctx.beginPath();
 
     sctx.ellipse(
-
       nx,
       ny,
-
       TILE * 2.30,
       TILE * 1.42,
-
       0,
       0,
       Math.PI * 2
@@ -3664,13 +2686,10 @@
   }
 
   /* =========================================================
-     DRAW ANTIGENS
+     DYNAMIC RENDERING
      ========================================================= */
 
-  function drawPellets(
-    time
-  ) {
-
+  function drawPellets(time) {
     const radius =
       3.7 +
       Math.sin(
@@ -3678,18 +2697,12 @@
       ) *
       0.24;
 
-    /*
-     Draw each antigen group in a batch for better
-     performance.
-    */
-
     for (
       let antigen = 0;
       antigen <
         ANTIGENS.length;
       antigen++
     ) {
-
       const color =
         ANTIGENS[
           antigen
@@ -3704,15 +2717,11 @@
         const p
         of pellets
       ) {
-
         if (
           p.eaten ||
-          p.antigen !==
-            antigen
+          p.antigen !== antigen
         ) {
-
           continue;
-
         }
 
         ctx.moveTo(
@@ -3746,34 +2755,24 @@
         const p
         of pellets
       ) {
-
         if (
           p.eaten ||
-          p.antigen !==
-            antigen
+          p.antigen !== antigen
         ) {
-
           continue;
-
         }
 
         ctx.moveTo(
-
           p.x +
           radius +
           2.2,
-
           p.y
         );
 
         ctx.arc(
-
           p.x,
           p.y,
-
-          radius +
-          2.2,
-
+          radius + 2.2,
           0,
           Math.PI * 2
         );
@@ -3786,25 +2785,13 @@
     }
   }
 
-  /* =========================================================
-     DRAW CYTOKINE BOOSTERS
-     ========================================================= */
-
-  function drawPowerUps(
-    time
-  ) {
-
+  function drawPowerUps(time) {
     for (
       const p
       of powerUps
     ) {
-
-      if (
-        p.eaten
-      ) {
-
+      if (p.eaten) {
         continue;
-
       }
 
       const booster =
@@ -3821,42 +2808,24 @@
         0.06;
 
       drawBonusSprite(
-
         ctx,
-
         p.x,
         p.y,
-
         booster,
-
-        0.72 *
-        pulse
+        0.72 * pulse
       );
 
-      /*
-       Cytokine name follows directly above the circular icon.
-      */
-
       drawFloatingLabel(
-
         ctx,
-
         p.x,
         p.y - 20,
-
         booster.name,
-
         9.5
       );
     }
   }
 
-  /* =========================================================
-     DRAW CD4 T CELL
-     ========================================================= */
-
   function drawTCell() {
-
     const dir =
       DIRECTIONS[
         player.dir
@@ -3874,50 +2843,27 @@
       0.13;
 
     drawTCellSprite(
-
       ctx,
-
       player.x,
       player.y,
-
       dir.angle,
-
       mouthOpen,
-
       player.radius,
-
       boostTimer > 0
     );
 
-    /*
-     Floating white CD4 label.
-    */
-
     drawFloatingLabel(
-
       ctx,
-
       player.x,
-
       player.y -
       player.radius -
       11,
-
       "CD4",
-
       14
     );
   }
 
-  /* =========================================================
-     DRAW REGULATORY CELL
-     ========================================================= */
-
-  function drawEnemy(
-    enemy,
-    time
-  ) {
-
+  function drawEnemy(enemy, time) {
     const vulnerable =
       boostTimer > 0;
 
@@ -3930,54 +2876,32 @@
       2 === 0;
 
     drawGhostSprite(
-
       ctx,
-
       enemy.x,
       enemy.y,
-
       enemy.radius,
-
       enemy.color,
-
       enemy.dir,
-
       vulnerable,
-
       flash
     );
 
-    /*
-     Floating white enemy name.
-    */
-
     drawFloatingLabel(
-
       ctx,
-
       enemy.x,
-
       enemy.y -
       enemy.radius -
       13,
-
       enemy.name,
-
       12.5
     );
   }
 
-  /* =========================================================
-     DRAW FLOATING POINT VALUES
-     ========================================================= */
-
   function drawFloatingScores() {
-
     for (
       const item
       of floatingScores
     ) {
-
       const alpha =
         Math.max(
           0,
@@ -4032,12 +2956,7 @@
     }
   }
 
-  /* =========================================================
-     DRAW BOARD HEADER
-     ========================================================= */
-
   function drawBoardLabels() {
-
     ctx.textAlign =
       "left";
 
@@ -4061,7 +2980,6 @@
       const antigen
       of ANTIGENS
     ) {
-
       ctx.fillStyle =
         antigen.color;
 
@@ -4092,10 +3010,6 @@
         16;
     }
 
-    /*
-     Active cytokine boost status.
-    */
-
     ctx.textAlign =
       "right";
 
@@ -4106,9 +3020,7 @@
 
     const boostText =
       boostTimer > 0
-
         ? `${boostName} BOOST ${boostTimer.toFixed(1)}s`
-
         : "CYTOKINE BOOST: INACTIVE";
 
     ctx.fillText(
@@ -4116,10 +3028,6 @@
       W - 28,
       22
     );
-
-    /*
-     Beta cell label.
-    */
 
     ctx.textAlign =
       "center";
@@ -4137,12 +3045,7 @@
     );
   }
 
-  /* =========================================================
-     COMPLETION RING
-     ========================================================= */
-
   function drawProgressRing() {
-
     const x =
       W - 52;
 
@@ -4154,7 +3057,6 @@
 
     const frac =
       totalPellets
-
         ? Math.max(
           0,
           Math.min(
@@ -4163,12 +3065,7 @@
             totalPellets
           )
         )
-
         : 0;
-
-    /*
-     Background ring.
-    */
 
     ctx.lineWidth =
       4;
@@ -4187,10 +3084,6 @@
     );
 
     ctx.stroke();
-
-    /*
-     Three-antigen gradient.
-    */
 
     const grad =
       ctx.createLinearGradient(
@@ -4221,13 +3114,10 @@
     ctx.beginPath();
 
     ctx.arc(
-
       x,
       y,
       r,
-
       -Math.PI / 2,
-
       -Math.PI / 2 +
       Math.PI *
       2 *
@@ -4235,10 +3125,6 @@
     );
 
     ctx.stroke();
-
-    /*
-     Percentage.
-    */
 
     ctx.fillStyle =
       "#DFE7FF";
@@ -4261,50 +3147,31 @@
     );
   }
 
-  /* =========================================================
-     DRAW COMPLETE FRAME
-     ========================================================= */
-
   function draw(
     time = performance.now()
   ) {
-
-    /*
-     Reuse the pre-rendered beta cell layer.
-    */
-
     ctx.drawImage(
       staticLayer,
       0,
       0
     );
 
-    drawPellets(
-      time
-    );
-
-    drawPowerUps(
-      time
-    );
+    drawPellets(time);
+    drawPowerUps(time);
 
     for (
       const enemy
       of enemies
     ) {
-
       drawEnemy(
         enemy,
         time
       );
-
     }
 
     drawTCell();
-
     drawFloatingScores();
-
     drawBoardLabels();
-
     drawProgressRing();
 
     forceRender =
@@ -4312,13 +3179,10 @@
   }
 
   /* =========================================================
-     SCIENCE GUIDE CANVASES
+     GUIDE ART
      ========================================================= */
 
-  function prepGuideCanvas(
-    c
-  ) {
-
+  function prepGuideCanvas(c) {
     if (!c) {
       return null;
     }
@@ -4339,55 +3203,31 @@
     return g;
   }
 
-  /* =========================================================
-     RENDER EXACT GAME ICONS IN THE IMMUNOLOGY GUIDE
-     ========================================================= */
-
   function renderGuideIcons() {
-
-    /*
-     CD4 T cell.
-    */
-
     let g =
       prepGuideCanvas(
         UI.guideTCell
       );
 
     if (g) {
-
       drawTCellSprite(
-
         g,
-
         150,
         69,
-
         0,
-
         0.31,
-
         31,
-
         false
       );
 
       drawFloatingLabel(
-
         g,
-
         150,
         25,
-
         "CD4",
-
         16
       );
     }
-
-    /*
-     Beta cell antigens.
-    */
 
     g =
       prepGuideCanvas(
@@ -4395,7 +3235,6 @@
       );
 
     if (g) {
-
       const xs = [
         55,
         150,
@@ -4404,16 +3243,11 @@
 
       ANTIGENS.forEach(
         (antigen, i) => {
-
           drawAntigenDot(
-
             g,
-
             xs[i],
             46,
-
             antigen.color,
-
             8
           );
 
@@ -4427,20 +3261,13 @@
             antigen.color;
 
           g.fillText(
-
             antigen.name,
-
             xs[i],
-
             82
           );
         }
       );
     }
-
-    /*
-     Regulatory immune cells.
-    */
 
     g =
       prepGuideCanvas(
@@ -4448,27 +3275,22 @@
       );
 
     if (g) {
-
       const guideEnemies = [
-
         {
           x: 47,
           name: "Treg",
           color: "#C55CFF"
         },
-
         {
           x: 135,
           name: "Tol DC",
           color: "#4FC3FF"
         },
-
         {
           x: 229,
           name: "PD-L1 APC",
           color: "#FF5D73"
         },
-
         {
           x: 321,
           name: "Reg Mφ",
@@ -4476,48 +3298,27 @@
         }
       ];
 
-      guideEnemies.forEach(
-        e => {
+      guideEnemies.forEach(e => {
+        drawGhostSprite(
+          g,
+          e.x,
+          79,
+          25,
+          e.color,
+          "left",
+          false,
+          false
+        );
 
-          drawGhostSprite(
-
-            g,
-
-            e.x,
-            79,
-
-            25,
-
-            e.color,
-
-            "left",
-
-            false,
-
-            false
-          );
-
-          drawFloatingLabel(
-
-            g,
-
-            e.x,
-            32,
-
-            e.name,
-
-            11.5
-          );
-        }
-      );
+        drawFloatingLabel(
+          g,
+          e.x,
+          32,
+          e.name,
+          11.5
+        );
+      });
     }
-
-    /*
-     Cytokine boosters.
-
-     These use the same exact circular drawing function
-     as the boosters appearing in the playable game.
-    */
 
     g =
       prepGuideCanvas(
@@ -4525,7 +3326,6 @@
       );
 
     if (g) {
-
       const xs = [
         52,
         156,
@@ -4540,11 +3340,8 @@
 
       BOOSTERS.forEach(
         (item, i) => {
-
           const x =
-            xs[
-              i % 4
-            ];
+            xs[i % 4];
 
           const y =
             ys[
@@ -4554,14 +3351,10 @@
             ];
 
           drawBonusSprite(
-
             g,
-
             x,
             y,
-
             item,
-
             0.70
           );
 
@@ -4575,11 +3368,8 @@
             "#FFFFFF";
 
           g.fillText(
-
             item.name,
-
             x,
-
             y + 25
           );
         }
@@ -4588,51 +3378,30 @@
   }
 
   /* =========================================================
-     GAME UPDATE
+     MAIN UPDATE LOOP
      ========================================================= */
 
-  function update(
-    dt
-  ) {
-
-    /*
-     Stage/banner countdown.
-    */
-
-    if (
-      bannerTimer > 0
-    ) {
-
-      bannerTimer -=
-        dt;
+  function update(dt) {
+    if (bannerTimer > 0) {
+      bannerTimer -= dt;
 
       if (
         bannerTimer <= 0
       ) {
-
         hideStageBanner();
-
       }
     }
-
-    /*
-     Floating point labels.
-    */
 
     for (
       const item
       of floatingScores
     ) {
-
-      item.time -=
-        dt;
-
+      item.time -= dt;
     }
 
     if (
       floatingScores.length
     ) {
-
       floatingScores =
         floatingScores.filter(
           item =>
@@ -4643,22 +3412,16 @@
         true;
     }
 
-    /*
-     Short recovery after regulatory cell contact.
-    */
-
     if (
       state ===
       "recovering"
     ) {
-
       recoveryTimer -=
         dt;
 
       if (
         recoveryTimer <= 0
       ) {
-
         state =
           "running";
 
@@ -4676,19 +3439,12 @@
       state !==
       "running"
     ) {
-
       return;
-
     }
-
-    /*
-     Cytokine boost countdown.
-    */
 
     if (
       boostTimer > 0
     ) {
-
       boostTimer =
         Math.max(
           0,
@@ -4698,7 +3454,6 @@
       if (
         boostTimer === 0
       ) {
-
         boostName =
           "";
 
@@ -4707,32 +3462,15 @@
       }
     }
 
-    movePlayer(
-      dt
-    );
-
-    moveEnemies(
-      dt
-    );
-
+    movePlayer(dt);
+    moveEnemies(dt);
     handleEnemyCollisions();
   }
 
-  /* =========================================================
-     MAIN GAME LOOP
-     ========================================================= */
-
-  function gameLoop(
-    time
-  ) {
-
-    if (
-      !lastFrameTime
-    ) {
-
+  function gameLoop(time) {
+    if (!lastFrameTime) {
       lastFrameTime =
         time;
-
     }
 
     let frameSeconds =
@@ -4744,10 +3482,6 @@
 
     lastFrameTime =
       time;
-
-    /*
-     Avoid huge simulation jumps if the browser briefly stalls.
-    */
 
     frameSeconds =
       Math.min(
@@ -4761,12 +3495,7 @@
       state ===
         "recovering";
 
-    /*
-     Fixed 60 Hz simulation.
-    */
-
     if (active) {
-
       accumulator +=
         frameSeconds;
 
@@ -4778,7 +3507,6 @@
         updates <
           MAX_UPDATES_PER_FRAME
       ) {
-
         update(
           FIXED_STEP
         );
@@ -4793,22 +3521,13 @@
         updates ===
         MAX_UPDATES_PER_FRAME
       ) {
-
         accumulator =
           0;
-
       }
-
     } else {
-
       accumulator =
         0;
-
     }
-
-    /*
-     Render no more than ~60 FPS.
-    */
 
     if (
       (
@@ -4820,10 +3539,7 @@
       ) ||
       forceRender
     ) {
-
-      draw(
-        time
-      );
+      draw(time);
 
       lastRenderTime =
         time;
@@ -4835,20 +3551,15 @@
   }
 
   /* =========================================================
-     PLAYER CONTROLS
+     CONTROLS
      ========================================================= */
 
-  function setDirection(
-    dir
-  ) {
-
+  function setDirection(dir) {
     if (
       !DIRECTIONS[dir] ||
       !player
     ) {
-
       return;
-
     }
 
     player.queuedDir =
@@ -4856,45 +3567,25 @@
   }
 
   window.addEventListener(
-
     "keydown",
-
     event => {
-
       const key =
         event.key.toLowerCase();
 
       const dirMap = {
-
-        arrowleft:
-          "left",
-
-        a:
-          "left",
-
-        arrowright:
-          "right",
-
-        d:
-          "right",
-
-        arrowup:
-          "up",
-
-        w:
-          "up",
-
-        arrowdown:
-          "down",
-
-        s:
-          "down"
+        arrowleft: "left",
+        a: "left",
+        arrowright: "right",
+        d: "right",
+        arrowup: "up",
+        w: "up",
+        arrowdown: "down",
+        s: "down"
       };
 
       if (
         dirMap[key]
       ) {
-
         event.preventDefault();
 
         setDirection(
@@ -4905,9 +3596,7 @@
           state ===
           "ready"
         ) {
-
           startGame();
-
         }
 
         return;
@@ -4916,108 +3605,71 @@
       if (
         key === "p"
       ) {
-
         event.preventDefault();
 
         togglePause();
-
       } else if (
         key === "m"
       ) {
-
         event.preventDefault();
 
         toggleSound();
-
       }
     },
-
     {
       passive: false
     }
   );
 
-  /* =========================================================
-     TOUCH CONTROLS
-     ========================================================= */
-
   document
     .querySelectorAll(
       ".aa-touch[data-dir]"
     )
-    .forEach(
-      button => {
+    .forEach(button => {
+      button.addEventListener(
+        "pointerdown",
+        event => {
+          event.preventDefault();
 
-        button.addEventListener(
+          setDirection(
+            button.dataset.dir
+          );
 
-          "pointerdown",
-
-          event => {
-
-            event.preventDefault();
-
-            setDirection(
-              button.dataset.dir
-            );
-
-            if (
-              state ===
-              "ready"
-            ) {
-
-              startGame();
-
-            }
+          if (
+            state ===
+            "ready"
+          ) {
+            startGame();
           }
-        );
-      }
-    );
-
-  /* =========================================================
-     UI BUTTONS
-     ========================================================= */
+        }
+      );
+    });
 
   UI.primaryButton.addEventListener(
-
     "click",
-
     () => {
-
       if (
         state ===
         "paused"
       ) {
-
         togglePause();
-
       } else {
-
         startGame();
-
       }
     }
   );
 
   UI.pauseButton.addEventListener(
-
     "click",
-
     togglePause
   );
 
   UI.restartButton.addEventListener(
-
     "click",
-
     restartGame
   );
 
-  /* =========================================================
-     SOUND TOGGLE
-     ========================================================= */
-
   function toggleSound() {
-
     soundEnabled =
       !soundEnabled;
 
@@ -5029,18 +3681,13 @@
       }`;
 
     UI.soundButton.setAttribute(
-
       "aria-pressed",
-
       String(
         !soundEnabled
       )
     );
 
-    if (
-      soundEnabled
-    ) {
-
+    if (soundEnabled) {
       ensureAudio();
 
       beep(
@@ -5053,44 +3700,30 @@
   }
 
   UI.soundButton.addEventListener(
-
     "click",
-
     toggleSound
   );
 
-  /* =========================================================
-     PAUSE WHEN TAB IS HIDDEN
-     ========================================================= */
-
   document.addEventListener(
-
     "visibilitychange",
-
     () => {
-
       if (
         document.hidden
       ) {
-
         persistHighScore();
 
         if (
           state ===
           "running"
         ) {
-
           togglePause();
-
         }
       }
     }
   );
 
   window.addEventListener(
-
     "pagehide",
-
     persistHighScore
   );
 
@@ -5099,25 +3732,16 @@
      ========================================================= */
 
   buildGrid();
-
   generatePowerUps();
-
   generatePellets();
-
   renderStaticLayer();
-
   resetGame(true);
-
   renderGuideIcons();
 
   showOverlay(
-
     "Beta Cell Breakdown",
-
     "Clear the yellow, pink, and blue beta cell antigen dots while avoiding immune regulatory cells. Cytokine bonus items temporarily amplify your T cell response.",
-
     "Start experiment",
-
     true
   );
 
@@ -5126,5 +3750,4 @@
   requestAnimationFrame(
     gameLoop
   );
-
 })();
