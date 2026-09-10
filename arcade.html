@@ -5,6 +5,28 @@ title: Autoimmune Arcade
 
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/game/arcade.css">
 
+<script>
+  document.body.classList.add("aa-arcade-active");
+</script>
+
+<nav class="aa-page-selector" aria-label="Page selection">
+  <button class="aa-page-selector-trigger" type="button" aria-label="Page selection">
+    <span class="aa-page-selector-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span>Page selection</span>
+  </button>
+
+  <div class="aa-page-selector-menu">
+    <a href="{{ site.baseurl }}/">Home</a>
+    <a href="{{ site.baseurl }}/research.html">Research</a>
+    <a href="{{ site.baseurl }}/people.html">People</a>
+    <a href="{{ site.baseurl }}/publications.html">Publications</a>
+    <a class="is-current" href="{{ site.baseurl }}/arcade.html" aria-current="page">Arcade</a>
+    <a href="{{ site.baseurl }}/gallery.html">Gallery</a>
+    <a href="{{ site.baseurl }}/lab-values.html">Lab Values</a>
+    <a href="{{ site.baseurl }}/contact.html">Contact</a>
+  </div>
+</nav>
+
 <section class="aa-page" aria-labelledby="arcade-title">
   <div class="aa-hero">
     <div>
@@ -94,15 +116,8 @@ title: Autoimmune Arcade
             <span><i class="aa-dot aa-dot-insb"></i>InsB:9-23</span>
           </div>
 
-          <button id="aa-primary-button" class="aa-game-button" type="button">
-            Start experiment
-          </button>
-
-          <p class="aa-key-hint">
-            Move: Arrow keys / WASD &nbsp;•&nbsp;
-            Pause: P &nbsp;•&nbsp;
-            Sound: M
-          </p>
+          <button id="aa-primary-button" class="aa-game-button" type="button">Start experiment</button>
+          <p class="aa-key-hint">Move: Arrow keys / WASD &nbsp;•&nbsp; Pause: P &nbsp;•&nbsp; Sound: M</p>
         </div>
       </div>
 
@@ -110,60 +125,16 @@ title: Autoimmune Arcade
     </div>
 
     <div class="aa-control-row">
-      <button id="aa-pause" class="aa-small-button" type="button">
-        Pause
-      </button>
-
-      <button
-        id="aa-sound"
-        class="aa-small-button"
-        type="button"
-        aria-pressed="false"
-      >
-        Sound: on
-      </button>
-
-      <button id="aa-restart" class="aa-small-button" type="button">
-        Restart
-      </button>
+      <button id="aa-pause" class="aa-small-button" type="button">Pause</button>
+      <button id="aa-sound" class="aa-small-button" type="button" aria-pressed="false">Sound: on</button>
+      <button id="aa-restart" class="aa-small-button" type="button">Restart</button>
     </div>
 
     <div class="aa-touch-controls" aria-label="Touch controls">
-      <button
-        class="aa-touch aa-up"
-        data-dir="up"
-        type="button"
-        aria-label="Move up"
-      >
-        ▲
-      </button>
-
-      <button
-        class="aa-touch aa-left"
-        data-dir="left"
-        type="button"
-        aria-label="Move left"
-      >
-        ◀
-      </button>
-
-      <button
-        class="aa-touch aa-down"
-        data-dir="down"
-        type="button"
-        aria-label="Move down"
-      >
-        ▼
-      </button>
-
-      <button
-        class="aa-touch aa-right"
-        data-dir="right"
-        type="button"
-        aria-label="Move right"
-      >
-        ▶
-      </button>
+      <button class="aa-touch aa-up" data-dir="up" type="button" aria-label="Move up">▲</button>
+      <button class="aa-touch aa-left" data-dir="left" type="button" aria-label="Move left">◀</button>
+      <button class="aa-touch aa-down" data-dir="down" type="button" aria-label="Move down">▼</button>
+      <button class="aa-touch aa-right" data-dir="right" type="button" aria-label="Move right">▶</button>
     </div>
   </div>
 
@@ -173,80 +144,15 @@ title: Autoimmune Arcade
       <span class="aa-kicker aa-guide-kicker">What the game represents</span>
     </div>
 
-    <div class="aa-guide-grid">
-
-      <article class="aa-guide-card">
-        <canvas
-          id="aa-guide-tcell-canvas"
-          class="aa-guide-canvas"
-          width="300"
-          height="116"
-          aria-hidden="true"
-        ></canvas>
-
-        <h3>Autoreactive CD4+ T cell</h3>
-
-        <p>
-          You control the T cell. Antigen encounters and cytokine boosts raise its activation
-          state from <strong>Naive</strong> to <strong>Activated</strong>,
-          <strong>Expanded</strong>, and <strong>Effector</strong>.
-        </p>
-      </article>
-
-      <article class="aa-guide-card">
-        <canvas
-          id="aa-guide-antigen-canvas"
-          class="aa-guide-canvas"
-          width="300"
-          height="116"
-          aria-hidden="true"
-        ></canvas>
-
-        <h3>Beta cell antigens</h3>
-
-        <p>
-          Antigen dots are color coded exactly as they appear on the board:
-          <strong>IAPP-HIP</strong> is yellow,
-          <strong>ChgA-HIP</strong> is pink, and
-          <strong>InsB:9-23</strong> is blue.
-          Clearing all antigen dots reduces simulated beta cell function to 0%.
-        </p>
-      </article>
-
-      <article class="aa-guide-card">
-        <canvas
-          id="aa-guide-ghost-canvas"
-          class="aa-guide-canvas"
-          width="360"
-          height="126"
-          aria-hidden="true"
-        ></canvas>
-
-        <h3>Immune regulation</h3>
-
-        <p>
-          Regulatory T cells and suppressive or tolerogenic antigen presenting cells act as
-          the maze antagonists. Contact lowers activation and costs a T cell life.
-        </p>
-      </article>
-
-      <article class="aa-guide-card aa-guide-card-boosts">
-        <canvas
-          id="aa-guide-boost-canvas"
-          class="aa-guide-canvas aa-guide-boost-canvas"
-          width="420"
-          height="150"
-          aria-hidden="true"
-        ></canvas>
-
+    <div class="aa-guide-grid aa-guide-layout">
+      <article class="aa-guide-card aa-guide-card-boosts aa-guide-boosts-left">
+        <canvas id="aa-guide-boost-canvas" class="aa-guide-canvas aa-guide-boost-canvas" width="420" height="150" aria-hidden="true"></canvas>
         <h3>Inflammatory boosts</h3>
-
         <p>
           Cytokine bonus items temporarily increase T cell performance and make regulatory
           enemies vulnerable. Their point values follow the classic escalating arcade bonus
           progression.
         </p>
-
         <div class="aa-boost-points" aria-label="Cytokine bonus point values">
           <span><strong>IL-2</strong> 100</span>
           <span><strong>IL-12</strong> 300</span>
@@ -259,6 +165,37 @@ title: Autoimmune Arcade
         </div>
       </article>
 
+      <div class="aa-guide-right">
+        <article class="aa-guide-card aa-guide-card-compact">
+          <canvas id="aa-guide-tcell-canvas" class="aa-guide-canvas" width="300" height="116" aria-hidden="true"></canvas>
+          <h3>Autoreactive CD4+ T cell</h3>
+          <p>
+            You control the T cell. Antigen encounters and cytokine boosts raise its activation
+            state from <strong>Naive</strong> to <strong>Activated</strong>,
+            <strong>Expanded</strong>, and <strong>Effector</strong>.
+          </p>
+        </article>
+
+        <article class="aa-guide-card aa-guide-card-compact">
+          <canvas id="aa-guide-antigen-canvas" class="aa-guide-canvas" width="300" height="116" aria-hidden="true"></canvas>
+          <h3>Beta cell antigens</h3>
+          <p>
+            Antigen dots are color coded exactly as they appear on the board:
+            <strong>IAPP-HIP</strong> is yellow, <strong>ChgA-HIP</strong> is pink, and
+            <strong>InsB:9-23</strong> is blue. Clearing all antigen dots reduces simulated
+            beta cell function to 0%.
+          </p>
+        </article>
+
+        <article class="aa-guide-card aa-guide-card-compact">
+          <canvas id="aa-guide-ghost-canvas" class="aa-guide-canvas" width="360" height="126" aria-hidden="true"></canvas>
+          <h3>Immune regulation</h3>
+          <p>
+            Regulatory T cells and suppressive or tolerogenic antigen presenting cells act as
+            the maze antagonists. Contact lowers activation and costs a T cell life.
+          </p>
+        </article>
+      </div>
     </div>
 
     <div class="aa-win-rule">
