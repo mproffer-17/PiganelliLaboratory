@@ -2,16 +2,19 @@
   "use strict";
 
   /* =========================================================
-     AUTOIMMUNE ARCADE: BETA CELL BREAKDOWN — V6
+     AUTOIMMUNE ARCADE: BETA CELL BREAKDOWN — V6.1
+     Clean rebuild
+     - fixes Start Experiment / keyboard-handler syntax issue
+     - restores guide icons
+     - keeps global Supabase top-five leaderboard
+     - allows any leaderboard name up to 10 characters
+     - forces leaderboard names to uppercase
      ========================================================= */
 
   const canvas = document.getElementById("betaCellGame");
-
   if (!canvas) return;
 
-  const ctx = canvas.getContext("2d", {
-    alpha: false
-  });
+  const ctx = canvas.getContext("2d", { alpha: false });
 
   const UI = {
     score: document.getElementById("aa-score"),
@@ -57,21 +60,19 @@
   const LEADERBOARD_LIMIT = 5;
   const USERNAME_MAX_LENGTH = 10;
 
+  /* =========================================================
+     GAME CONSTANTS
+     ========================================================= */
+
   const W = canvas.width;
   const H = canvas.height;
   const COLS = 27;
   const ROWS = 21;
   const TILE = 30;
-
   const BOARD_W = COLS * TILE;
   const BOARD_H = ROWS * TILE;
-
-  const OFFSET_X =
-    (W - BOARD_W) / 2;
-
-  const OFFSET_Y =
-    (H - BOARD_H) / 2;
-
+  const OFFSET_X = (W - BOARD_W) / 2;
+  const OFFSET_Y = (H - BOARD_H) / 2;
   const FIXED_STEP = 1 / 60;
   const MAX_UPDATES_PER_FRAME = 4;
   const RENDER_INTERVAL = 1000 / 60;
@@ -80,7 +81,6 @@
     bg: "#03050d",
     membrane: "#6389ff",
     wall: "#2459ff",
-    wallDark: "#07123e",
     wallGlow: "rgba(81,126,244,0.60)",
     iapp: "#FFE84A",
     chga: "#FF6AA9",
@@ -92,65 +92,24 @@
   };
 
   const DIRECTIONS = {
-    left: {
-      x: -1,
-      y: 0,
-      angle: Math.PI
-    },
-
-    right: {
-      x: 1,
-      y: 0,
-      angle: 0
-    },
-
-    up: {
-      x: 0,
-      y: -1,
-      angle: -Math.PI / 2
-    },
-
-    down: {
-      x: 0,
-      y: 1,
-      angle: Math.PI / 2
-    },
-
-    none: {
-      x: 0,
-      y: 0,
-      angle: 0
-    }
+    left:  { x: -1, y: 0, angle: Math.PI },
+    right: { x: 1, y: 0, angle: 0 },
+    up:    { x: 0, y: -1, angle: -Math.PI / 2 },
+    down:  { x: 0, y: 1, angle: Math.PI / 2 },
+    none:  { x: 0, y: 0, angle: 0 }
   };
 
-  const DIR_NAMES = [
-    "left",
-    "right",
-    "up",
-    "down"
-  ];
+  const DIR_NAMES = ["left", "right", "up", "down"];
 
   const ANTIGENS = [
-    {
-      name: "IAPP-HIP",
-      color: COLORS.iapp
-    },
-
-    {
-      name: "ChgA-HIP",
-      color: COLORS.chga
-    },
-
-    {
-      name: "InsB:9-23",
-      color: COLORS.insb
-    }
+    { name: "IAPP-HIP", color: COLORS.iapp },
+    { name: "ChgA-HIP", color: COLORS.chga },
+    { name: "InsB:9-23", color: COLORS.insb }
   ];
 
   const BOOSTERS = [
     {
       name: "IL-2",
-      arcadeRef: "Cherry",
       bonus: 100,
       effect: "Expansion boost",
       main: "#FE3030"
@@ -158,7 +117,6 @@
 
     {
       name: "IL-12",
-      arcadeRef: "Strawberry",
       bonus: 300,
       effect: "Effector boost",
       main: "#FF73B7"
@@ -166,7 +124,6 @@
 
     {
       name: "IFNγ",
-      arcadeRef: "Orange",
       bonus: 500,
       effect: "Inflammatory boost",
       main: "#FFA23A"
@@ -174,7 +131,6 @@
 
     {
       name: "IL-21",
-      arcadeRef: "Apple",
       bonus: 700,
       effect: "Persistence boost",
       main: "#6BEA63"
@@ -182,7 +138,6 @@
 
     {
       name: "IL-18",
-      arcadeRef: "Melon",
       bonus: 1000,
       effect: "Activation boost",
       main: "#67E3B8"
@@ -190,7 +145,6 @@
 
     {
       name: "TNFα",
-      arcadeRef: "Galaxian",
       bonus: 2000,
       effect: "Inflammatory boost",
       main: "#4D79FF"
@@ -198,7 +152,6 @@
 
     {
       name: "IL-1β",
-      arcadeRef: "Bell",
       bonus: 3000,
       effect: "Danger signal boost",
       main: "#FFE04E"
@@ -206,7 +159,6 @@
 
     {
       name: "Type I IFN",
-      arcadeRef: "Key",
       bonus: 5000,
       effect: "Antiviral inflammatory boost",
       main: "#FFFFFF"
@@ -337,16 +289,17 @@
     row: 18
   };
 
+  /* =========================================================
+     STATE
+     ========================================================= */
+
   let grid = [];
 
   let pellets = [];
   let pelletGrid = [];
 
-  let antigenTotals =
-    [0, 0, 0];
-
-  let antigenRemaining =
-    [0, 0, 0];
+  let antigenTotals = [0, 0, 0];
+  let antigenRemaining = [0, 0, 0];
 
   let totalPellets = 0;
   let remainingPellets = 0;
@@ -362,9 +315,7 @@
   let state = "ready";
 
   let score = 0;
-
-  let highScore =
-    readHighScore();
+  let highScore = readHighScore();
 
   let lives = 3;
 
@@ -428,16 +379,17 @@
     );
 
   /* =========================================================
-     LOCAL HIGH SCORE
+     LOCAL STORAGE
      ========================================================= */
 
   function readHighScore() {
     try {
-      const value = Number(
-        window.localStorage.getItem(
-          "autoimmuneArcadeHighScore"
-        ) || 0
-      );
+      const value =
+        Number(
+          window.localStorage.getItem(
+            "autoimmuneArcadeHighScore"
+          ) || 0
+        );
 
       return Number.isFinite(value)
         ? value
@@ -455,6 +407,10 @@
       );
     } catch (_) {}
   }
+
+  /* =========================================================
+     BOARD HELPERS
+     ========================================================= */
 
   function tileCenterX(col) {
     return (
@@ -490,10 +446,6 @@
       down: "up"
     }[dir] || "none";
   }
-
-  /* =========================================================
-     BUILD BOARD
-     ========================================================= */
 
   function buildGrid() {
     grid =
@@ -707,7 +659,9 @@
             used
           );
 
-        if (!position) return;
+        if (!position) {
+          return;
+        }
 
         used.add(
           `${position.col},${position.row}`
@@ -718,12 +672,14 @@
           row: position.row,
           type,
           eaten: false,
-          x: tileCenterX(
-            position.col
-          ),
-          y: tileCenterY(
-            position.row
-          )
+          x:
+            tileCenterX(
+              position.col
+            ),
+          y:
+            tileCenterY(
+              position.row
+            )
         };
 
         powerUps.push(power);
@@ -790,7 +746,12 @@
         col < COLS - 1;
         col++
       ) {
-        if (!isOpen(col, row)) {
+        if (
+          !isOpen(
+            col,
+            row
+          )
+        ) {
           continue;
         }
 
@@ -858,15 +819,19 @@
           row: position.row,
           antigen,
           eaten: false,
-          x: tileCenterX(
-            position.col
-          ),
-          y: tileCenterY(
-            position.row
-          )
+          x:
+            tileCenterX(
+              position.col
+            ),
+          y:
+            tileCenterY(
+              position.row
+            )
         };
 
-        pellets.push(pellet);
+        pellets.push(
+          pellet
+        );
 
         pelletGrid[
           pellet.row
@@ -890,6 +855,10 @@
       totalPellets;
   }
 
+  /* =========================================================
+     ENTITIES
+     ========================================================= */
+
   function makeEntity(
     col,
     row,
@@ -902,9 +871,12 @@
       queuedDir: "none",
       progress: 0,
       tilesPerSecond,
-      x: tileCenterX(col),
-      y: tileCenterY(row),
-      radius: TILE * 0.38
+      x:
+        tileCenterX(col),
+      y:
+        tileCenterY(row),
+      radius:
+        TILE * 0.38
     };
   }
 
@@ -1049,6 +1021,7 @@
                     ? 4
                     : 22
                 ),
+
             row:
               i < 2
                 ? 4
@@ -1083,11 +1056,9 @@
      ========================================================= */
 
   function leaderboardConfigured() {
-    return (
+    return Boolean(
       LEADERBOARD_CONFIG.supabaseUrl &&
-      LEADERBOARD_CONFIG.publishableKey &&
-      !LEADERBOARD_CONFIG.supabaseUrl.startsWith("YOUR_") &&
-      !LEADERBOARD_CONFIG.publishableKey.startsWith("YOUR_")
+      LEADERBOARD_CONFIG.publishableKey
     );
   }
 
@@ -1148,6 +1119,7 @@
         detail =
           errorBody?.message ||
           errorBody?.details ||
+          errorBody?.hint ||
           "";
       } catch (_) {}
 
@@ -1202,44 +1174,60 @@
           "span"
         );
 
+      const username =
+        document.createElement(
+          "strong"
+        );
+
+      const scoreText =
+        document.createElement(
+          "span"
+        );
+
       rank.className =
         "aa-rank";
 
       rank.textContent =
         String(index + 1);
 
-const username =
-  (
-    UI.scoreName?.value ||
-    ""
-  )
-    .trim()
-    .toUpperCase()
-    .slice(
-      0,
-      USERNAME_MAX_LENGTH
-    );
+      username.textContent =
+        record?.username ||
+        "---";
 
-const valid =
-  username.length >= 1 &&
-  username.length <=
-    USERNAME_MAX_LENGTH;
+      scoreText.textContent =
+        record
+          ? String(
+              Number(
+                record.score
+              ) || 0
+            ).padStart(
+              6,
+              "0"
+            )
+          : "------";
 
-if (!valid) {
+      li.append(
+        rank,
+        username,
+        scoreText
+      );
 
-  UI.scoreFormMessage
-    .textContent =
-    "Enter a name between 1 and 10 characters.";
+      UI.leaderboardList
+        .appendChild(
+          li
+        );
+    }
+  }
 
-  UI.scoreFormMessage
-    .classList.add(
-      "is-error"
-    );
-
-  UI.scoreName.focus();
-
-  return;
-}
+  function setLeaderboardStatus(
+    message,
+    isError = false
+  ) {
+    if (
+      !UI.leaderboardStatus
+    ) {
+      return;
+    }
 
     UI.leaderboardStatus
       .textContent =
@@ -1273,7 +1261,7 @@ if (!valid) {
       }
 
       setLeaderboardStatus(
-        "Global records will appear after the database is connected."
+        "Global records are not configured."
       );
 
       return false;
@@ -1297,9 +1285,9 @@ if (!valid) {
       leaderboardScores =
         Array.isArray(scores)
           ? scores.slice(
-            0,
-            LEADERBOARD_LIMIT
-          )
+              0,
+              LEADERBOARD_LIMIT
+            )
           : [];
 
       leaderboardReady =
@@ -1388,7 +1376,10 @@ if (!valid) {
         b =>
           b
             .toString(16)
-            .padStart(2, "0")
+            .padStart(
+              2,
+              "0"
+            )
       );
 
     return (
@@ -1404,7 +1395,9 @@ if (!valid) {
     if (
       anonymousPlayerId
     ) {
-      return anonymousPlayerId;
+      return (
+        anonymousPlayerId
+      );
     }
 
     try {
@@ -1527,7 +1520,7 @@ if (!valid) {
     ) {
       UI.scoreFormMessage
         .textContent =
-        "1–10 letters, numbers, or underscores.";
+        "Enter any name up to 10 characters.";
 
       UI.scoreFormMessage
         .classList.remove(
@@ -1571,6 +1564,32 @@ if (!valid) {
     UI.scoreName.focus();
   }
 
+  function escapeHtml(
+    value
+  ) {
+    return String(value)
+      .replaceAll(
+        "&",
+        "&amp;"
+      )
+      .replaceAll(
+        "<",
+        "&lt;"
+      )
+      .replaceAll(
+        ">",
+        "&gt;"
+      )
+      .replaceAll(
+        '"',
+        "&quot;"
+      )
+      .replaceAll(
+        "'",
+        "&#039;"
+      );
+  }
+
   function showPendingEndScreen(
     savedName = ""
   ) {
@@ -1597,30 +1616,6 @@ if (!valid) {
       endScreen.buttonText,
       false
     );
-  }
-
-  function escapeHtml(value) {
-    return String(value)
-      .replaceAll(
-        "&",
-        "&amp;"
-      )
-      .replaceAll(
-        "<",
-        "&lt;"
-      )
-      .replaceAll(
-        ">",
-        "&gt;"
-      )
-      .replaceAll(
-        '"',
-        "&quot;"
-      )
-      .replaceAll(
-        "'",
-        "&#039;"
-      );
   }
 
   async function processFinishedScore(
@@ -1664,21 +1659,36 @@ if (!valid) {
       return;
     }
 
+    /*
+       Any characters are allowed.
+
+       The HTML input already has maxlength="10".
+       We also uppercase the actual stored value.
+    */
+
     const username =
       (
         UI.scoreName?.value ||
         ""
-      ).trim();
+      )
+        .trim()
+        .toUpperCase()
+        .slice(
+          0,
+          USERNAME_MAX_LENGTH
+        );
 
     const valid =
-      new RegExp(
-        `^[A-Za-z0-9_]{1,${USERNAME_MAX_LENGTH}}$`
-      ).test(username);
+      username.length >= 1 &&
+      username.length <=
+        USERNAME_MAX_LENGTH;
 
-    if (!valid) {
+    if (
+      !valid
+    ) {
       UI.scoreFormMessage
         .textContent =
-        "Use 1–10 letters, numbers, or underscores only.";
+        "Enter a name between 1 and 10 characters.";
 
       UI.scoreFormMessage
         .classList.add(
@@ -1711,8 +1721,11 @@ if (!valid) {
         {
           p_username:
             username,
+
           p_score:
-            Math.round(score)
+            Math.round(
+              score
+            )
         }
       );
 
@@ -1729,9 +1742,14 @@ if (!valid) {
 
       UI.scoreFormMessage
         .textContent =
-        error?.message?.includes(
-          "no longer qualifies"
+        String(
+          error?.message ||
+          ""
         )
+          .toLowerCase()
+          .includes(
+            "no longer qualifies"
+          )
           ? "The leaderboard changed and this score no longer qualifies."
           : "Could not save the score. Please try again.";
 
@@ -1749,7 +1767,7 @@ if (!valid) {
   }
 
   /* =========================================================
-     RESET / HUD
+     GAME RESET / HUD / OVERLAYS
      ========================================================= */
 
   function resetGame(
@@ -1758,15 +1776,21 @@ if (!valid) {
     if (full) {
       score = 0;
       lives = 3;
+
       activation = 8;
       betaFunction = 100;
+
       currentAntigen = 0;
       totalCollected = 0;
+
       boostTimer = 0;
       boostName = "";
+
       enemyEatChain = 0;
+
       recoveryTimer = 0;
       bannerTimer = 0;
+
       floatingScores = [];
 
       antigenRemaining =
@@ -1821,7 +1845,8 @@ if (!valid) {
     if (
       score > highScore
     ) {
-      highScore = score;
+      highScore =
+        score;
     }
 
     const actState =
@@ -1839,10 +1864,13 @@ if (!valid) {
 
     if (
       force ||
-      uiCache.score !== score
+      uiCache.score !==
+        score
     ) {
       UI.score.textContent =
-        String(score).padStart(
+        String(
+          score
+        ).padStart(
           6,
           "0"
         );
@@ -1856,12 +1884,14 @@ if (!valid) {
       uiCache.highScore !==
         highScore
     ) {
-      UI.highScore.textContent =
-        String(highScore)
-          .padStart(
-            6,
-            "0"
-          );
+      UI.highScore
+        .textContent =
+        String(
+          highScore
+        ).padStart(
+          6,
+          "0"
+        );
 
       uiCache.highScore =
         highScore;
@@ -2090,21 +2120,24 @@ if (!valid) {
           window.AudioContext ||
           window.webkitAudioContext;
 
-        if (AC) {
+        if (
+          AC
+        ) {
           audioContext =
             new AC();
         }
       }
 
       if (
-        audioContext &&
-        audioContext.state ===
-          "suspended"
+        audioContext?.state ===
+        "suspended"
       ) {
         audioContext.resume();
       }
 
-      return audioContext;
+      return (
+        audioContext
+      );
     } catch (_) {
       return null;
     }
@@ -2120,7 +2153,11 @@ if (!valid) {
     const ac =
       ensureAudio();
 
-    if (!ac) return;
+    if (
+      !ac
+    ) {
+      return;
+    }
 
     try {
       const osc =
@@ -2141,7 +2178,9 @@ if (!valid) {
           now
         );
 
-      if (slide) {
+      if (
+        slide
+      ) {
         osc.frequency
           .linearRampToValueAtTime(
             freq + slide,
@@ -2161,13 +2200,17 @@ if (!valid) {
           now + duration
         );
 
-      osc.connect(gain);
+      osc.connect(
+        gain
+      );
 
       gain.connect(
         ac.destination
       );
 
-      osc.start(now);
+      osc.start(
+        now
+      );
 
       osc.stop(
         now + duration
@@ -2195,7 +2238,8 @@ if (!valid) {
     beep(
       520 +
       (
-        totalCollected % 5
+        totalCollected %
+        5
       ) *
       40,
       0.028,
@@ -2242,7 +2286,7 @@ if (!valid) {
       784,
       1047
     ].forEach(
-      (f, i) =>
+      (f, i) => {
         setTimeout(
           () =>
             beep(
@@ -2252,12 +2296,13 @@ if (!valid) {
               0.024
             ),
           i * 105
-        )
+        );
+      }
     );
   }
 
   /* =========================================================
-     ENEMY MOVEMENT
+     MOVEMENT / ENEMY AI
      ========================================================= */
 
   function choosePlayerDirectionAtCenter() {
@@ -2322,8 +2367,11 @@ if (!valid) {
       "chase"
     ) {
       return {
-        col: playerCol,
-        row: playerRow
+        col:
+          playerCol,
+
+        row:
+          playerRow
       };
     }
 
@@ -2361,9 +2409,12 @@ if (!valid) {
       )
         ? enemy.scatter
         : {
-          col: playerCol,
-          row: playerRow
-        };
+            col:
+              playerCol,
+
+            row:
+              playerRow
+          };
     }
 
     const cycle =
@@ -2376,37 +2427,31 @@ if (!valid) {
       cycle === 0
     )
       ? {
-        col: playerCol,
-        row: playerRow
-      }
+          col:
+            playerCol,
+
+          row:
+            playerRow
+        }
       : enemy.scatter;
   }
 
   function legalEnemyDirections(
     enemy
   ) {
-    const available = [];
+    const available =
+      DIR_NAMES.filter(
+        name =>
+          canLeaveTile(
+            enemy,
+            name
+          )
+      );
 
     const reverse =
       opposite(
         enemy.dir
       );
-
-    for (
-      const name
-      of DIR_NAMES
-    ) {
-      if (
-        canLeaveTile(
-          enemy,
-          name
-        )
-      ) {
-        available.push(
-          name
-        );
-      }
-    }
 
     const noReverse =
       available.filter(
@@ -2497,10 +2542,13 @@ if (!valid) {
       isPlayer &&
       boostTimer > 0
     ) {
-      travel *= 1.10;
+      travel *=
+        1.10;
     }
 
-    if (!isPlayer) {
+    if (
+      !isPlayer
+    ) {
       const progress =
         totalPellets
           ? totalCollected /
@@ -2529,9 +2577,12 @@ if (!valid) {
         entity.progress <=
         0.000001
       ) {
-        entity.progress = 0;
+        entity.progress =
+          0;
 
-        if (isPlayer) {
+        if (
+          isPlayer
+        ) {
           choosePlayerDirectionAtCenter();
         } else {
           entity.dir =
@@ -2583,9 +2634,12 @@ if (!valid) {
         entity.row +=
           d.y;
 
-        entity.progress = 0;
+        entity.progress =
+          0;
 
-        if (isPlayer) {
+        if (
+          isPlayer
+        ) {
           collectAtTile(
             entity.col,
             entity.row
@@ -2599,7 +2653,9 @@ if (!valid) {
     );
   }
 
-  function movePlayer(dt) {
+  function movePlayer(
+    dt
+  ) {
     advanceEntity(
       player,
       dt,
@@ -2610,7 +2666,9 @@ if (!valid) {
       dt * 12;
   }
 
-  function moveEnemies(dt) {
+  function moveEnemies(
+    dt
+  ) {
     for (
       const enemy
       of enemies
@@ -2624,7 +2682,7 @@ if (!valid) {
   }
 
   /* =========================================================
-     SCORING
+     SCORING / COLLISIONS / GAME END
      ========================================================= */
 
   function addFloatingScore(
@@ -2646,7 +2704,8 @@ if (!valid) {
     col,
     row
   ) {
-    let changed = false;
+    let changed =
+      false;
 
     const pellet =
       pelletGrid[
@@ -2681,7 +2740,8 @@ if (!valid) {
       activation =
         Math.min(
           100,
-          activation + 1.45
+          activation +
+          1.45
         );
 
       betaFunction =
@@ -2699,7 +2759,8 @@ if (!valid) {
 
       soundCollect();
 
-      changed = true;
+      changed =
+        true;
     }
 
     const power =
@@ -2754,10 +2815,13 @@ if (!valid) {
 
       soundPower();
 
-      changed = true;
+      changed =
+        true;
     }
 
-    if (changed) {
+    if (
+      changed
+    ) {
       updateUI();
 
       forceRender =
@@ -2779,10 +2843,12 @@ if (!valid) {
     b
   ) {
     const dx =
-      a.x - b.x;
+      a.x -
+      b.x;
 
     const dy =
-      a.y - b.y;
+      a.y -
+      b.y;
 
     return (
       dx * dx +
@@ -2895,9 +2961,14 @@ if (!valid) {
         activation - 25
       );
 
-    boostTimer = 0;
-    boostName = "";
-    enemyEatChain = 0;
+    boostTimer =
+      0;
+
+    boostName =
+      "";
+
+    enemyEatChain =
+      0;
 
     soundHit();
 
@@ -2985,9 +3056,11 @@ if (!valid) {
     state =
       "running";
 
-    accumulator = 0;
+    accumulator =
+      0;
 
     hideOverlay();
+
     hideStageBanner();
 
     UI.pauseButton
@@ -3034,7 +3107,8 @@ if (!valid) {
       state =
         "running";
 
-      accumulator = 0;
+      accumulator =
+        0;
 
       hideOverlay();
 
@@ -3080,7 +3154,7 @@ if (!valid) {
   }
 
   /* =========================================================
-     SPRITES
+     SHARED SPRITE DRAWING
      ========================================================= */
 
   function drawFloatingLabel(
@@ -3107,7 +3181,8 @@ if (!valid) {
     target.strokeStyle =
       "rgba(0,0,0,0.92)";
 
-    target.lineWidth = 4;
+    target.lineWidth =
+      4;
 
     target.strokeText(
       text,
@@ -3147,11 +3222,14 @@ if (!valid) {
       angle
     );
 
-    if (boosted) {
+    if (
+      boosted
+    ) {
       target.strokeStyle =
         "rgba(255,255,255,0.86)";
 
-      target.lineWidth = 3;
+      target.lineWidth =
+        3;
 
       target.beginPath();
 
@@ -3406,7 +3484,8 @@ if (!valid) {
     target.globalAlpha =
       0.24;
 
-    target.lineWidth = 1;
+    target.lineWidth =
+      1;
 
     target.beginPath();
 
@@ -3430,16 +3509,11 @@ if (!valid) {
     item,
     scale = 1
   ) {
-    const s = scale;
-
     const radius =
-      12 * s;
+      12 * scale;
 
     const ringRadius =
-      15.2 * s;
-
-    const glow =
-      item.main;
+      15.2 * scale;
 
     target.save();
 
@@ -3449,10 +3523,10 @@ if (!valid) {
     );
 
     target.shadowColor =
-      glow;
+      item.main;
 
     target.shadowBlur =
-      12 * s;
+      12 * scale;
 
     target.fillStyle =
       item.main;
@@ -3469,7 +3543,8 @@ if (!valid) {
 
     target.fill();
 
-    target.shadowBlur = 0;
+    target.shadowBlur =
+      0;
 
     target.strokeStyle =
       item.main;
@@ -3478,7 +3553,7 @@ if (!valid) {
       0.34;
 
     target.lineWidth =
-      2 * s;
+      2 * scale;
 
     target.beginPath();
 
@@ -3501,19 +3576,21 @@ if (!valid) {
     target.beginPath();
 
     target.arc(
-      -4.2 * s,
-      -4.4 * s,
-      3.3 * s,
+      -4.2 * scale,
+      -4.4 * scale,
+      3.3 * scale,
       0,
       Math.PI * 2
     );
 
     target.fill();
 
-    target.globalAlpha = 1;
+    target.globalAlpha =
+      1;
 
     target.fillStyle =
-      item.main === "#FFFFFF"
+      item.main ===
+      "#FFFFFF"
         ? "#6AA7FF"
         : "#FFFFFF";
 
@@ -3522,7 +3599,7 @@ if (!valid) {
     target.arc(
       0,
       0,
-      3.2 * s,
+      3.2 * scale,
       0,
       Math.PI * 2
     );
@@ -3533,7 +3610,7 @@ if (!valid) {
   }
 
   /* =========================================================
-     STATIC BOARD RENDER
+     STATIC BOARD DRAWING
      ========================================================= */
 
   function drawStructureStatic(
@@ -3552,10 +3629,12 @@ if (!valid) {
       TILE / 2;
 
     const width =
-      structure.w * TILE;
+      structure.w *
+      TILE;
 
     const height =
-      structure.h * TILE;
+      structure.h *
+      TILE;
 
     sctx.save();
 
@@ -3572,7 +3651,8 @@ if (!valid) {
     sctx.shadowColor =
       COLORS.wallGlow;
 
-    sctx.shadowBlur = 6;
+    sctx.shadowBlur =
+      6;
 
     sctx.fillStyle =
       COLORS.wall;
@@ -3613,20 +3693,23 @@ if (!valid) {
         }
 
         const cx =
-          tileCenterX(col);
+          tileCenterX(
+            col
+          );
 
         const cy =
-          tileCenterY(row);
+          tileCenterY(
+            row
+          );
 
-        const size = 15;
+        const size =
+          15;
 
         sctx.fillRect(
           cx -
           size / 2,
-
           cy -
           size / 2,
-
           size,
           size
         );
@@ -3643,7 +3726,8 @@ if (!valid) {
       top +
       height / 2;
 
-    let fontSize = 15;
+    let fontSize =
+      15;
 
     sctx.save();
 
@@ -3675,7 +3759,8 @@ if (!valid) {
     sctx.strokeStyle =
       "rgba(0,0,0,0.95)";
 
-    sctx.lineWidth = 4;
+    sctx.lineWidth =
+      4;
 
     sctx.strokeText(
       structure.label,
@@ -3706,26 +3791,33 @@ if (!valid) {
       H
     );
 
-    const cx = W / 2;
-    const cy = H / 2;
+    const cx =
+      W / 2;
+
+    const cy =
+      H / 2;
 
     const rx =
-      BOARD_W * 0.49;
+      BOARD_W *
+      0.49;
 
     const ry =
-      BOARD_H * 0.48;
+      BOARD_H *
+      0.48;
 
     sctx.save();
 
     sctx.shadowColor =
       COLORS.wallGlow;
 
-    sctx.shadowBlur = 18;
+    sctx.shadowBlur =
+      18;
 
     sctx.strokeStyle =
       COLORS.membrane;
 
-    sctx.lineWidth = 5;
+    sctx.lineWidth =
+      5;
 
     sctx.beginPath();
 
@@ -3746,7 +3838,8 @@ if (!valid) {
     sctx.strokeStyle =
       "rgba(125,160,255,0.34)";
 
-    sctx.lineWidth = 1.5;
+    sctx.lineWidth =
+      1.5;
 
     sctx.beginPath();
 
@@ -3789,10 +3882,14 @@ if (!valid) {
     }
 
     const nx =
-      tileCenterX(13);
+      tileCenterX(
+        13
+      );
 
     const ny =
-      tileCenterY(9.6);
+      tileCenterY(
+        9.6
+      );
 
     sctx.save();
 
@@ -3816,7 +3913,8 @@ if (!valid) {
     sctx.strokeStyle =
       "rgba(255,125,210,0.72)";
 
-    sctx.lineWidth = 3;
+    sctx.lineWidth =
+      3;
 
     sctx.stroke();
 
@@ -3832,7 +3930,8 @@ if (!valid) {
     sctx.strokeStyle =
       "rgba(0,0,0,0.95)";
 
-    sctx.lineWidth = 4;
+    sctx.lineWidth =
+      4;
 
     sctx.strokeText(
       "NUCLEUS",
@@ -3853,10 +3952,12 @@ if (!valid) {
   }
 
   /* =========================================================
-     DRAWING
+     DYNAMIC GAME DRAWING
      ========================================================= */
 
-  function drawPellets(time) {
+  function drawPellets(
+    time
+  ) {
     const radius =
       3.7 +
       Math.sin(
@@ -3893,7 +3994,8 @@ if (!valid) {
         }
 
         ctx.moveTo(
-          p.x + radius,
+          p.x +
+          radius,
           p.y
         );
 
@@ -3914,7 +4016,8 @@ if (!valid) {
       ctx.globalAlpha =
         0.22;
 
-      ctx.lineWidth = 1;
+      ctx.lineWidth =
+        1;
 
       ctx.beginPath();
 
@@ -3940,7 +4043,8 @@ if (!valid) {
         ctx.arc(
           p.x,
           p.y,
-          radius + 2.2,
+          radius +
+          2.2,
           0,
           Math.PI * 2
         );
@@ -3948,11 +4052,14 @@ if (!valid) {
 
       ctx.stroke();
 
-      ctx.globalAlpha = 1;
+      ctx.globalAlpha =
+        1;
     }
   }
 
-  function drawPowerUps(time) {
+  function drawPowerUps(
+    time
+  ) {
     for (
       const p
       of powerUps
@@ -3981,7 +4088,8 @@ if (!valid) {
         p.x,
         p.y,
         booster,
-        0.72 * pulse
+        0.72 *
+        pulse
       );
 
       drawFloatingLabel(
@@ -4083,6 +4191,14 @@ if (!valid) {
           )
         );
 
+      const y =
+        item.y -
+        (
+          1.1 -
+          item.time
+        ) *
+        18;
+
       ctx.save();
 
       ctx.globalAlpha =
@@ -4097,15 +4213,8 @@ if (!valid) {
       ctx.strokeStyle =
         "#000000";
 
-      ctx.lineWidth = 4;
-
-      const y =
-        item.y -
-        (
-          1.1 -
-          item.time
-        ) *
-        18;
+      ctx.lineWidth =
+        4;
 
       ctx.strokeText(
         item.text,
@@ -4134,7 +4243,8 @@ if (!valid) {
     ctx.font =
       '900 11px "Courier New", monospace';
 
-    let x = 28;
+    let x =
+      28;
 
     ctx.fillStyle =
       "#DDE7FF";
@@ -4145,7 +4255,8 @@ if (!valid) {
       22
     );
 
-    x += 132;
+    x +=
+      132;
 
     for (
       const antigen
@@ -4166,7 +4277,8 @@ if (!valid) {
 
       ctx.fill();
 
-      x += 9;
+      x +=
+        9;
 
       ctx.fillText(
         antigen.name,
@@ -4189,13 +4301,10 @@ if (!valid) {
         ? "#FFFFFF"
         : COLORS.muted;
 
-    const boostText =
+    ctx.fillText(
       boostTimer > 0
         ? `${boostName} BOOST ${boostTimer.toFixed(1)}s`
-        : "CYTOKINE BOOST: INACTIVE";
-
-    ctx.fillText(
-      boostText,
+        : "CYTOKINE BOOST: INACTIVE",
       W - 28,
       22
     );
@@ -4217,23 +4326,29 @@ if (!valid) {
   }
 
   function drawProgressRing() {
-    const x = W - 52;
-    const y = H - 48;
-    const r = 20;
+    const x =
+      W - 52;
+
+    const y =
+      H - 48;
+
+    const r =
+      20;
 
     const frac =
       totalPellets
         ? Math.max(
-          0,
-          Math.min(
-            1,
-            totalCollected /
-            totalPellets
+            0,
+            Math.min(
+              1,
+              totalCollected /
+              totalPellets
+            )
           )
-        )
         : 0;
 
-    ctx.lineWidth = 4;
+    ctx.lineWidth =
+      4;
 
     ctx.strokeStyle =
       "#29324d";
@@ -4322,9 +4437,13 @@ if (!valid) {
       0
     );
 
-    drawPellets(time);
+    drawPellets(
+      time
+    );
 
-    drawPowerUps(time);
+    drawPowerUps(
+      time
+    );
 
     for (
       const enemy
@@ -4344,20 +4463,34 @@ if (!valid) {
 
     drawProgressRing();
 
-    forceRender = false;
+    forceRender =
+      false;
   }
 
   /* =========================================================
-     GUIDE ART
+     GUIDE ICONS — SAME ART USED IN THE GAME
      ========================================================= */
 
-  function prepGuideCanvas(c) {
-    if (!c) return null;
+  function prepGuideCanvas(
+    c
+  ) {
+    if (
+      !c
+    ) {
+      return null;
+    }
 
     const g =
       c.getContext(
         "2d"
       );
+
+    g.clearRect(
+      0,
+      0,
+      c.width,
+      c.height
+    );
 
     g.fillStyle =
       "#070A14";
@@ -4373,12 +4506,18 @@ if (!valid) {
   }
 
   function renderGuideIcons() {
+    /*
+     AUTOREACTIVE CD4+ T CELL
+    */
+
     let g =
       prepGuideCanvas(
         UI.guideTCell
       );
 
-    if (g) {
+    if (
+      g
+    ) {
       drawTCellSprite(
         g,
         150,
@@ -4398,14 +4537,23 @@ if (!valid) {
       );
     }
 
+    /*
+     BETA CELL ANTIGENS
+    */
+
     g =
       prepGuideCanvas(
         UI.guideAntigen
       );
 
-    if (g) {
-      const xs =
-        [55, 150, 245];
+    if (
+      g
+    ) {
+      const xs = [
+        55,
+        150,
+        245
+      ];
 
       ANTIGENS.forEach(
         (antigen, i) => {
@@ -4435,12 +4583,18 @@ if (!valid) {
       );
     }
 
+    /*
+     IMMUNE REGULATION
+    */
+
     g =
       prepGuideCanvas(
         UI.guideGhost
       );
 
-    if (g) {
+    if (
+      g
+    ) {
       const guideEnemies = [
         {
           x: 47,
@@ -4491,22 +4645,36 @@ if (!valid) {
       );
     }
 
+    /*
+     INFLAMMATORY BOOSTS
+    */
+
     g =
       prepGuideCanvas(
         UI.guideBoost
       );
 
-    if (g) {
-      const xs =
-        [52, 156, 264, 368];
+    if (
+      g
+    ) {
+      const xs = [
+        52,
+        156,
+        264,
+        368
+      ];
 
-      const ys =
-        [43, 108];
+      const ys = [
+        43,
+        108
+      ];
 
       BOOSTERS.forEach(
         (item, i) => {
           const x =
-            xs[i % 4];
+            xs[
+              i % 4
+            ];
 
           const y =
             ys[
@@ -4543,14 +4711,17 @@ if (!valid) {
   }
 
   /* =========================================================
-     UPDATE LOOP
+     UPDATE / ANIMATION LOOP
      ========================================================= */
 
-  function update(dt) {
+  function update(
+    dt
+  ) {
     if (
       bannerTimer > 0
     ) {
-      bannerTimer -= dt;
+      bannerTimer -=
+        dt;
 
       if (
         bannerTimer <= 0
@@ -4563,7 +4734,8 @@ if (!valid) {
       const item
       of floatingScores
     ) {
-      item.time -= dt;
+      item.time -=
+        dt;
     }
 
     if (
@@ -4575,14 +4747,16 @@ if (!valid) {
             item.time > 0
         );
 
-      forceRender = true;
+      forceRender =
+        true;
     }
 
     if (
       state ===
       "recovering"
     ) {
-      recoveryTimer -= dt;
+      recoveryTimer -=
+        dt;
 
       if (
         recoveryTimer <= 0
@@ -4590,9 +4764,11 @@ if (!valid) {
         state =
           "running";
 
-        recoveryTimer = 0;
+        recoveryTimer =
+          0;
 
-        forceRender = true;
+        forceRender =
+          true;
       }
 
       return;
@@ -4617,17 +4793,28 @@ if (!valid) {
       if (
         boostTimer === 0
       ) {
-        boostName = "";
-        enemyEatChain = 0;
+        boostName =
+          "";
+
+        enemyEatChain =
+          0;
       }
     }
 
-    movePlayer(dt);
-    moveEnemies(dt);
+    movePlayer(
+      dt
+    );
+
+    moveEnemies(
+      dt
+    );
+
     handleEnemyCollisions();
   }
 
-  function gameLoop(time) {
+  function gameLoop(
+    time
+  ) {
     if (
       !lastFrameTime
     ) {
@@ -4657,11 +4844,14 @@ if (!valid) {
       state ===
         "recovering";
 
-    if (active) {
+    if (
+      active
+    ) {
       accumulator +=
         frameSeconds;
 
-      let updates = 0;
+      let updates =
+        0;
 
       while (
         accumulator >=
@@ -4683,10 +4873,12 @@ if (!valid) {
         updates ===
         MAX_UPDATES_PER_FRAME
       ) {
-        accumulator = 0;
+        accumulator =
+          0;
       }
     } else {
-      accumulator = 0;
+      accumulator =
+        0;
     }
 
     if (
@@ -4699,7 +4891,9 @@ if (!valid) {
       ) ||
       forceRender
     ) {
-      draw(time);
+      draw(
+        time
+      );
 
       lastRenderTime =
         time;
@@ -4714,7 +4908,9 @@ if (!valid) {
      CONTROLS
      ========================================================= */
 
-  function setDirection(dir) {
+  function setDirection(
+    dir
+  ) {
     if (
       !DIRECTIONS[dir] ||
       !player
@@ -4726,94 +4922,64 @@ if (!valid) {
       dir;
   }
 
- window.addEventListener(
-  "keydown",
-  event => {
+  /*
+   IMPORTANT FIX:
 
-    /*
-     Do not activate game keyboard shortcuts while the
-     player is typing into a form field.
-    */
+   Game shortcuts are ignored while someone is typing
+   in a form field.
 
-    const target =
-      event.target;
+   This means W, A, S, D, P, M, arrow keys, and all other
+   letters can be entered into the leaderboard name field.
+  */
 
-    const isTyping =
-      target instanceof HTMLInputElement ||
-      target instanceof HTMLTextAreaElement ||
-      target instanceof HTMLSelectElement ||
-      target?.isContentEditable;
+  window.addEventListener(
+    "keydown",
+    event => {
+      const target =
+        event.target;
 
-    if (isTyping) {
-      return;
-    }
-
-    const key =
-      event.key.toLowerCase();
-
-    const dirMap = {
-      arrowleft: "left",
-      a: "left",
-
-      arrowright: "right",
-      d: "right",
-
-      arrowup: "up",
-      w: "up",
-
-      arrowdown: "down",
-      s: "down"
-    };
-
-    if (
-      dirMap[key]
-    ) {
-      event.preventDefault();
-
-      setDirection(
-        dirMap[key]
-      );
+      const isTyping =
+        target instanceof
+          HTMLInputElement ||
+        target instanceof
+          HTMLTextAreaElement ||
+        target instanceof
+          HTMLSelectElement ||
+        target?.isContentEditable;
 
       if (
-        state ===
-        "ready"
+        isTyping
       ) {
-        startGame();
+        return;
       }
 
-      return;
-    }
+      const key =
+        event.key.toLowerCase();
 
-    if (
-      key === "p"
-    ) {
-      event.preventDefault();
+      const dirMap = {
+        arrowleft:
+          "left",
 
-      togglePause();
+        a:
+          "left",
 
-    } else if (
-      key === "m"
-    ) {
-      event.preventDefault();
+        arrowright:
+          "right",
 
-      toggleSound();
-    }
-  },
-  {
-    passive: false
-  }
-);
-        arrowleft: "left",
-        a: "left",
+        d:
+          "right",
 
-        arrowright: "right",
-        d: "right",
+        arrowup:
+          "up",
 
-        arrowup: "up",
-        w: "up",
+        w:
+          "up",
 
-        arrowdown: "down",
-        s: "down"
+        arrowdown:
+          "down",
+
+        s:
+          "down"
       };
 
       if (
@@ -4968,56 +5134,54 @@ if (!valid) {
       );
   }
 
-if (
-  UI.scoreName
-) {
-  UI.scoreName
-    .addEventListener(
-      "input",
-      () => {
+  /*
+   Convert leaderboard names to uppercase immediately
+   while preserving spaces, punctuation, numbers,
+   and all other characters.
+  */
 
-        /*
-         Convert alphabetic characters to uppercase
-         immediately while preserving numbers, spaces,
-         punctuation, and other characters.
-        */
+  if (
+    UI.scoreName
+  ) {
+    UI.scoreName
+      .addEventListener(
+        "input",
+        () => {
+          const start =
+            UI.scoreName
+              .selectionStart;
 
-        const start =
-          UI.scoreName.selectionStart;
+          const end =
+            UI.scoreName
+              .selectionEnd;
 
-        const end =
-          UI.scoreName.selectionEnd;
+          UI.scoreName.value =
+            UI.scoreName.value
+              .toUpperCase()
+              .slice(
+                0,
+                USERNAME_MAX_LENGTH
+              );
 
-        UI.scoreName.value =
-          UI.scoreName.value
-            .toUpperCase()
-            .slice(
-              0,
-              USERNAME_MAX_LENGTH
+          try {
+            UI.scoreName
+              .setSelectionRange(
+                start,
+                end
+              );
+          } catch (_) {}
+
+          UI.scoreFormMessage
+            .textContent =
+            "Enter any name up to 10 characters.";
+
+          UI.scoreFormMessage
+            .classList.remove(
+              "is-error"
             );
-
-        /*
-         Preserve cursor position after capitalization.
-        */
-
-        try {
-          UI.scoreName.setSelectionRange(
-            start,
-            end
-          );
-        } catch (_) {}
-
-        UI.scoreFormMessage
-          .textContent =
-          "Enter any name up to 10 characters.";
-
-        UI.scoreFormMessage
-          .classList.remove(
-            "is-error"
-          );
-      }
-    );
-}
+        }
+      );
+  }
 
   document.addEventListener(
     "visibilitychange",
@@ -5055,6 +5219,11 @@ if (
   renderStaticLayer();
 
   resetGame(true);
+
+  /*
+   This restores all four icon panels under:
+   "The immunology behind the arcade"
+  */
 
   renderGuideIcons();
 
