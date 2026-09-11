@@ -29,9 +29,22 @@
 
 .aa-hero {
   background:
-    radial-gradient(circle at 10% 16%, rgba(253, 228, 1, 0.82) 0 8%, transparent 8.4%),
-    radial-gradient(circle at 91% 22%, rgba(81, 126, 244, 0.18) 0 14%, transparent 14.4%),
-    linear-gradient(135deg, var(--aa-pale), #fff);
+    radial-gradient(
+      circle at 10% 16%,
+      rgba(253, 228, 1, 0.82) 0 8%,
+      transparent 8.4%
+    ),
+    radial-gradient(
+      circle at 91% 22%,
+      rgba(81, 126, 244, 0.18) 0 14%,
+      transparent 14.4%
+    ),
+    linear-gradient(
+      135deg,
+      var(--aa-pale),
+      #fff
+    );
+
   border: 5px solid var(--aa-ink);
   border-radius: 32px;
   box-shadow: 10px 10px 0 var(--aa-gray);
@@ -59,7 +72,9 @@
   color: var(--aa-blue);
   font-size: clamp(2.7rem, 7vw, 5.1rem);
   margin: 0.65rem 0 0;
-  text-shadow: 3px 3px 0 var(--aa-yellow), 5px 5px 0 var(--aa-ink);
+  text-shadow:
+    3px 3px 0 var(--aa-yellow),
+    5px 5px 0 var(--aa-ink);
   text-transform: uppercase;
 }
 
@@ -111,9 +126,9 @@
   box-shadow: 10px 10px 0 var(--aa-yellow);
   margin: 2.4rem auto 3rem;
   max-width: none;
-  width: 100%;
   overflow: hidden;
   padding: clamp(0.7rem, 2vw, 1.2rem);
+  width: 100%;
 }
 
 .aa-hud {
@@ -170,7 +185,11 @@
 }
 
 .aa-meter span {
-  background: linear-gradient(90deg, var(--aa-yellow), #ff7438);
+  background: linear-gradient(
+    90deg,
+    var(--aa-yellow),
+    #ff7438
+  );
   display: block;
   height: 100%;
   transition: width 180ms ease;
@@ -178,7 +197,11 @@
 }
 
 .aa-beta-meter span {
-  background: linear-gradient(90deg, #ff4b4b, var(--aa-il2));
+  background: linear-gradient(
+    90deg,
+    #ff4b4b,
+    var(--aa-il2)
+  );
   width: 100%;
 }
 
@@ -211,7 +234,8 @@
   background: var(--aa-board);
   border: 3px solid #273356;
   border-radius: 22px;
-  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.85);
+  box-shadow:
+    inset 0 0 40px rgba(0, 0, 0, 0.85);
   overflow: hidden;
   position: relative;
 }
@@ -226,7 +250,8 @@
 }
 
 #betaCellGame:focus-visible {
-  box-shadow: inset 0 0 0 3px var(--aa-yellow);
+  box-shadow:
+    inset 0 0 0 3px var(--aa-yellow);
 }
 
 .aa-overlay {
@@ -401,11 +426,11 @@
 
 .aa-touch-controls {
   display: none;
+  gap: 7px;
   grid-template-areas:
     ". up ."
     "left down right";
   grid-template-columns: repeat(3, 58px);
-  gap: 7px;
   justify-content: center;
   margin: 1rem auto 0.2rem;
 }
@@ -456,14 +481,15 @@
 
 .aa-guide-kicker {
   background: var(--aa-blue);
-  color: #ffffff;
   box-shadow: 4px 4px 0 var(--aa-ink);
+  color: #ffffff;
 }
 
 .aa-guide-grid {
   display: grid;
   gap: 1.25rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
   margin-top: 2rem;
 }
 
@@ -478,7 +504,8 @@
 }
 
 .aa-guide-card:hover {
-  box-shadow: 7px 7px 0 var(--aa-yellow);
+  box-shadow:
+    7px 7px 0 var(--aa-yellow);
 }
 
 .aa-guide-card h3 {
@@ -509,7 +536,8 @@
 .aa-boost-points {
   display: grid;
   gap: 0.42rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
   margin: 1rem auto 0;
   max-width: 430px;
 }
@@ -536,7 +564,8 @@
   background: var(--aa-pale);
   border: 4px solid var(--aa-ink);
   border-radius: 20px;
-  box-shadow: 6px 6px 0 var(--aa-yellow);
+  box-shadow:
+    6px 6px 0 var(--aa-yellow);
   margin: 1.7rem auto 0;
   max-width: 900px;
   padding: 1rem 1.2rem;
@@ -550,7 +579,8 @@
 
 @media (max-width: 900px) {
   .aa-hud {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
   }
 
   .aa-stat-wide {
@@ -560,7 +590,8 @@
 
 @media (max-width: 700px) {
   .aa-hud {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
   }
 
   .aa-guide-grid {
@@ -615,7 +646,6 @@
    ARCADE PAGE CHROME + WIDE GAME — V5
    ========================================================== */
 
-/* The standard sticky site header is hidden only on the Arcade page. */
 body.aa-arcade-active .site-header {
   display: none;
 }
@@ -624,7 +654,6 @@ body.aa-arcade-active main {
   padding-top: 1rem;
 }
 
-/* Floating page selector stays beside the browser scrollbar while scrolling. */
 .aa-page-selector {
   align-items: center;
   display: flex;
@@ -647,7 +676,10 @@ body.aa-arcade-active main {
   color: #ffffff;
   cursor: pointer;
   display: flex;
-  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-family:
+    "Trebuchet MS",
+    Arial,
+    sans-serif;
   font-size: 0.78rem;
   font-weight: 900;
   gap: 0.55rem;
@@ -685,17 +717,25 @@ body.aa-arcade-active main {
   gap: 0.42rem;
   opacity: 0;
   pointer-events: none;
-  transform: translateX(14px) scale(0.96);
+  transform:
+    translateX(14px)
+    scale(0.96);
   transform-origin: right center;
-  transition: opacity 150ms ease, transform 150ms ease;
+  transition:
+    opacity 150ms ease,
+    transform 150ms ease;
   visibility: hidden;
 }
 
-.aa-page-selector:hover .aa-page-selector-menu,
-.aa-page-selector:focus-within .aa-page-selector-menu {
+.aa-page-selector:hover
+.aa-page-selector-menu,
+.aa-page-selector:focus-within
+.aa-page-selector-menu {
   opacity: 1;
   pointer-events: auto;
-  transform: translateX(0) scale(1);
+  transform:
+    translateX(0)
+    scale(1);
   visibility: visible;
 }
 
@@ -717,8 +757,8 @@ body.aa-arcade-active main {
 .aa-page-selector-menu a:hover,
 .aa-page-selector-menu a:focus-visible {
   background: #fde401;
-  transform: translateX(-3px);
   outline: none;
+  transform: translateX(-3px);
 }
 
 .aa-page-selector-menu a.is-current {
@@ -726,19 +766,21 @@ body.aa-arcade-active main {
   color: #ffffff;
 }
 
-/* Match the game shell to the full site content width instead of the old 1000px cap. */
 .aa-shell {
   max-width: none;
   width: 100%;
 }
 
+
 /* ==========================================================
-   IMMUNOLOGY GUIDE — BOOSTERS LEFT, THREE CARDS RIGHT
+   IMMUNOLOGY GUIDE
    ========================================================== */
 
 .aa-guide-layout {
   align-items: stretch;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
 }
 
 .aa-guide-boosts-left {
@@ -749,13 +791,15 @@ body.aa-arcade-active main {
   min-height: 100%;
 }
 
-.aa-guide-boosts-left .aa-guide-boost-canvas {
+.aa-guide-boosts-left
+.aa-guide-boost-canvas {
   height: auto;
   max-height: 220px;
   width: 100%;
 }
 
-.aa-guide-boosts-left .aa-boost-points {
+.aa-guide-boosts-left
+.aa-boost-points {
   margin-top: 1.2rem;
   max-width: none;
   width: 100%;
@@ -764,27 +808,32 @@ body.aa-arcade-active main {
 .aa-guide-right {
   display: grid;
   gap: 1.25rem;
-  grid-template-rows: repeat(3, minmax(0, 1fr));
+  grid-template-rows:
+    repeat(3, minmax(0, 1fr));
   min-width: 0;
 }
 
-.aa-guide-right .aa-guide-card {
+.aa-guide-right
+.aa-guide-card {
   min-height: 0;
   width: 100%;
 }
 
-/* Right-hand cards use a compact horizontal layout to eliminate excess blank space. */
 .aa-guide-card-compact {
   align-items: center;
-  display: grid;
   column-gap: 1rem;
-  grid-template-columns: minmax(150px, 38%) minmax(0, 1fr);
-  grid-template-rows: auto auto;
+  display: grid;
+  grid-template-columns:
+    minmax(150px, 38%)
+    minmax(0, 1fr);
+  grid-template-rows:
+    auto auto;
   padding: 1rem 1.1rem;
   text-align: left;
 }
 
-.aa-guide-card-compact .aa-guide-canvas {
+.aa-guide-card-compact
+.aa-guide-canvas {
   grid-column: 1;
   grid-row: 1 / span 2;
   height: auto;
@@ -807,7 +856,8 @@ body.aa-arcade-active main {
 }
 
 @media (max-width: 900px) {
-  .aa-page-selector-trigger span:last-child {
+  .aa-page-selector-trigger
+  span:last-child {
     display: none;
   }
 
@@ -848,7 +898,8 @@ body.aa-arcade-active main {
     text-align: center;
   }
 
-  .aa-guide-card-compact .aa-guide-canvas {
+  .aa-guide-card-compact
+  .aa-guide-canvas {
     margin: 0 auto 0.8rem;
     width: min(100%, 360px);
   }
@@ -858,5 +909,323 @@ body.aa-arcade-active main {
   .aa-page-selector-menu,
   .aa-page-selector-menu a {
     transition: none;
+  }
+}
+
+
+/* ==========================================================
+   V6 — GLOBAL ARCADE RECORDS
+   ========================================================== */
+
+.aa-record-board {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(81, 126, 244, 0.12),
+      transparent 45%
+    ),
+    #070b17;
+
+  border: 3px solid #273356;
+  border-radius: 20px;
+  box-shadow:
+    inset 0 0 24px
+    rgba(0, 0, 0, 0.5);
+  color: #fff;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns:
+    minmax(190px, 0.34fr)
+    minmax(0, 1fr);
+  margin-top: 1rem;
+  overflow: hidden;
+  padding: 1rem;
+  position: relative;
+}
+
+.aa-record-board::before {
+  background:
+    linear-gradient(
+      90deg,
+      #ffe84a,
+      #ff6aa9,
+      #58e5ff
+    );
+  content: "";
+  height: 4px;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.aa-record-summary {
+  align-content: start;
+  display: grid;
+  gap: 0.45rem;
+  min-width: 0;
+  padding: 0.35rem;
+}
+
+.aa-record-kicker {
+  color: #58e5ff;
+  font-family: "Courier New", monospace;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+}
+
+.aa-record-summary h2 {
+  color: #fff;
+  font-family: "Courier New", monospace;
+  font-size:
+    clamp(1.15rem, 2.5vw, 1.65rem);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.aa-player-count {
+  align-items: center;
+  background: #10172c;
+  border: 2px solid #517ef4;
+  border-radius: 14px;
+  display: flex;
+  gap: 0.7rem;
+  justify-content: space-between;
+  margin-top: 0.2rem;
+  padding: 0.65rem 0.75rem;
+}
+
+.aa-player-count span {
+  color: #9eafd6;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.aa-player-count strong {
+  color: #ffe84a;
+  font-family: "Courier New", monospace;
+  font-size: 1.3rem;
+}
+
+.aa-record-note,
+.aa-leaderboard-status {
+  color: #91a0c1;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.aa-leaderboard-status.is-error {
+  color: #ff8da2;
+}
+
+.aa-top-five-wrap {
+  background: #0c1121;
+  border: 2px solid #26324e;
+  border-radius: 15px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.aa-top-five-heading,
+.aa-leaderboard-list li {
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns:
+    54px
+    minmax(0, 1fr)
+    minmax(86px, 0.38fr);
+}
+
+.aa-top-five-heading {
+  background: #111a31;
+  color: #8293bb;
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  padding: 0.48rem 0.75rem;
+  text-transform: uppercase;
+}
+
+.aa-top-five-heading span:last-child,
+.aa-leaderboard-list li > span:last-child {
+  text-align: right;
+}
+
+.aa-leaderboard-list {
+  counter-reset: none;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.aa-leaderboard-list li {
+  align-items: center;
+  border-top: 1px solid #202b45;
+  color: #eaf0ff;
+  font-family: "Courier New", monospace;
+  min-height: 42px;
+  padding: 0.5rem 0.75rem;
+}
+
+.aa-leaderboard-list li:first-child {
+  border-top: 0;
+}
+
+.aa-leaderboard-list
+li:nth-child(1)
+.aa-rank {
+  color: #ffe84a;
+}
+
+.aa-leaderboard-list
+li:nth-child(2)
+.aa-rank {
+  color: #ff6aa9;
+}
+
+.aa-leaderboard-list
+li:nth-child(3)
+.aa-rank {
+  color: #58e5ff;
+}
+
+.aa-leaderboard-list
+li:nth-child(n+4)
+.aa-rank {
+  color: #a6b3cf;
+}
+
+.aa-leaderboard-list
+.aa-rank {
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.aa-leaderboard-list strong {
+  color: #fff;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.aa-leaderboard-list
+li > span:last-child {
+  color: #ffe84a;
+  font-weight: 900;
+}
+
+.aa-score-form {
+  background: #0c1225;
+  border: 2px solid #517ef4;
+  border-radius: 16px;
+  margin: 1rem 0;
+  padding: 0.9rem;
+  text-align: left;
+}
+
+.aa-score-form[hidden] {
+  display: none !important;
+}
+
+.aa-score-form label {
+  color: #ffe84a;
+  display: block;
+  font-family: "Courier New", monospace;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.aa-score-entry-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.aa-score-entry-row input {
+  background: #040713;
+  border: 2px solid #43527b;
+  border-radius: 999px;
+  color: #fff;
+  flex: 1 1 auto;
+  font-family: "Courier New", monospace;
+  font-size: 1rem;
+  font-weight: 900;
+  min-width: 0;
+  outline: none;
+  padding: 0.7rem 0.9rem;
+  text-transform: none;
+}
+
+.aa-score-entry-row input:focus {
+  border-color: #ffe84a;
+  box-shadow:
+    0 0 0 2px
+    rgba(255, 232, 74, 0.18);
+}
+
+.aa-score-entry-row
+.aa-game-button {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+.aa-score-form-message {
+  color: #9cafd3 !important;
+  font-size: 0.72rem !important;
+  margin: 0.55rem 0 0 !important;
+}
+
+.aa-score-form-message.is-error {
+  color: #ff8da2 !important;
+}
+
+.aa-score-skip {
+  background: transparent;
+  border: 0;
+  color: #aab7d5;
+  cursor: pointer;
+  display: block;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 800;
+  margin: 0.65rem auto 0;
+  padding: 0.25rem;
+  text-decoration: underline;
+}
+
+.aa-score-skip:hover,
+.aa-score-skip:focus-visible {
+  color: #fff;
+}
+
+@media (max-width: 700px) {
+  .aa-record-board {
+    grid-template-columns: 1fr;
+  }
+
+  .aa-score-entry-row {
+    flex-direction: column;
+  }
+
+  .aa-score-entry-row
+  .aa-game-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 430px) {
+  .aa-top-five-heading,
+  .aa-leaderboard-list li {
+    grid-template-columns:
+      42px
+      minmax(0, 1fr)
+      78px;
   }
 }
