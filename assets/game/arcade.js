@@ -1208,52 +1208,38 @@
       rank.textContent =
         String(index + 1);
 
-      const username =
-        document.createElement(
-          "strong"
-        );
+const username =
+  (
+    UI.scoreName?.value ||
+    ""
+  )
+    .trim()
+    .toUpperCase()
+    .slice(
+      0,
+      USERNAME_MAX_LENGTH
+    );
 
-      username.textContent =
-        record?.username ||
-        "---";
+const valid =
+  username.length >= 1 &&
+  username.length <=
+    USERNAME_MAX_LENGTH;
 
-      const scoreText =
-        document.createElement(
-          "span"
-        );
+if (!valid) {
 
-      scoreText.textContent =
-        record
-          ? String(
-            Number(
-              record.score
-            ) || 0
-          ).padStart(
-            6,
-            "0"
-          )
-          : "------";
+  UI.scoreFormMessage
+    .textContent =
+    "Enter a name between 1 and 10 characters.";
 
-      li.append(
-        rank,
-        username,
-        scoreText
-      );
+  UI.scoreFormMessage
+    .classList.add(
+      "is-error"
+    );
 
-      UI.leaderboardList
-        .appendChild(li);
-    }
-  }
+  UI.scoreName.focus();
 
-  function setLeaderboardStatus(
-    message,
-    isError = false
-  ) {
-    if (
-      !UI.leaderboardStatus
-    ) {
-      return;
-    }
+  return;
+}
 
     UI.leaderboardStatus
       .textContent =
@@ -4740,13 +4726,83 @@
       dir;
   }
 
-  window.addEventListener(
-    "keydown",
-    event => {
-      const key =
-        event.key.toLowerCase();
+ window.addEventListener(
+  "keydown",
+  event => {
 
-      const dirMap = {
+    /*
+     Do not activate game keyboard shortcuts while the
+     player is typing into a form field.
+    */
+
+    const target =
+      event.target;
+
+    const isTyping =
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLTextAreaElement ||
+      target instanceof HTMLSelectElement ||
+      target?.isContentEditable;
+
+    if (isTyping) {
+      return;
+    }
+
+    const key =
+      event.key.toLowerCase();
+
+    const dirMap = {
+      arrowleft: "left",
+      a: "left",
+
+      arrowright: "right",
+      d: "right",
+
+      arrowup: "up",
+      w: "up",
+
+      arrowdown: "down",
+      s: "down"
+    };
+
+    if (
+      dirMap[key]
+    ) {
+      event.preventDefault();
+
+      setDirection(
+        dirMap[key]
+      );
+
+      if (
+        state ===
+        "ready"
+      ) {
+        startGame();
+      }
+
+      return;
+    }
+
+    if (
+      key === "p"
+    ) {
+      event.preventDefault();
+
+      togglePause();
+
+    } else if (
+      key === "m"
+    ) {
+      event.preventDefault();
+
+      toggleSound();
+    }
+  },
+  {
+    passive: false
+  }
+);
         arrowleft: "left",
         a: "left",
 
@@ -4912,24 +4968,56 @@
       );
   }
 
-  if (
-    UI.scoreName
-  ) {
-    UI.scoreName
-      .addEventListener(
-        "input",
-        () => {
-          UI.scoreFormMessage
-            .textContent =
-            "1–10 letters, numbers, or underscores.";
+if (
+  UI.scoreName
+) {
+  UI.scoreName
+    .addEventListener(
+      "input",
+      () => {
 
-          UI.scoreFormMessage
-            .classList.remove(
-              "is-error"
+        /*
+         Convert alphabetic characters to uppercase
+         immediately while preserving numbers, spaces,
+         punctuation, and other characters.
+        */
+
+        const start =
+          UI.scoreName.selectionStart;
+
+        const end =
+          UI.scoreName.selectionEnd;
+
+        UI.scoreName.value =
+          UI.scoreName.value
+            .toUpperCase()
+            .slice(
+              0,
+              USERNAME_MAX_LENGTH
             );
-        }
-      );
-  }
+
+        /*
+         Preserve cursor position after capitalization.
+        */
+
+        try {
+          UI.scoreName.setSelectionRange(
+            start,
+            end
+          );
+        } catch (_) {}
+
+        UI.scoreFormMessage
+          .textContent =
+          "Enter any name up to 10 characters.";
+
+        UI.scoreFormMessage
+          .classList.remove(
+            "is-error"
+          );
+      }
+    );
+}
 
   document.addEventListener(
     "visibilitychange",
