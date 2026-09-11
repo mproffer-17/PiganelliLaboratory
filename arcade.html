@@ -105,6 +105,7 @@ title: Autoimmune Arcade
         <div class="aa-overlay-card">
           <span class="aa-overlay-kicker">AUTOIMMUNE ARCADE</span>
           <h2 id="aa-overlay-title">Beta Cell Breakdown</h2>
+
           <p id="aa-overlay-text">
             Clear the beta cell antigen field while avoiding immune regulatory cells.
             Cytokine bonus items temporarily amplify your T cell response.
@@ -116,8 +117,44 @@ title: Autoimmune Arcade
             <span><i class="aa-dot aa-dot-insb"></i>InsB:9-23</span>
           </div>
 
-          <button id="aa-primary-button" class="aa-game-button" type="button">Start experiment</button>
-          <p class="aa-key-hint">Move: Arrow keys / WASD &nbsp;•&nbsp; Pause: P &nbsp;•&nbsp; Sound: M</p>
+          <form id="aa-score-form" class="aa-score-form" hidden autocomplete="off">
+            <label for="aa-score-name">Top-five username</label>
+
+            <div class="aa-score-entry-row">
+              <input
+                id="aa-score-name"
+                name="username"
+                type="text"
+                minlength="1"
+                maxlength="10"
+                pattern="[A-Za-z0-9_]+"
+                placeholder="e.g. TCell42"
+                aria-describedby="aa-score-form-message"
+              >
+
+              <button id="aa-score-submit" class="aa-game-button" type="submit">
+                Save score
+              </button>
+            </div>
+
+            <p id="aa-score-form-message" class="aa-score-form-message">
+              1–10 letters, numbers, or underscores.
+            </p>
+
+            <button id="aa-score-skip" class="aa-score-skip" type="button">
+              Skip leaderboard
+            </button>
+          </form>
+
+          <button id="aa-primary-button" class="aa-game-button" type="button">
+            Start experiment
+          </button>
+
+          <p class="aa-key-hint">
+            Move: Arrow keys / WASD &nbsp;•&nbsp;
+            Pause: P &nbsp;•&nbsp;
+            Sound: M
+          </p>
         </div>
       </div>
 
@@ -125,34 +162,160 @@ title: Autoimmune Arcade
     </div>
 
     <div class="aa-control-row">
-      <button id="aa-pause" class="aa-small-button" type="button">Pause</button>
-      <button id="aa-sound" class="aa-small-button" type="button" aria-pressed="false">Sound: on</button>
-      <button id="aa-restart" class="aa-small-button" type="button">Restart</button>
+      <button id="aa-pause" class="aa-small-button" type="button">
+        Pause
+      </button>
+
+      <button
+        id="aa-sound"
+        class="aa-small-button"
+        type="button"
+        aria-pressed="false"
+      >
+        Sound: on
+      </button>
+
+      <button id="aa-restart" class="aa-small-button" type="button">
+        Restart
+      </button>
     </div>
 
+    <section class="aa-record-board" aria-labelledby="aa-record-title">
+      <div class="aa-record-summary">
+        <span class="aa-record-kicker">GLOBAL RECORDS</span>
+
+        <h2 id="aa-record-title">Arcade Records</h2>
+
+        <div class="aa-player-count">
+          <span>Players Ever</span>
+          <strong id="aa-player-count">—</strong>
+        </div>
+
+        <p class="aa-record-note">
+          Counted once per browser/device when the game is first started.
+        </p>
+
+        <p
+          id="aa-leaderboard-status"
+          class="aa-leaderboard-status"
+          aria-live="polite"
+        >
+          Loading global records…
+        </p>
+      </div>
+
+      <div class="aa-top-five-wrap">
+        <div class="aa-top-five-heading">
+          <span>Rank</span>
+          <span>Username</span>
+          <span>Score</span>
+        </div>
+
+        <ol
+          id="aa-leaderboard-list"
+          class="aa-leaderboard-list"
+          aria-label="Top five arcade scores"
+        >
+          <li>
+            <span class="aa-rank">1</span>
+            <strong>---</strong>
+            <span>------</span>
+          </li>
+
+          <li>
+            <span class="aa-rank">2</span>
+            <strong>---</strong>
+            <span>------</span>
+          </li>
+
+          <li>
+            <span class="aa-rank">3</span>
+            <strong>---</strong>
+            <span>------</span>
+          </li>
+
+          <li>
+            <span class="aa-rank">4</span>
+            <strong>---</strong>
+            <span>------</span>
+          </li>
+
+          <li>
+            <span class="aa-rank">5</span>
+            <strong>---</strong>
+            <span>------</span>
+          </li>
+        </ol>
+      </div>
+    </section>
+
     <div class="aa-touch-controls" aria-label="Touch controls">
-      <button class="aa-touch aa-up" data-dir="up" type="button" aria-label="Move up">▲</button>
-      <button class="aa-touch aa-left" data-dir="left" type="button" aria-label="Move left">◀</button>
-      <button class="aa-touch aa-down" data-dir="down" type="button" aria-label="Move down">▼</button>
-      <button class="aa-touch aa-right" data-dir="right" type="button" aria-label="Move right">▶</button>
+      <button
+        class="aa-touch aa-up"
+        data-dir="up"
+        type="button"
+        aria-label="Move up"
+      >
+        ▲
+      </button>
+
+      <button
+        class="aa-touch aa-left"
+        data-dir="left"
+        type="button"
+        aria-label="Move left"
+      >
+        ◀
+      </button>
+
+      <button
+        class="aa-touch aa-down"
+        data-dir="down"
+        type="button"
+        aria-label="Move down"
+      >
+        ▼
+      </button>
+
+      <button
+        class="aa-touch aa-right"
+        data-dir="right"
+        type="button"
+        aria-label="Move right"
+      >
+        ▶
+      </button>
     </div>
   </div>
 
   <section class="aa-guide" aria-labelledby="aa-guide-title">
     <div class="aa-guide-heading">
       <h2 id="aa-guide-title">The immunology behind the arcade</h2>
-      <span class="aa-kicker aa-guide-kicker">What the game represents</span>
+
+      <span class="aa-kicker aa-guide-kicker">
+        What the game represents
+      </span>
     </div>
 
     <div class="aa-guide-grid aa-guide-layout">
+
       <article class="aa-guide-card aa-guide-card-boosts aa-guide-boosts-left">
-        <canvas id="aa-guide-boost-canvas" class="aa-guide-canvas aa-guide-boost-canvas" width="420" height="150" aria-hidden="true"></canvas>
+        <canvas
+          id="aa-guide-boost-canvas"
+          class="aa-guide-canvas aa-guide-boost-canvas"
+          width="420"
+          height="150"
+          aria-hidden="true"
+        ></canvas>
+
         <h3>Inflammatory boosts</h3>
+
         <p>
           Cytokine bonus items temporarily increase T cell performance and make regulatory
           enemies vulnerable. Their point values follow the classic escalating arcade bonus
           progression.
         </p>
+
         <div class="aa-boost-points" aria-label="Cytokine bonus point values">
           <span><strong>IL-2</strong> 100</span>
           <span><strong>IL-12</strong> 300</span>
@@ -166,9 +329,18 @@ title: Autoimmune Arcade
       </article>
 
       <div class="aa-guide-right">
+
         <article class="aa-guide-card aa-guide-card-compact">
-          <canvas id="aa-guide-tcell-canvas" class="aa-guide-canvas" width="300" height="116" aria-hidden="true"></canvas>
+          <canvas
+            id="aa-guide-tcell-canvas"
+            class="aa-guide-canvas"
+            width="300"
+            height="116"
+            aria-hidden="true"
+          ></canvas>
+
           <h3>Autoreactive CD4+ T cell</h3>
+
           <p>
             You control the T cell. Antigen encounters and cytokine boosts raise its activation
             state from <strong>Naive</strong> to <strong>Activated</strong>,
@@ -177,24 +349,42 @@ title: Autoimmune Arcade
         </article>
 
         <article class="aa-guide-card aa-guide-card-compact">
-          <canvas id="aa-guide-antigen-canvas" class="aa-guide-canvas" width="300" height="116" aria-hidden="true"></canvas>
+          <canvas
+            id="aa-guide-antigen-canvas"
+            class="aa-guide-canvas"
+            width="300"
+            height="116"
+            aria-hidden="true"
+          ></canvas>
+
           <h3>Beta cell antigens</h3>
+
           <p>
             Antigen dots are color coded exactly as they appear on the board:
-            <strong>IAPP-HIP</strong> is yellow, <strong>ChgA-HIP</strong> is pink, and
-            <strong>InsB:9-23</strong> is blue. Clearing all antigen dots reduces simulated
-            beta cell function to 0%.
+            <strong>IAPP-HIP</strong> is yellow,
+            <strong>ChgA-HIP</strong> is pink, and
+            <strong>InsB:9-23</strong> is blue.
+            Clearing all antigen dots reduces simulated beta cell function to 0%.
           </p>
         </article>
 
         <article class="aa-guide-card aa-guide-card-compact">
-          <canvas id="aa-guide-ghost-canvas" class="aa-guide-canvas" width="360" height="126" aria-hidden="true"></canvas>
+          <canvas
+            id="aa-guide-ghost-canvas"
+            class="aa-guide-canvas"
+            width="360"
+            height="126"
+            aria-hidden="true"
+          ></canvas>
+
           <h3>Immune regulation</h3>
+
           <p>
             Regulatory T cells and suppressive or tolerogenic antigen presenting cells act as
             the maze antagonists. Contact lowers activation and costs a T cell life.
           </p>
         </article>
+
       </div>
     </div>
 
