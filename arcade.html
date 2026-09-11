@@ -121,14 +121,16 @@ title: Autoimmune Arcade
             <label for="aa-score-name">Top-five username</label>
 
             <div class="aa-score-entry-row">
-              <input
+             <input
                 id="aa-score-name"
                 name="username"
                 type="text"
                 minlength="1"
                 maxlength="10"
-                pattern="[A-Za-z0-9_]+"
-                placeholder="e.g. TCell42"
+                autocapitalize="characters"
+                autocomplete="off"
+                spellcheck="false"
+                placeholder="YOUR NAME"
                 aria-describedby="aa-score-form-message"
               >
 
@@ -138,7 +140,7 @@ title: Autoimmune Arcade
             </div>
 
             <p id="aa-score-form-message" class="aa-score-form-message">
-              1–10 letters, numbers, or underscores.
+              Enter any name up to 10 characters.
             </p>
 
             <button id="aa-score-skip" class="aa-score-skip" type="button">
