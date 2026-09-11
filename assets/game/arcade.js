@@ -2,19 +2,16 @@
   "use strict";
 
   /* =========================================================
-     AUTOIMMUNE ARCADE: BETA CELL BREAKDOWN — V5
-     Performance build with:
-     - fixed step tile movement
-     - cached static beta cell board
-     - three simultaneous antigen colors
-     - eight circular cytokine bonus icons using arcade-inspired color schemes
-     - shared sprite functions for game + science guide
-     - floating character labels
+     AUTOIMMUNE ARCADE: BETA CELL BREAKDOWN — V6
      ========================================================= */
 
   const canvas = document.getElementById("betaCellGame");
+
   if (!canvas) return;
-  const ctx = canvas.getContext("2d", { alpha: false });
+
+  const ctx = canvas.getContext("2d", {
+    alpha: false
+  });
 
   const UI = {
     score: document.getElementById("aa-score"),
@@ -37,18 +34,44 @@
     guideTCell: document.getElementById("aa-guide-tcell-canvas"),
     guideAntigen: document.getElementById("aa-guide-antigen-canvas"),
     guideGhost: document.getElementById("aa-guide-ghost-canvas"),
-    guideBoost: document.getElementById("aa-guide-boost-canvas")
+    guideBoost: document.getElementById("aa-guide-boost-canvas"),
+    leaderboardList: document.getElementById("aa-leaderboard-list"),
+    playerCount: document.getElementById("aa-player-count"),
+    leaderboardStatus: document.getElementById("aa-leaderboard-status"),
+    scoreForm: document.getElementById("aa-score-form"),
+    scoreName: document.getElementById("aa-score-name"),
+    scoreFormMessage: document.getElementById("aa-score-form-message"),
+    scoreSubmit: document.getElementById("aa-score-submit"),
+    scoreSkip: document.getElementById("aa-score-skip")
   };
+
+  /* =========================================================
+     SUPABASE GLOBAL LEADERBOARD
+     ========================================================= */
+
+  const LEADERBOARD_CONFIG = {
+    supabaseUrl: "https://jtptfuxtvimtqdhhlhsq.supabase.co",
+    publishableKey: "sb_publishable_6ZEbk6iRjOZPGLr9FsEoIQ_zrI4aXS3"
+  };
+
+  const LEADERBOARD_LIMIT = 5;
+  const USERNAME_MAX_LENGTH = 10;
 
   const W = canvas.width;
   const H = canvas.height;
   const COLS = 27;
   const ROWS = 21;
   const TILE = 30;
+
   const BOARD_W = COLS * TILE;
   const BOARD_H = ROWS * TILE;
-  const OFFSET_X = (W - BOARD_W) / 2;
-  const OFFSET_Y = (H - BOARD_H) / 2;
+
+  const OFFSET_X =
+    (W - BOARD_W) / 2;
+
+  const OFFSET_Y =
+    (H - BOARD_H) / 2;
+
   const FIXED_STEP = 1 / 60;
   const MAX_UPDATES_PER_FRAME = 4;
   const RENDER_INTERVAL = 1000 / 60;
@@ -69,25 +92,60 @@
   };
 
   const DIRECTIONS = {
-    left:  { x: -1, y:  0, angle: Math.PI },
-    right: { x:  1, y:  0, angle: 0 },
-    up:    { x:  0, y: -1, angle: -Math.PI / 2 },
-    down:  { x:  0, y:  1, angle: Math.PI / 2 },
-    none:  { x:  0, y:  0, angle: 0 }
+    left: {
+      x: -1,
+      y: 0,
+      angle: Math.PI
+    },
+
+    right: {
+      x: 1,
+      y: 0,
+      angle: 0
+    },
+
+    up: {
+      x: 0,
+      y: -1,
+      angle: -Math.PI / 2
+    },
+
+    down: {
+      x: 0,
+      y: 1,
+      angle: Math.PI / 2
+    },
+
+    none: {
+      x: 0,
+      y: 0,
+      angle: 0
+    }
   };
 
-  const DIR_NAMES = ["left", "right", "up", "down"];
-
-  const ANTIGENS = [
-    { name: "IAPP-HIP", color: COLORS.iapp },
-    { name: "ChgA-HIP", color: COLORS.chga },
-    { name: "InsB:9-23", color: COLORS.insb }
+  const DIR_NAMES = [
+    "left",
+    "right",
+    "up",
+    "down"
   ];
 
-  /* Point values follow the classic Pac-Man bonus progression requested.
-     The booster icons are original circular symbols that keep the arcade
-     color schemes while matching the round icon language used elsewhere
-     in this game. */
+  const ANTIGENS = [
+    {
+      name: "IAPP-HIP",
+      color: COLORS.iapp
+    },
+
+    {
+      name: "ChgA-HIP",
+      color: COLORS.chga
+    },
+
+    {
+      name: "InsB:9-23",
+      color: COLORS.insb
+    }
+  ];
 
   const BOOSTERS = [
     {
@@ -97,6 +155,7 @@
       effect: "Expansion boost",
       main: "#FE3030"
     },
+
     {
       name: "IL-12",
       arcadeRef: "Strawberry",
@@ -104,6 +163,7 @@
       effect: "Effector boost",
       main: "#FF73B7"
     },
+
     {
       name: "IFNγ",
       arcadeRef: "Orange",
@@ -111,6 +171,7 @@
       effect: "Inflammatory boost",
       main: "#FFA23A"
     },
+
     {
       name: "IL-21",
       arcadeRef: "Apple",
@@ -118,6 +179,7 @@
       effect: "Persistence boost",
       main: "#6BEA63"
     },
+
     {
       name: "IL-18",
       arcadeRef: "Melon",
@@ -125,6 +187,7 @@
       effect: "Activation boost",
       main: "#67E3B8"
     },
+
     {
       name: "TNFα",
       arcadeRef: "Galaxian",
@@ -132,6 +195,7 @@
       effect: "Inflammatory boost",
       main: "#4D79FF"
     },
+
     {
       name: "IL-1β",
       arcadeRef: "Bell",
@@ -139,6 +203,7 @@
       effect: "Danger signal boost",
       main: "#FFE04E"
     },
+
     {
       name: "Type I IFN",
       arcadeRef: "Key",
@@ -149,52 +214,176 @@
   ];
 
   const STRUCTURES = [
-    { x: 5,  y: 3,  w: 4, h: 2, label: "MITOCHONDRIA" },
-    { x: 11, y: 2,  w: 5, h: 2, label: "ER" },
-    { x: 18, y: 3,  w: 4, h: 2, label: "GRANULES" },
-    { x: 3,  y: 7,  w: 4, h: 2, label: "ER" },
-    { x: 9,  y: 6,  w: 3, h: 4, label: "MITOCHONDRIA" },
-    { x: 15, y: 6,  w: 3, h: 4, label: "GRANULES" },
-    { x: 20, y: 7,  w: 4, h: 2, label: "MITOCHONDRIA" },
-    { x: 5,  y: 11, w: 4, h: 3, label: "GRANULES" },
-    { x: 11, y: 11, w: 5, h: 2, label: "ER" },
-    { x: 18, y: 11, w: 4, h: 3, label: "ER" },
-    { x: 3,  y: 16, w: 5, h: 2, label: "MITOCHONDRIA" },
-    { x: 10, y: 15, w: 3, h: 3, label: "GRANULES" },
-    { x: 14, y: 15, w: 3, h: 3, label: "ER" },
-    { x: 19, y: 16, w: 5, h: 2, label: "MITOCHONDRIA" }
+    {
+      x: 5,
+      y: 3,
+      w: 4,
+      h: 2,
+      label: "MITOCHONDRIA"
+    },
+
+    {
+      x: 11,
+      y: 2,
+      w: 5,
+      h: 2,
+      label: "ER"
+    },
+
+    {
+      x: 18,
+      y: 3,
+      w: 4,
+      h: 2,
+      label: "GRANULES"
+    },
+
+    {
+      x: 3,
+      y: 7,
+      w: 4,
+      h: 2,
+      label: "ER"
+    },
+
+    {
+      x: 9,
+      y: 6,
+      w: 3,
+      h: 4,
+      label: "MITOCHONDRIA"
+    },
+
+    {
+      x: 15,
+      y: 6,
+      w: 3,
+      h: 4,
+      label: "GRANULES"
+    },
+
+    {
+      x: 20,
+      y: 7,
+      w: 4,
+      h: 2,
+      label: "MITOCHONDRIA"
+    },
+
+    {
+      x: 5,
+      y: 11,
+      w: 4,
+      h: 3,
+      label: "GRANULES"
+    },
+
+    {
+      x: 11,
+      y: 11,
+      w: 5,
+      h: 2,
+      label: "ER"
+    },
+
+    {
+      x: 18,
+      y: 11,
+      w: 4,
+      h: 3,
+      label: "ER"
+    },
+
+    {
+      x: 3,
+      y: 16,
+      w: 5,
+      h: 2,
+      label: "MITOCHONDRIA"
+    },
+
+    {
+      x: 10,
+      y: 15,
+      w: 3,
+      h: 3,
+      label: "GRANULES"
+    },
+
+    {
+      x: 14,
+      y: 15,
+      w: 3,
+      h: 3,
+      label: "ER"
+    },
+
+    {
+      x: 19,
+      y: 16,
+      w: 5,
+      h: 2,
+      label: "MITOCHONDRIA"
+    }
   ];
 
-  const enemyHome = { col: 13, row: 10 };
-  const playerHome = { col: 13, row: 18 };
+  const enemyHome = {
+    col: 13,
+    row: 10
+  };
+
+  const playerHome = {
+    col: 13,
+    row: 18
+  };
 
   let grid = [];
+
   let pellets = [];
   let pelletGrid = [];
-  let antigenTotals = [0, 0, 0];
-  let antigenRemaining = [0, 0, 0];
+
+  let antigenTotals =
+    [0, 0, 0];
+
+  let antigenRemaining =
+    [0, 0, 0];
+
   let totalPellets = 0;
   let remainingPellets = 0;
+
   let powerUps = [];
   let powerGrid = [];
+
   let player = null;
   let enemies = [];
+
   let floatingScores = [];
 
   let state = "ready";
+
   let score = 0;
-  let highScore = readHighScore();
+
+  let highScore =
+    readHighScore();
+
   let lives = 3;
+
   let activation = 8;
   let betaFunction = 100;
+
   let currentAntigen = 0;
   let totalCollected = 0;
+
   let boostTimer = 0;
   let boostName = "";
+
   let enemyEatChain = 0;
+
   let recoveryTimer = 0;
   let bannerTimer = 0;
+
   let mouthPhase = 0;
+
   let soundEnabled = true;
   let audioContext = null;
 
@@ -202,6 +391,15 @@
   let accumulator = 0;
   let lastRenderTime = 0;
   let forceRender = true;
+
+  let leaderboardScores = [];
+  let leaderboardReady = false;
+
+  let playerRegisteredThisPage = false;
+  let anonymousPlayerId = null;
+
+  let pendingEndScreen = null;
+  let scoreSubmissionInProgress = false;
 
   const uiCache = {
     score: null,
@@ -213,21 +411,37 @@
     antigen: null
   };
 
-  const staticLayer = document.createElement("canvas");
+  const staticLayer =
+    document.createElement(
+      "canvas"
+    );
+
   staticLayer.width = W;
   staticLayer.height = H;
 
-  const sctx = staticLayer.getContext("2d", {
-    alpha: false
-  });
+  const sctx =
+    staticLayer.getContext(
+      "2d",
+      {
+        alpha: false
+      }
+    );
+
+  /* =========================================================
+     LOCAL HIGH SCORE
+     ========================================================= */
 
   function readHighScore() {
     try {
       const value = Number(
-        window.localStorage.getItem("autoimmuneArcadeHighScore") || 0
+        window.localStorage.getItem(
+          "autoimmuneArcadeHighScore"
+        ) || 0
       );
 
-      return Number.isFinite(value) ? value : 0;
+      return Number.isFinite(value)
+        ? value
+        : 0;
     } catch (_) {
       return 0;
     }
@@ -239,17 +453,23 @@
         "autoimmuneArcadeHighScore",
         String(highScore)
       );
-    } catch (_) {
-      // Storage may be unavailable in local previews or privacy modes.
-    }
+    } catch (_) {}
   }
 
   function tileCenterX(col) {
-    return OFFSET_X + col * TILE + TILE / 2;
+    return (
+      OFFSET_X +
+      col * TILE +
+      TILE / 2
+    );
   }
 
   function tileCenterY(row) {
-    return OFFSET_Y + row * TILE + TILE / 2;
+    return (
+      OFFSET_Y +
+      row * TILE +
+      TILE / 2
+    );
   }
 
   function isOpen(col, row) {
@@ -271,37 +491,70 @@
     }[dir] || "none";
   }
 
-  function buildGrid() {
-    grid = Array.from(
-      { length: ROWS },
-      () => Array(COLS).fill(-1)
-    );
+  /* =========================================================
+     BUILD BOARD
+     ========================================================= */
 
-    const cx = (COLS - 1) / 2;
-    const cy = (ROWS - 1) / 2;
+  function buildGrid() {
+    grid =
+      Array.from(
+        {
+          length: ROWS
+        },
+        () =>
+          Array(COLS).fill(-1)
+      );
+
+    const cx =
+      (COLS - 1) / 2;
+
+    const cy =
+      (ROWS - 1) / 2;
+
     const rx = 12.4;
     const ry = 9.5;
 
-    for (let row = 0; row < ROWS; row++) {
-      for (let col = 0; col < COLS; col++) {
-        const dx = (col - cx) / rx;
-        const dy = (row - cy) / ry;
+    for (
+      let row = 0;
+      row < ROWS;
+      row++
+    ) {
+      for (
+        let col = 0;
+        col < COLS;
+        col++
+      ) {
+        const dx =
+          (col - cx) / rx;
 
-        if (dx * dx + dy * dy <= 1) {
+        const dy =
+          (row - cy) / ry;
+
+        if (
+          dx * dx +
+          dy * dy <= 1
+        ) {
           grid[row][col] = 0;
         }
       }
     }
 
-    for (const structure of STRUCTURES) {
+    for (
+      const structure
+      of STRUCTURES
+    ) {
       for (
         let row = structure.y;
-        row < structure.y + structure.h;
+        row <
+          structure.y +
+          structure.h;
         row++
       ) {
         for (
           let col = structure.x;
-          col < structure.x + structure.w;
+          col <
+            structure.x +
+            structure.w;
           col++
         ) {
           if (
@@ -339,17 +592,31 @@
       [14, 18]
     ];
 
-    guaranteedOpen.forEach(([col, row]) => {
-      if (grid[row] && grid[row][col] !== -1) {
-        grid[row][col] = 0;
+    guaranteedOpen.forEach(
+      ([col, row]) => {
+        if (
+          grid[row] &&
+          grid[row][col] !== -1
+        ) {
+          grid[row][col] = 0;
+        }
       }
-    });
+    );
   }
 
-  function nearestOpen(preferredCol, preferredRow, used) {
+  function nearestOpen(
+    preferredCol,
+    preferredRow,
+    used
+  ) {
     if (
-      isOpen(preferredCol, preferredRow) &&
-      !used.has(`${preferredCol},${preferredRow}`)
+      isOpen(
+        preferredCol,
+        preferredRow
+      ) &&
+      !used.has(
+        `${preferredCol},${preferredRow}`
+      )
     ) {
       return {
         col: preferredCol,
@@ -357,9 +624,21 @@
       };
     }
 
-    for (let radius = 1; radius < 8; radius++) {
-      for (let dr = -radius; dr <= radius; dr++) {
-        for (let dc = -radius; dc <= radius; dc++) {
+    for (
+      let radius = 1;
+      radius < 8;
+      radius++
+    ) {
+      for (
+        let dr = -radius;
+        dr <= radius;
+        dr++
+      ) {
+        for (
+          let dc = -radius;
+          dc <= radius;
+          dc++
+        ) {
           if (
             Math.max(
               Math.abs(dc),
@@ -369,12 +648,17 @@
             continue;
           }
 
-          const col = preferredCol + dc;
-          const row = preferredRow + dr;
+          const col =
+            preferredCol + dc;
+
+          const row =
+            preferredRow + dr;
 
           if (
             isOpen(col, row) &&
-            !used.has(`${col},${row}`)
+            !used.has(
+              `${col},${row}`
+            )
           ) {
             return {
               col,
@@ -391,10 +675,14 @@
   function generatePowerUps() {
     powerUps = [];
 
-    powerGrid = Array.from(
-      { length: ROWS },
-      () => Array(COLS).fill(null)
-    );
+    powerGrid =
+      Array.from(
+        {
+          length: ROWS
+        },
+        () =>
+          Array(COLS).fill(null)
+      );
 
     const preferred = [
       [4, 10],
@@ -407,45 +695,60 @@
       [19, 5]
     ];
 
-    const used = new Set();
+    const used =
+      new Set();
 
-    preferred.forEach(([col, row], type) => {
-      const position = nearestOpen(
-        col,
-        row,
-        used
-      );
+    preferred.forEach(
+      ([col, row], type) => {
+        const position =
+          nearestOpen(
+            col,
+            row,
+            used
+          );
 
-      if (!position) return;
+        if (!position) return;
 
-      used.add(
-        `${position.col},${position.row}`
-      );
+        used.add(
+          `${position.col},${position.row}`
+        );
 
-      const power = {
-        col: position.col,
-        row: position.row,
-        type,
-        eaten: false,
-        x: tileCenterX(position.col),
-        y: tileCenterY(position.row)
-      };
+        const power = {
+          col: position.col,
+          row: position.row,
+          type,
+          eaten: false,
+          x: tileCenterX(
+            position.col
+          ),
+          y: tileCenterY(
+            position.row
+          )
+        };
 
-      powerUps.push(power);
+        powerUps.push(power);
 
-      powerGrid[
-        power.row
-      ][
-        power.col
-      ] = power;
-    });
+        powerGrid[
+          power.row
+        ][
+          power.col
+        ] = power;
+      }
+    );
   }
 
-  function openNeighborCount(col, row) {
+  function openNeighborCount(
+    col,
+    row
+  ) {
     let count = 0;
 
-    for (const name of DIR_NAMES) {
-      const d = DIRECTIONS[name];
+    for (
+      const name
+      of DIR_NAMES
+    ) {
+      const d =
+        DIRECTIONS[name];
 
       if (
         isOpen(
@@ -463,37 +766,73 @@
   function generatePellets() {
     pellets = [];
 
-    pelletGrid = Array.from(
-      { length: ROWS },
-      () => Array(COLS).fill(null)
-    );
+    pelletGrid =
+      Array.from(
+        {
+          length: ROWS
+        },
+        () =>
+          Array(COLS).fill(null)
+      );
 
-    antigenTotals = [0, 0, 0];
+    antigenTotals =
+      [0, 0, 0];
 
     const candidates = [];
 
-    for (let row = 1; row < ROWS - 1; row++) {
-      for (let col = 1; col < COLS - 1; col++) {
-        if (!isOpen(col, row)) continue;
-        if (powerGrid[row][col]) continue;
+    for (
+      let row = 1;
+      row < ROWS - 1;
+      row++
+    ) {
+      for (
+        let col = 1;
+        col < COLS - 1;
+        col++
+      ) {
+        if (!isOpen(col, row)) {
+          continue;
+        }
 
         if (
-          Math.abs(col - enemyHome.col) <= 1 &&
-          Math.abs(row - enemyHome.row) <= 1
+          powerGrid[row][col]
         ) {
           continue;
         }
 
         if (
-          Math.abs(col - playerHome.col) <= 1 &&
-          Math.abs(row - playerHome.row) <= 1
+          Math.abs(
+            col -
+            enemyHome.col
+          ) <= 1 &&
+          Math.abs(
+            row -
+            enemyHome.row
+          ) <= 1
         ) {
           continue;
         }
 
         if (
-          (col + row) % 2 !== 0 &&
-          openNeighborCount(col, row) < 3
+          Math.abs(
+            col -
+            playerHome.col
+          ) <= 1 &&
+          Math.abs(
+            row -
+            playerHome.row
+          ) <= 1
+        ) {
+          continue;
+        }
+
+        if (
+          (col + row) %
+          2 !== 0 &&
+          openNeighborCount(
+            col,
+            row
+          ) < 3
         ) {
           continue;
         }
@@ -505,32 +844,41 @@
       }
     }
 
-    candidates.forEach((position, index) => {
-      const antigen =
-        (index + position.row) %
-        ANTIGENS.length;
+    candidates.forEach(
+      (position, index) => {
+        const antigen =
+          (
+            index +
+            position.row
+          ) %
+          ANTIGENS.length;
 
-      const pellet = {
-        col: position.col,
-        row: position.row,
-        antigen,
-        eaten: false,
-        x: tileCenterX(position.col),
-        y: tileCenterY(position.row)
-      };
+        const pellet = {
+          col: position.col,
+          row: position.row,
+          antigen,
+          eaten: false,
+          x: tileCenterX(
+            position.col
+          ),
+          y: tileCenterY(
+            position.row
+          )
+        };
 
-      pellets.push(pellet);
+        pellets.push(pellet);
 
-      pelletGrid[
-        pellet.row
-      ][
-        pellet.col
-      ] = pellet;
+        pelletGrid[
+          pellet.row
+        ][
+          pellet.col
+        ] = pellet;
 
-      antigenTotals[
-        antigen
-      ]++;
-    });
+        antigenTotals[
+          antigen
+        ]++;
+      }
+    );
 
     antigenRemaining =
       antigenTotals.slice();
@@ -542,7 +890,11 @@
       totalPellets;
   }
 
-  function makeEntity(col, row, tilesPerSecond) {
+  function makeEntity(
+    col,
+    row,
+    tilesPerSecond
+  ) {
     return {
       col,
       row,
@@ -556,26 +908,38 @@
     };
   }
 
-  function updateEntityPixel(entity) {
+  function updateEntityPixel(
+    entity
+  ) {
     const d =
-      DIRECTIONS[entity.dir] ||
+      DIRECTIONS[
+        entity.dir
+      ] ||
       DIRECTIONS.none;
 
     entity.x =
-      tileCenterX(entity.col) +
+      tileCenterX(
+        entity.col
+      ) +
       d.x *
       TILE *
       entity.progress;
 
     entity.y =
-      tileCenterY(entity.row) +
+      tileCenterY(
+        entity.row
+      ) +
       d.y *
       TILE *
       entity.progress;
   }
 
-  function canLeaveTile(entity, dir) {
-    const d = DIRECTIONS[dir];
+  function canLeaveTile(
+    entity,
+    dir
+  ) {
+    const d =
+      DIRECTIONS[dir];
 
     return (
       !!d &&
@@ -588,16 +952,22 @@
   }
 
   function resetEntities() {
-    player = makeEntity(
-      playerHome.col,
-      playerHome.row,
-      7.2
+    player =
+      makeEntity(
+        playerHome.col,
+        playerHome.row,
+        7.2
+      );
+
+    player.dir =
+      "left";
+
+    player.queuedDir =
+      "left";
+
+    updateEntityPixel(
+      player
     );
-
-    player.dir = "left";
-    player.queuedDir = "left";
-
-    updateEntityPixel(player);
 
     const starts = [
       {
@@ -608,6 +978,7 @@
         personality: "chase",
         speed: 4.25
       },
+
       {
         col: 14,
         row: 10,
@@ -616,6 +987,7 @@
         personality: "ambush",
         speed: 4.45
       },
+
       {
         col: 13,
         row: 9,
@@ -624,6 +996,7 @@
         personality: "patrol",
         speed: 4.15
       },
+
       {
         col: 13,
         row: 11,
@@ -634,70 +1007,768 @@
       }
     ];
 
-    enemies = starts.map((s, i) => {
-      const enemy = makeEntity(
-        s.col,
-        s.row,
-        s.speed
-      );
+    enemies =
+      starts.map(
+        (s, i) => {
+          const enemy =
+            makeEntity(
+              s.col,
+              s.row,
+              s.speed
+            );
 
-      enemy.name =
-        s.name;
+          enemy.name =
+            s.name;
 
-      enemy.color =
-        s.color;
+          enemy.color =
+            s.color;
 
-      enemy.personality =
-        s.personality;
+          enemy.personality =
+            s.personality;
 
-      enemy.dir =
-        i % 2
-          ? "right"
-          : "left";
+          enemy.dir =
+            i % 2
+              ? "right"
+              : "left";
 
-      enemy.home = {
-        col: s.col,
-        row: s.row
-      };
+          enemy.home = {
+            col: s.col,
+            row: s.row
+          };
 
-      enemy.scatter = {
-        col:
-          i < 2
-            ? (
-              i === 0
-                ? 3
-                : 23
-            )
-            : (
-              i === 2
+          enemy.scatter = {
+            col:
+              i < 2
+                ? (
+                  i === 0
+                    ? 3
+                    : 23
+                )
+                : (
+                  i === 2
+                    ? 4
+                    : 22
+                ),
+            row:
+              i < 2
                 ? 4
-                : 22
-            ),
-        row:
-          i < 2
-            ? 4
-            : 17
-      };
+                : 17
+          };
 
-      if (
-        !canLeaveTile(
-          enemy,
-          enemy.dir
-        )
-      ) {
-        enemy.dir =
-          chooseEnemyDirection(enemy);
-      }
+          if (
+            !canLeaveTile(
+              enemy,
+              enemy.dir
+            )
+          ) {
+            enemy.dir =
+              chooseEnemyDirection(
+                enemy
+              );
+          }
 
-      updateEntityPixel(enemy);
+          updateEntityPixel(
+            enemy
+          );
 
-      return enemy;
-    });
+          return enemy;
+        }
+      );
 
     forceRender = true;
   }
 
-  function resetGame(full = true) {
+  /* =========================================================
+     GLOBAL LEADERBOARD
+     ========================================================= */
+
+  function leaderboardConfigured() {
+    return (
+      LEADERBOARD_CONFIG.supabaseUrl &&
+      LEADERBOARD_CONFIG.publishableKey &&
+      !LEADERBOARD_CONFIG.supabaseUrl.startsWith("YOUR_") &&
+      !LEADERBOARD_CONFIG.publishableKey.startsWith("YOUR_")
+    );
+  }
+
+  function normalizeSupabaseUrl() {
+    return (
+      LEADERBOARD_CONFIG
+        .supabaseUrl
+        .replace(/\/+$/, "")
+    );
+  }
+
+  async function leaderboardRpc(
+    functionName,
+    payload = {}
+  ) {
+    if (
+      !leaderboardConfigured()
+    ) {
+      throw new Error(
+        "Leaderboard database is not configured yet."
+      );
+    }
+
+    const response =
+      await fetch(
+        `${normalizeSupabaseUrl()}/rest/v1/rpc/${functionName}`,
+        {
+          method: "POST",
+
+          headers: {
+            apikey:
+              LEADERBOARD_CONFIG
+                .publishableKey,
+
+            Authorization:
+              `Bearer ${LEADERBOARD_CONFIG.publishableKey}`,
+
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify(
+              payload
+            )
+        }
+      );
+
+    if (
+      !response.ok
+    ) {
+      let detail = "";
+
+      try {
+        const errorBody =
+          await response.json();
+
+        detail =
+          errorBody?.message ||
+          errorBody?.details ||
+          "";
+      } catch (_) {}
+
+      throw new Error(
+        detail ||
+        `Leaderboard request failed (${response.status}).`
+      );
+    }
+
+    if (
+      response.status === 204
+    ) {
+      return null;
+    }
+
+    const text =
+      await response.text();
+
+    return text
+      ? JSON.parse(text)
+      : null;
+  }
+
+  function renderLeaderboard() {
+    if (
+      !UI.leaderboardList
+    ) {
+      return;
+    }
+
+    UI.leaderboardList
+      .replaceChildren();
+
+    for (
+      let index = 0;
+      index <
+        LEADERBOARD_LIMIT;
+      index++
+    ) {
+      const record =
+        leaderboardScores[
+          index
+        ];
+
+      const li =
+        document.createElement(
+          "li"
+        );
+
+      const rank =
+        document.createElement(
+          "span"
+        );
+
+      rank.className =
+        "aa-rank";
+
+      rank.textContent =
+        String(index + 1);
+
+      const username =
+        document.createElement(
+          "strong"
+        );
+
+      username.textContent =
+        record?.username ||
+        "---";
+
+      const scoreText =
+        document.createElement(
+          "span"
+        );
+
+      scoreText.textContent =
+        record
+          ? String(
+            Number(
+              record.score
+            ) || 0
+          ).padStart(
+            6,
+            "0"
+          )
+          : "------";
+
+      li.append(
+        rank,
+        username,
+        scoreText
+      );
+
+      UI.leaderboardList
+        .appendChild(li);
+    }
+  }
+
+  function setLeaderboardStatus(
+    message,
+    isError = false
+  ) {
+    if (
+      !UI.leaderboardStatus
+    ) {
+      return;
+    }
+
+    UI.leaderboardStatus
+      .textContent =
+      message;
+
+    UI.leaderboardStatus
+      .classList.toggle(
+        "is-error",
+        isError
+      );
+  }
+
+  async function refreshLeaderboard() {
+    if (
+      !leaderboardConfigured()
+    ) {
+      leaderboardReady =
+        false;
+
+      leaderboardScores =
+        [];
+
+      renderLeaderboard();
+
+      if (
+        UI.playerCount
+      ) {
+        UI.playerCount
+          .textContent =
+          "—";
+      }
+
+      setLeaderboardStatus(
+        "Global records will appear after the database is connected."
+      );
+
+      return false;
+    }
+
+    try {
+      const [
+        scores,
+        count
+      ] =
+        await Promise.all([
+          leaderboardRpc(
+            "arcade_top_scores"
+          ),
+
+          leaderboardRpc(
+            "arcade_player_count"
+          )
+        ]);
+
+      leaderboardScores =
+        Array.isArray(scores)
+          ? scores.slice(
+            0,
+            LEADERBOARD_LIMIT
+          )
+          : [];
+
+      leaderboardReady =
+        true;
+
+      renderLeaderboard();
+
+      if (
+        UI.playerCount
+      ) {
+        UI.playerCount
+          .textContent =
+          Number(
+            count || 0
+          ).toLocaleString();
+      }
+
+      setLeaderboardStatus(
+        "Live global leaderboard"
+      );
+
+      return true;
+    } catch (error) {
+      console.error(
+        "Autoimmune Arcade leaderboard:",
+        error
+      );
+
+      leaderboardReady =
+        false;
+
+      setLeaderboardStatus(
+        "Global records are temporarily unavailable.",
+        true
+      );
+
+      return false;
+    }
+  }
+
+  function createAnonymousPlayerId() {
+    if (
+      window.crypto?.randomUUID
+    ) {
+      return (
+        window.crypto
+          .randomUUID()
+      );
+    }
+
+    const bytes =
+      new Uint8Array(16);
+
+    if (
+      window.crypto
+        ?.getRandomValues
+    ) {
+      window.crypto
+        .getRandomValues(
+          bytes
+        );
+    } else {
+      for (
+        let i = 0;
+        i < bytes.length;
+        i++
+      ) {
+        bytes[i] =
+          Math.floor(
+            Math.random() *
+            256
+          );
+      }
+    }
+
+    bytes[6] =
+      (bytes[6] & 0x0f) |
+      0x40;
+
+    bytes[8] =
+      (bytes[8] & 0x3f) |
+      0x80;
+
+    const hex =
+      [...bytes].map(
+        b =>
+          b
+            .toString(16)
+            .padStart(2, "0")
+      );
+
+    return (
+      `${hex.slice(0, 4).join("")}-` +
+      `${hex.slice(4, 6).join("")}-` +
+      `${hex.slice(6, 8).join("")}-` +
+      `${hex.slice(8, 10).join("")}-` +
+      `${hex.slice(10, 16).join("")}`
+    );
+  }
+
+  function getOrCreateAnonymousPlayerId() {
+    if (
+      anonymousPlayerId
+    ) {
+      return anonymousPlayerId;
+    }
+
+    try {
+      const saved =
+        window.localStorage.getItem(
+          "autoimmuneArcadeAnonymousPlayerId"
+        );
+
+      if (saved) {
+        anonymousPlayerId =
+          saved;
+
+        return (
+          anonymousPlayerId
+        );
+      }
+    } catch (_) {}
+
+    anonymousPlayerId =
+      createAnonymousPlayerId();
+
+    try {
+      window.localStorage.setItem(
+        "autoimmuneArcadeAnonymousPlayerId",
+        anonymousPlayerId
+      );
+    } catch (_) {}
+
+    return (
+      anonymousPlayerId
+    );
+  }
+
+  async function registerGlobalPlayer() {
+    if (
+      playerRegisteredThisPage ||
+      !leaderboardConfigured()
+    ) {
+      return;
+    }
+
+    playerRegisteredThisPage =
+      true;
+
+    try {
+      const count =
+        await leaderboardRpc(
+          "arcade_register_player",
+          {
+            p_player_id:
+              getOrCreateAnonymousPlayerId()
+          }
+        );
+
+      if (
+        UI.playerCount
+      ) {
+        UI.playerCount
+          .textContent =
+          Number(
+            count || 0
+          ).toLocaleString();
+      }
+    } catch (error) {
+      console.error(
+        "Could not register arcade player:",
+        error
+      );
+    }
+  }
+
+  function qualifiesForLeaderboard(
+    candidateScore
+  ) {
+    if (
+      !leaderboardConfigured() ||
+      !leaderboardReady ||
+      candidateScore <= 0
+    ) {
+      return false;
+    }
+
+    if (
+      leaderboardScores.length <
+      LEADERBOARD_LIMIT
+    ) {
+      return true;
+    }
+
+    const cutoff =
+      Number(
+        leaderboardScores[
+          LEADERBOARD_LIMIT - 1
+        ]?.score || 0
+      );
+
+    return (
+      candidateScore >
+      cutoff
+    );
+  }
+
+  function hideScoreEntry() {
+    if (
+      UI.scoreForm
+    ) {
+      UI.scoreForm.hidden =
+        true;
+    }
+
+    if (
+      UI.primaryButton
+    ) {
+      UI.primaryButton.hidden =
+        false;
+    }
+
+    if (
+      UI.scoreFormMessage
+    ) {
+      UI.scoreFormMessage
+        .textContent =
+        "1–10 letters, numbers, or underscores.";
+
+      UI.scoreFormMessage
+        .classList.remove(
+          "is-error"
+        );
+    }
+  }
+
+  function showScoreEntry(
+    endScreen
+  ) {
+    pendingEndScreen =
+      endScreen;
+
+    UI.overlayTitle
+      .textContent =
+      "NEW TOP 5 SCORE";
+
+    UI.overlayText
+      .innerHTML =
+      `You scored <strong>${score.toLocaleString()} points</strong> and currently qualify for the global leaderboard.`;
+
+    UI.startLegend
+      .style.display =
+      "none";
+
+    UI.primaryButton.hidden =
+      true;
+
+    UI.scoreForm.hidden =
+      false;
+
+    UI.overlay
+      .classList.remove(
+        "is-hidden"
+      );
+
+    UI.scoreName.value =
+      "";
+
+    UI.scoreName.focus();
+  }
+
+  function showPendingEndScreen(
+    savedName = ""
+  ) {
+    const endScreen =
+      pendingEndScreen;
+
+    hideScoreEntry();
+
+    if (
+      !endScreen
+    ) {
+      return;
+    }
+
+    const extra =
+      savedName
+        ? `<br><br><strong>Score saved as ${escapeHtml(savedName)}.</strong>`
+        : "";
+
+    showOverlay(
+      endScreen.title,
+      endScreen.text +
+      extra,
+      endScreen.buttonText,
+      false
+    );
+  }
+
+  function escapeHtml(value) {
+    return String(value)
+      .replaceAll(
+        "&",
+        "&amp;"
+      )
+      .replaceAll(
+        "<",
+        "&lt;"
+      )
+      .replaceAll(
+        ">",
+        "&gt;"
+      )
+      .replaceAll(
+        '"',
+        "&quot;"
+      )
+      .replaceAll(
+        "'",
+        "&#039;"
+      );
+  }
+
+  async function processFinishedScore(
+    endScreen
+  ) {
+    pendingEndScreen =
+      endScreen;
+
+    persistHighScore();
+
+    if (
+      !leaderboardConfigured()
+    ) {
+      showPendingEndScreen();
+      return;
+    }
+
+    await refreshLeaderboard();
+
+    if (
+      qualifiesForLeaderboard(
+        score
+      )
+    ) {
+      showScoreEntry(
+        endScreen
+      );
+    } else {
+      showPendingEndScreen();
+    }
+  }
+
+  async function submitLeaderboardScore(
+    event
+  ) {
+    event.preventDefault();
+
+    if (
+      scoreSubmissionInProgress
+    ) {
+      return;
+    }
+
+    const username =
+      (
+        UI.scoreName?.value ||
+        ""
+      ).trim();
+
+    const valid =
+      new RegExp(
+        `^[A-Za-z0-9_]{1,${USERNAME_MAX_LENGTH}}$`
+      ).test(username);
+
+    if (!valid) {
+      UI.scoreFormMessage
+        .textContent =
+        "Use 1–10 letters, numbers, or underscores only.";
+
+      UI.scoreFormMessage
+        .classList.add(
+          "is-error"
+        );
+
+      UI.scoreName.focus();
+
+      return;
+    }
+
+    scoreSubmissionInProgress =
+      true;
+
+    UI.scoreSubmit.disabled =
+      true;
+
+    UI.scoreFormMessage
+      .textContent =
+      "Saving score…";
+
+    UI.scoreFormMessage
+      .classList.remove(
+        "is-error"
+      );
+
+    try {
+      await leaderboardRpc(
+        "arcade_submit_score",
+        {
+          p_username:
+            username,
+          p_score:
+            Math.round(score)
+        }
+      );
+
+      await refreshLeaderboard();
+
+      showPendingEndScreen(
+        username
+      );
+    } catch (error) {
+      console.error(
+        "Could not submit arcade score:",
+        error
+      );
+
+      UI.scoreFormMessage
+        .textContent =
+        error?.message?.includes(
+          "no longer qualifies"
+        )
+          ? "The leaderboard changed and this score no longer qualifies."
+          : "Could not save the score. Please try again.";
+
+      UI.scoreFormMessage
+        .classList.add(
+          "is-error"
+        );
+    } finally {
+      scoreSubmissionInProgress =
+        false;
+
+      UI.scoreSubmit.disabled =
+        false;
+    }
+  }
+
+  /* =========================================================
+     RESET / HUD
+     ========================================================= */
+
+  function resetGame(
+    full = true
+  ) {
     if (full) {
       score = 0;
       lives = 3;
@@ -718,37 +1789,52 @@
       remainingPellets =
         totalPellets;
 
-      pellets.forEach(p => {
-        p.eaten = false;
-      });
+      pellets.forEach(
+        p => {
+          p.eaten = false;
+        }
+      );
 
-      powerUps.forEach(p => {
-        p.eaten = false;
-      });
+      powerUps.forEach(
+        p => {
+          p.eaten = false;
+        }
+      );
     }
 
     resetEntities();
+
     updateUI(true);
   }
 
   function activationState() {
-    if (activation < 25) {
+    if (
+      activation < 25
+    ) {
       return "Naive";
     }
 
-    if (activation < 50) {
+    if (
+      activation < 50
+    ) {
       return "Activated";
     }
 
-    if (activation < 75) {
+    if (
+      activation < 75
+    ) {
       return "Expanded";
     }
 
     return "Effector";
   }
 
-  function updateUI(force = false) {
-    if (score > highScore) {
+  function updateUI(
+    force = false
+  ) {
+    if (
+      score > highScore
+    ) {
       highScore = score;
     }
 
@@ -756,10 +1842,14 @@
       activationState();
 
     const actRounded =
-      Math.round(activation);
+      Math.round(
+        activation
+      );
 
     const betaRounded =
-      Math.round(betaFunction);
+      Math.round(
+        betaFunction
+      );
 
     if (
       force ||
@@ -771,7 +1861,8 @@
           "0"
         );
 
-      uiCache.score = score;
+      uiCache.score =
+        score;
     }
 
     if (
@@ -780,10 +1871,11 @@
         highScore
     ) {
       UI.highScore.textContent =
-        String(highScore).padStart(
-          6,
-          "0"
-        );
+        String(highScore)
+          .padStart(
+            6,
+            "0"
+          );
 
       uiCache.highScore =
         highScore;
@@ -794,7 +1886,8 @@
       uiCache.activationState !==
         actState
     ) {
-      UI.activationLabel.textContent =
+      UI.activationLabel
+        .textContent =
         actState;
 
       uiCache.activationState =
@@ -806,7 +1899,8 @@
       uiCache.activationRounded !==
         actRounded
     ) {
-      UI.activationBar.style.width =
+      UI.activationBar
+        .style.width =
         `${Math.max(
           0,
           Math.min(
@@ -824,13 +1918,15 @@
       uiCache.betaRounded !==
         betaRounded
     ) {
-      UI.betaLabel.textContent =
+      UI.betaLabel
+        .textContent =
         `${Math.max(
           0,
           betaRounded
         )}%`;
 
-      UI.betaBar.style.width =
+      UI.betaBar
+        .style.width =
         `${Math.max(
           0,
           Math.min(
@@ -848,13 +1944,15 @@
       uiCache.antigen !==
         currentAntigen
     ) {
-      UI.stageLabel.textContent =
+      UI.stageLabel
+        .textContent =
         ANTIGENS[
           currentAntigen
         ]?.name ||
         "Complete";
 
-      UI.stageLabel.style.color =
+      UI.stageLabel
+        .style.color =
         ANTIGENS[
           currentAntigen
         ]?.color ||
@@ -869,7 +1967,8 @@
       uiCache.lives !==
         lives
     ) {
-      UI.lives.replaceChildren();
+      UI.lives
+        .replaceChildren();
 
       for (
         let i = 0;
@@ -884,7 +1983,10 @@
         dot.className =
           "aa-life-dot";
 
-        UI.lives.appendChild(dot);
+        UI.lives
+          .appendChild(
+            dot
+          );
       }
 
       UI.lives.setAttribute(
@@ -907,29 +2009,40 @@
     buttonText,
     showLegend = false
   ) {
-    UI.overlayTitle.textContent =
+    hideScoreEntry();
+
+    UI.overlayTitle
+      .textContent =
       title;
 
-    UI.overlayText.innerHTML =
+    UI.overlayText
+      .innerHTML =
       text;
 
-    UI.primaryButton.textContent =
+    UI.primaryButton
+      .textContent =
       buttonText;
 
-    UI.startLegend.style.display =
+    UI.primaryButton.hidden =
+      false;
+
+    UI.startLegend
+      .style.display =
       showLegend
         ? "flex"
         : "none";
 
-    UI.overlay.classList.remove(
-      "is-hidden"
-    );
+    UI.overlay
+      .classList.remove(
+        "is-hidden"
+      );
   }
 
   function hideOverlay() {
-    UI.overlay.classList.add(
-      "is-hidden"
-    );
+    UI.overlay
+      .classList.add(
+        "is-hidden"
+      );
 
     try {
       canvas.focus({
@@ -945,25 +2058,29 @@
     color,
     seconds = 1.25
   ) {
-    UI.stageBanner.textContent =
+    UI.stageBanner
+      .textContent =
       text;
 
-    UI.stageBanner.style.color =
+    UI.stageBanner
+      .style.color =
       color ||
       "#ffffff";
 
-    UI.stageBanner.classList.add(
-      "is-visible"
-    );
+    UI.stageBanner
+      .classList.add(
+        "is-visible"
+      );
 
     bannerTimer =
       seconds;
   }
 
   function hideStageBanner() {
-    UI.stageBanner.classList.remove(
-      "is-visible"
-    );
+    UI.stageBanner
+      .classList.remove(
+        "is-visible"
+      );
 
     bannerTimer = 0;
   }
@@ -973,12 +2090,16 @@
      ========================================================= */
 
   function ensureAudio() {
-    if (!soundEnabled) {
+    if (
+      !soundEnabled
+    ) {
       return null;
     }
 
     try {
-      if (!audioContext) {
+      if (
+        !audioContext
+      ) {
         const AC =
           window.AudioContext ||
           window.webkitAudioContext;
@@ -1010,7 +2131,8 @@
     volume = 0.02,
     slide = 0
   ) {
-    const ac = ensureAudio();
+    const ac =
+      ensureAudio();
 
     if (!ac) return;
 
@@ -1027,33 +2149,43 @@
       osc.type =
         type;
 
-      osc.frequency.setValueAtTime(
-        freq,
-        now
-      );
+      osc.frequency
+        .setValueAtTime(
+          freq,
+          now
+        );
 
       if (slide) {
-        osc.frequency.linearRampToValueAtTime(
-          freq + slide,
-          now + duration
-        );
+        osc.frequency
+          .linearRampToValueAtTime(
+            freq + slide,
+            now + duration
+          );
       }
 
-      gain.gain.setValueAtTime(
-        volume,
-        now
-      );
+      gain.gain
+        .setValueAtTime(
+          volume,
+          now
+        );
 
-      gain.gain.exponentialRampToValueAtTime(
-        0.0001,
-        now + duration
-      );
+      gain.gain
+        .exponentialRampToValueAtTime(
+          0.0001,
+          now + duration
+        );
 
       osc.connect(gain);
-      gain.connect(ac.destination);
+
+      gain.connect(
+        ac.destination
+      );
 
       osc.start(now);
-      osc.stop(now + duration);
+
+      osc.stop(
+        now + duration
+      );
     } catch (_) {}
   }
 
@@ -1076,7 +2208,9 @@
 
     beep(
       520 +
-      (totalCollected % 5) *
+      (
+        totalCollected % 5
+      ) *
       40,
       0.028,
       "square",
@@ -1137,7 +2271,7 @@
   }
 
   /* =========================================================
-     TILE MOVEMENT
+     ENEMY MOVEMENT
      ========================================================= */
 
   function choosePlayerDirectionAtCenter() {
@@ -1160,9 +2294,15 @@
     }
   }
 
-  function targetForEnemy(enemy) {
-    if (boostTimer > 0) {
-      return enemy.scatter;
+  function targetForEnemy(
+    enemy
+  ) {
+    if (
+      boostTimer > 0
+    ) {
+      return (
+        enemy.scatter
+      );
     }
 
     const pd =
@@ -1175,7 +2315,8 @@
       player.col +
       pd.x *
       (
-        player.progress >= 0.5
+        player.progress >=
+        0.5
           ? 1
           : 0
       );
@@ -1184,7 +2325,8 @@
       player.row +
       pd.y *
       (
-        player.progress >= 0.5
+        player.progress >=
+        0.5
           ? 1
           : 0
       );
@@ -1207,6 +2349,7 @@
         col:
           playerCol +
           pd.x * 4,
+
         row:
           playerRow +
           pd.y * 4
@@ -1253,7 +2396,9 @@
       : enemy.scatter;
   }
 
-  function legalEnemyDirections(enemy) {
+  function legalEnemyDirections(
+    enemy
+  ) {
     const available = [];
 
     const reverse =
@@ -1271,7 +2416,9 @@
           name
         )
       ) {
-        available.push(name);
+        available.push(
+          name
+        );
       }
     }
 
@@ -1288,16 +2435,24 @@
       : available;
   }
 
-  function chooseEnemyDirection(enemy) {
+  function chooseEnemyDirection(
+    enemy
+  ) {
     const options =
-      legalEnemyDirections(enemy);
+      legalEnemyDirections(
+        enemy
+      );
 
-    if (!options.length) {
+    if (
+      !options.length
+    ) {
       return "none";
     }
 
     const target =
-      targetForEnemy(enemy);
+      targetForEnemy(
+        enemy
+      );
 
     let best =
       options[0];
@@ -1305,7 +2460,10 @@
     let bestDistance =
       Infinity;
 
-    for (const name of options) {
+    for (
+      const name
+      of options
+    ) {
       const d =
         DIRECTIONS[name];
 
@@ -1391,7 +2549,9 @@
           choosePlayerDirectionAtCenter();
         } else {
           entity.dir =
-            chooseEnemyDirection(entity);
+            chooseEnemyDirection(
+              entity
+            );
         }
 
         if (
@@ -1448,7 +2608,9 @@
       }
     }
 
-    updateEntityPixel(entity);
+    updateEntityPixel(
+      entity
+    );
   }
 
   function movePlayer(dt) {
@@ -1476,7 +2638,7 @@
   }
 
   /* =========================================================
-     GAME RULES
+     SCORING
      ========================================================= */
 
   function addFloatingScore(
@@ -1494,7 +2656,10 @@
     });
   }
 
-  function collectAtTile(col, row) {
+  function collectAtTile(
+    col,
+    row
+  ) {
     let changed = false;
 
     const pellet =
@@ -1616,20 +2781,22 @@
     if (
       remainingPellets ===
         0 &&
-      state === "running"
+      state ===
+        "running"
     ) {
       winGame();
     }
   }
 
-  function collisionDistanceSq(a, b) {
+  function collisionDistanceSq(
+    a,
+    b
+  ) {
     const dx =
-      a.x -
-      b.x;
+      a.x - b.x;
 
     const dy =
-      a.y -
-      b.y;
+      a.y - b.y;
 
     return (
       dx * dx +
@@ -1659,7 +2826,9 @@
         continue;
       }
 
-      if (boostTimer > 0) {
+      if (
+        boostTimer > 0
+      ) {
         enemyEatChain++;
 
         const bonus =
@@ -1700,7 +2869,9 @@
         enemy.dir =
           "none";
 
-        updateEntityPixel(enemy);
+        updateEntityPixel(
+          enemy
+        );
 
         beep(
           760,
@@ -1724,7 +2895,8 @@
 
   function loseLife() {
     if (
-      state !== "running"
+      state !==
+      "running"
     ) {
       return;
     }
@@ -1745,18 +2917,22 @@
 
     updateUI(true);
 
-    if (lives <= 0) {
+    if (
+      lives <= 0
+    ) {
       state =
         "lost";
 
-      persistHighScore();
+      processFinishedScore({
+        title:
+          "T cell response suppressed",
 
-      showOverlay(
-        "T cell response suppressed",
-        "Immune regulation stopped the autoreactive response before the simulated beta cell was destroyed.<br><strong>Try again and clear the complete antigen field.</strong>",
-        "Restart experiment",
-        false
-      );
+        text:
+          "Immune regulation stopped the autoreactive response before the simulated beta cell was destroyed.<br><strong>Try again and clear the complete antigen field.</strong>",
+
+        buttonText:
+          "Restart experiment"
+      });
 
       return;
     }
@@ -1791,16 +2967,18 @@
 
     updateUI(true);
 
-    persistHighScore();
-
     soundWin();
 
-    showOverlay(
-      "DIABETES ONSET",
-      "<strong>Beta cell function ↓ &nbsp; • &nbsp; Insulin production ↓ &nbsp; • &nbsp; Blood glucose ↑</strong><br><br>All beta cell antigen dots were cleared and the simulated beta cell destruction threshold was reached.",
-      "Play again",
-      false
-    );
+    processFinishedScore({
+      title:
+        "DIABETES ONSET",
+
+      text:
+        "<strong>Beta cell function ↓ &nbsp; • &nbsp; Insulin production ↓ &nbsp; • &nbsp; Blood glucose ↑</strong><br><br>All beta cell antigen dots were cleared and the simulated beta cell destruction threshold was reached.",
+
+      buttonText:
+        "Play again"
+    });
 
     forceRender =
       true;
@@ -1808,6 +2986,8 @@
 
   function startGame() {
     ensureAudio();
+
+    registerGlobalPlayer();
 
     if (
       state === "won" ||
@@ -1819,13 +2999,13 @@
     state =
       "running";
 
-    accumulator =
-      0;
+    accumulator = 0;
 
     hideOverlay();
     hideStageBanner();
 
-    UI.pauseButton.textContent =
+    UI.pauseButton
+      .textContent =
       "Pause";
 
     collectAtTile(
@@ -1839,14 +3019,16 @@
 
   function togglePause() {
     if (
-      state === "running"
+      state ===
+      "running"
     ) {
       state =
         "paused";
 
       persistHighScore();
 
-      UI.pauseButton.textContent =
+      UI.pauseButton
+        .textContent =
         "Resume";
 
       showOverlay(
@@ -1860,17 +3042,18 @@
         false
       );
     } else if (
-      state === "paused"
+      state ===
+      "paused"
     ) {
       state =
         "running";
 
-      accumulator =
-        0;
+      accumulator = 0;
 
       hideOverlay();
 
-      UI.pauseButton.textContent =
+      UI.pauseButton
+        .textContent =
         "Pause";
 
       forceRender =
@@ -1880,6 +3063,11 @@
 
   function restartGame() {
     persistHighScore();
+
+    pendingEndScreen =
+      null;
+
+    hideScoreEntry();
 
     resetGame(true);
 
@@ -1893,7 +3081,8 @@
       true
     );
 
-    UI.pauseButton.textContent =
+    UI.pauseButton
+      .textContent =
       "Pause";
 
     forceRender =
@@ -1905,7 +3094,7 @@
   }
 
   /* =========================================================
-     SHARED SPRITE DRAWING
+     SPRITES
      ========================================================= */
 
   function drawFloatingLabel(
@@ -1932,8 +3121,7 @@
     target.strokeStyle =
       "rgba(0,0,0,0.92)";
 
-    target.lineWidth =
-      4;
+    target.lineWidth = 4;
 
     target.strokeText(
       text,
@@ -1977,8 +3165,7 @@
       target.strokeStyle =
         "rgba(255,255,255,0.86)";
 
-      target.lineWidth =
-        3;
+      target.lineWidth = 3;
 
       target.beginPath();
 
@@ -2040,6 +3227,7 @@
         Math.cos(a) *
         radius *
         0.74,
+
         Math.sin(a) *
         radius *
         0.74
@@ -2049,6 +3237,7 @@
         Math.cos(a) *
         radius *
         1.03,
+
         Math.sin(a) *
         radius *
         1.03
@@ -2231,8 +3420,7 @@
     target.globalAlpha =
       0.24;
 
-    target.lineWidth =
-      1;
+    target.lineWidth = 1;
 
     target.beginPath();
 
@@ -2256,8 +3444,7 @@
     item,
     scale = 1
   ) {
-    const s =
-      scale;
+    const s = scale;
 
     const radius =
       12 * s;
@@ -2296,8 +3483,7 @@
 
     target.fill();
 
-    target.shadowBlur =
-      0;
+    target.shadowBlur = 0;
 
     target.strokeStyle =
       item.main;
@@ -2338,8 +3524,7 @@
 
     target.fill();
 
-    target.globalAlpha =
-      1;
+    target.globalAlpha = 1;
 
     target.fillStyle =
       item.main === "#FFFFFF"
@@ -2362,10 +3547,12 @@
   }
 
   /* =========================================================
-     STATIC BOARD RENDERING
+     STATIC BOARD RENDER
      ========================================================= */
 
-  function drawStructureStatic(structure) {
+  function drawStructureStatic(
+    structure
+  ) {
     const left =
       tileCenterX(
         structure.x
@@ -2379,12 +3566,10 @@
       TILE / 2;
 
     const width =
-      structure.w *
-      TILE;
+      structure.w * TILE;
 
     const height =
-      structure.h *
-      TILE;
+      structure.h * TILE;
 
     sctx.save();
 
@@ -2401,8 +3586,7 @@
     sctx.shadowColor =
       COLORS.wallGlow;
 
-    sctx.shadowBlur =
-      6;
+    sctx.shadowBlur = 6;
 
     sctx.fillStyle =
       COLORS.wall;
@@ -2422,12 +3606,14 @@
         col++
       ) {
         const perimeter =
-          row === structure.y ||
+          row ===
+            structure.y ||
           row ===
             structure.y +
             structure.h -
             1 ||
-          col === structure.x ||
+          col ===
+            structure.x ||
           col ===
             structure.x +
             structure.w -
@@ -2446,12 +3632,15 @@
         const cy =
           tileCenterY(row);
 
-        const size =
-          15;
+        const size = 15;
 
         sctx.fillRect(
-          cx - size / 2,
-          cy - size / 2,
+          cx -
+          size / 2,
+
+          cy -
+          size / 2,
+
           size,
           size
         );
@@ -2468,8 +3657,7 @@
       top +
       height / 2;
 
-    let fontSize =
-      15;
+    let fontSize = 15;
 
     sctx.save();
 
@@ -2501,8 +3689,7 @@
     sctx.strokeStyle =
       "rgba(0,0,0,0.95)";
 
-    sctx.lineWidth =
-      4;
+    sctx.lineWidth = 4;
 
     sctx.strokeText(
       structure.label,
@@ -2533,11 +3720,8 @@
       H
     );
 
-    const cx =
-      W / 2;
-
-    const cy =
-      H / 2;
+    const cx = W / 2;
+    const cy = H / 2;
 
     const rx =
       BOARD_W * 0.49;
@@ -2550,14 +3734,12 @@
     sctx.shadowColor =
       COLORS.wallGlow;
 
-    sctx.shadowBlur =
-      18;
+    sctx.shadowBlur = 18;
 
     sctx.strokeStyle =
       COLORS.membrane;
 
-    sctx.lineWidth =
-      5;
+    sctx.lineWidth = 5;
 
     sctx.beginPath();
 
@@ -2578,8 +3760,7 @@
     sctx.strokeStyle =
       "rgba(125,160,255,0.34)";
 
-    sctx.lineWidth =
-      1.5;
+    sctx.lineWidth = 1.5;
 
     sctx.beginPath();
 
@@ -2616,7 +3797,9 @@
       const structure
       of STRUCTURES
     ) {
-      drawStructureStatic(structure);
+      drawStructureStatic(
+        structure
+      );
     }
 
     const nx =
@@ -2647,8 +3830,7 @@
     sctx.strokeStyle =
       "rgba(255,125,210,0.72)";
 
-    sctx.lineWidth =
-      3;
+    sctx.lineWidth = 3;
 
     sctx.stroke();
 
@@ -2664,8 +3846,7 @@
     sctx.strokeStyle =
       "rgba(0,0,0,0.95)";
 
-    sctx.lineWidth =
-      4;
+    sctx.lineWidth = 4;
 
     sctx.strokeText(
       "NUCLEUS",
@@ -2686,7 +3867,7 @@
   }
 
   /* =========================================================
-     DYNAMIC RENDERING
+     DRAWING
      ========================================================= */
 
   function drawPellets(time) {
@@ -2719,7 +3900,8 @@
       ) {
         if (
           p.eaten ||
-          p.antigen !== antigen
+          p.antigen !==
+            antigen
         ) {
           continue;
         }
@@ -2746,8 +3928,7 @@
       ctx.globalAlpha =
         0.22;
 
-      ctx.lineWidth =
-        1;
+      ctx.lineWidth = 1;
 
       ctx.beginPath();
 
@@ -2757,7 +3938,8 @@
       ) {
         if (
           p.eaten ||
-          p.antigen !== antigen
+          p.antigen !==
+            antigen
         ) {
           continue;
         }
@@ -2780,8 +3962,7 @@
 
       ctx.stroke();
 
-      ctx.globalAlpha =
-        1;
+      ctx.globalAlpha = 1;
     }
   }
 
@@ -2790,7 +3971,9 @@
       const p
       of powerUps
     ) {
-      if (p.eaten) {
+      if (
+        p.eaten
+      ) {
         continue;
       }
 
@@ -2863,7 +4046,10 @@
     );
   }
 
-  function drawEnemy(enemy, time) {
+  function drawEnemy(
+    enemy,
+    time
+  ) {
     const vulnerable =
       boostTimer > 0;
 
@@ -2925,10 +4111,9 @@
       ctx.strokeStyle =
         "#000000";
 
-      ctx.lineWidth =
-        4;
+      ctx.lineWidth = 4;
 
-      const drawY =
+      const y =
         item.y -
         (
           1.1 -
@@ -2939,7 +4124,7 @@
       ctx.strokeText(
         item.text,
         item.x,
-        drawY
+        y
       );
 
       ctx.fillStyle =
@@ -2949,7 +4134,7 @@
       ctx.fillText(
         item.text,
         item.x,
-        drawY
+        y
       );
 
       ctx.restore();
@@ -3046,14 +4231,9 @@
   }
 
   function drawProgressRing() {
-    const x =
-      W - 52;
-
-    const y =
-      H - 48;
-
-    const r =
-      20;
+    const x = W - 52;
+    const y = H - 48;
+    const r = 20;
 
     const frac =
       totalPellets
@@ -3067,8 +4247,7 @@
         )
         : 0;
 
-    ctx.lineWidth =
-      4;
+    ctx.lineWidth = 4;
 
     ctx.strokeStyle =
       "#29324d";
@@ -3148,7 +4327,8 @@
   }
 
   function draw(
-    time = performance.now()
+    time =
+      performance.now()
   ) {
     ctx.drawImage(
       staticLayer,
@@ -3157,6 +4337,7 @@
     );
 
     drawPellets(time);
+
     drawPowerUps(time);
 
     for (
@@ -3170,12 +4351,14 @@
     }
 
     drawTCell();
+
     drawFloatingScores();
+
     drawBoardLabels();
+
     drawProgressRing();
 
-    forceRender =
-      false;
+    forceRender = false;
   }
 
   /* =========================================================
@@ -3183,12 +4366,12 @@
      ========================================================= */
 
   function prepGuideCanvas(c) {
-    if (!c) {
-      return null;
-    }
+    if (!c) return null;
 
     const g =
-      c.getContext("2d");
+      c.getContext(
+        "2d"
+      );
 
     g.fillStyle =
       "#070A14";
@@ -3235,11 +4418,8 @@
       );
 
     if (g) {
-      const xs = [
-        55,
-        150,
-        245
-      ];
+      const xs =
+        [55, 150, 245];
 
       ANTIGENS.forEach(
         (antigen, i) => {
@@ -3281,16 +4461,19 @@
           name: "Treg",
           color: "#C55CFF"
         },
+
         {
           x: 135,
           name: "Tol DC",
           color: "#4FC3FF"
         },
+
         {
           x: 229,
           name: "PD-L1 APC",
           color: "#FF5D73"
         },
+
         {
           x: 321,
           name: "Reg Mφ",
@@ -3298,26 +4481,28 @@
         }
       ];
 
-      guideEnemies.forEach(e => {
-        drawGhostSprite(
-          g,
-          e.x,
-          79,
-          25,
-          e.color,
-          "left",
-          false,
-          false
-        );
+      guideEnemies.forEach(
+        e => {
+          drawGhostSprite(
+            g,
+            e.x,
+            79,
+            25,
+            e.color,
+            "left",
+            false,
+            false
+          );
 
-        drawFloatingLabel(
-          g,
-          e.x,
-          32,
-          e.name,
-          11.5
-        );
-      });
+          drawFloatingLabel(
+            g,
+            e.x,
+            32,
+            e.name,
+            11.5
+          );
+        }
+      );
     }
 
     g =
@@ -3326,17 +4511,11 @@
       );
 
     if (g) {
-      const xs = [
-        52,
-        156,
-        264,
-        368
-      ];
+      const xs =
+        [52, 156, 264, 368];
 
-      const ys = [
-        43,
-        108
-      ];
+      const ys =
+        [43, 108];
 
       BOOSTERS.forEach(
         (item, i) => {
@@ -3378,11 +4557,13 @@
   }
 
   /* =========================================================
-     MAIN UPDATE LOOP
+     UPDATE LOOP
      ========================================================= */
 
   function update(dt) {
-    if (bannerTimer > 0) {
+    if (
+      bannerTimer > 0
+    ) {
       bannerTimer -= dt;
 
       if (
@@ -3408,16 +4589,14 @@
             item.time > 0
         );
 
-      forceRender =
-        true;
+      forceRender = true;
     }
 
     if (
       state ===
       "recovering"
     ) {
-      recoveryTimer -=
-        dt;
+      recoveryTimer -= dt;
 
       if (
         recoveryTimer <= 0
@@ -3425,11 +4604,9 @@
         state =
           "running";
 
-        recoveryTimer =
-          0;
+        recoveryTimer = 0;
 
-        forceRender =
-          true;
+        forceRender = true;
       }
 
       return;
@@ -3454,11 +4631,8 @@
       if (
         boostTimer === 0
       ) {
-        boostName =
-          "";
-
-        enemyEatChain =
-          0;
+        boostName = "";
+        enemyEatChain = 0;
       }
     }
 
@@ -3468,7 +4642,9 @@
   }
 
   function gameLoop(time) {
-    if (!lastFrameTime) {
+    if (
+      !lastFrameTime
+    ) {
       lastFrameTime =
         time;
     }
@@ -3521,12 +4697,10 @@
         updates ===
         MAX_UPDATES_PER_FRAME
       ) {
-        accumulator =
-          0;
+        accumulator = 0;
       }
     } else {
-      accumulator =
-        0;
+      accumulator = 0;
     }
 
     if (
@@ -3575,10 +4749,13 @@
       const dirMap = {
         arrowleft: "left",
         a: "left",
+
         arrowright: "right",
         d: "right",
+
         arrowup: "up",
         w: "up",
+
         arrowdown: "down",
         s: "down"
       };
@@ -3625,69 +4802,78 @@
     .querySelectorAll(
       ".aa-touch[data-dir]"
     )
-    .forEach(button => {
-      button.addEventListener(
-        "pointerdown",
-        event => {
-          event.preventDefault();
+    .forEach(
+      button => {
+        button.addEventListener(
+          "pointerdown",
+          event => {
+            event.preventDefault();
 
-          setDirection(
-            button.dataset.dir
-          );
+            setDirection(
+              button.dataset.dir
+            );
 
-          if (
-            state ===
-            "ready"
-          ) {
-            startGame();
+            if (
+              state ===
+              "ready"
+            ) {
+              startGame();
+            }
           }
-        }
-      );
-    });
-
-  UI.primaryButton.addEventListener(
-    "click",
-    () => {
-      if (
-        state ===
-        "paused"
-      ) {
-        togglePause();
-      } else {
-        startGame();
+        );
       }
-    }
-  );
+    );
 
-  UI.pauseButton.addEventListener(
-    "click",
-    togglePause
-  );
+  UI.primaryButton
+    .addEventListener(
+      "click",
+      () => {
+        if (
+          state ===
+          "paused"
+        ) {
+          togglePause();
+        } else {
+          startGame();
+        }
+      }
+    );
 
-  UI.restartButton.addEventListener(
-    "click",
-    restartGame
-  );
+  UI.pauseButton
+    .addEventListener(
+      "click",
+      togglePause
+    );
+
+  UI.restartButton
+    .addEventListener(
+      "click",
+      restartGame
+    );
 
   function toggleSound() {
     soundEnabled =
       !soundEnabled;
 
-    UI.soundButton.textContent =
+    UI.soundButton
+      .textContent =
       `Sound: ${
         soundEnabled
           ? "on"
           : "off"
       }`;
 
-    UI.soundButton.setAttribute(
-      "aria-pressed",
-      String(
-        !soundEnabled
-      )
-    );
+    UI.soundButton
+      .setAttribute(
+        "aria-pressed",
+        String(
+          !soundEnabled
+        )
+      );
 
-    if (soundEnabled) {
+    if (
+      soundEnabled
+    ) {
       ensureAudio();
 
       beep(
@@ -3699,10 +4885,51 @@
     }
   }
 
-  UI.soundButton.addEventListener(
-    "click",
-    toggleSound
-  );
+  UI.soundButton
+    .addEventListener(
+      "click",
+      toggleSound
+    );
+
+  if (
+    UI.scoreForm
+  ) {
+    UI.scoreForm
+      .addEventListener(
+        "submit",
+        submitLeaderboardScore
+      );
+  }
+
+  if (
+    UI.scoreSkip
+  ) {
+    UI.scoreSkip
+      .addEventListener(
+        "click",
+        () =>
+          showPendingEndScreen()
+      );
+  }
+
+  if (
+    UI.scoreName
+  ) {
+    UI.scoreName
+      .addEventListener(
+        "input",
+        () => {
+          UI.scoreFormMessage
+            .textContent =
+            "1–10 letters, numbers, or underscores.";
+
+          UI.scoreFormMessage
+            .classList.remove(
+              "is-error"
+            );
+        }
+      );
+  }
 
   document.addEventListener(
     "visibilitychange",
@@ -3732,10 +4959,15 @@
      ========================================================= */
 
   buildGrid();
+
   generatePowerUps();
+
   generatePellets();
+
   renderStaticLayer();
+
   resetGame(true);
+
   renderGuideIcons();
 
   showOverlay(
@@ -3746,6 +4978,22 @@
   );
 
   draw();
+
+  renderLeaderboard();
+
+  refreshLeaderboard();
+
+  window.setInterval(
+    () => {
+      if (
+        !document.hidden &&
+        leaderboardConfigured()
+      ) {
+        refreshLeaderboard();
+      }
+    },
+    30000
+  );
 
   requestAnimationFrame(
     gameLoop
