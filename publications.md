@@ -1,187 +1,900 @@
 ---
-
 layout: default
 title: Publications
 ---
 
-# Publications
+<section class="publication-v2-hero">
 
-The Piganelli Lab studies type 1 diabetes, redox immunology, beta-cell stress, T cell activation, immunometabolism, and early immune biomarkers.
+  <span class="publication-v2-eyebrow">
+    Research outputs
+  </span>
 
-Click each publication card to open the associated PubMed page or PubMed search result.
+  <h1>
+    Publications
+  </h1>
 
----
+  <p>
+    Publications are organized using the same six research productions shown on the Research page.
+    Some papers appear in more than one production when they directly connect multiple themes.
+  </p>
 
-## Featured Research Articles
-
-<div class="card-grid">
-
-  <a class="publication-card-link" href="https://pubmed.ncbi.nlm.nih.gov/?term=Reactive+oxygen+species+are+required+for+driving+efficient+and+sustained+aerobic+glycolysis+during+CD4%2B+T+cell+activation+Piganelli" target="_blank">
-    <div class="card">
-      <h3>Reactive oxygen species and CD4+ T cell metabolism</h3>
-      <p><strong>Previte DM, O’Connor EC, Novak EA, Martins CP, Mollen KP, Piganelli JD.</strong></p>
-      <p><em>PLoS ONE. 2017.</em></p>
-      <p>This study examined how reactive oxygen species contribute to efficient and sustained aerobic glycolysis during CD4+ T cell activation.</p>
-    </div>
+  <a
+    class="publication-v2-back-link"
+    href="{{ site.baseurl }}/research.html"
+  >
+    ← Return to Research
   </a>
 
-  <a class="publication-card-link" href="https://pubmed.ncbi.nlm.nih.gov/?term=Glycolysis+inhibition+functional+and+metabolic+properties+autoreactive+T+cells+type+1+diabetes+Piganelli" target="_blank">
-    <div class="card">
-      <h3>Glycolysis inhibition and autoreactive T cells</h3>
-      <p><strong>Martins CP, et al.; Piganelli JD.</strong></p>
-      <p><em>Frontiers in Immunology. 2021.</em></p>
-      <p>This work investigated how glycolysis inhibition alters functional and metabolic properties of autoreactive T cells in type 1 diabetes models.</p>
-    </div>
+</section>
+
+
+<nav
+  class="publication-v2-jump-nav"
+  aria-label="Publication categories"
+>
+
+  <a href="#production-1">
+    Production 1<br>
+    <strong>Redox Immunology</strong>
   </a>
 
-  <a class="publication-card-link" href="https://pubmed.ncbi.nlm.nih.gov/?term=ER+stress+elicits+modifying+enzymes+generate+epitopes+recognized+CD4%2B+T+cells+type+1+diabetes+Piganelli+James" target="_blank">
-    <div class="card">
-      <h3>ER stress-generated epitopes in type 1 diabetes</h3>
-      <p><strong>Marré ML, et al.; Piganelli JD; James EA.</strong></p>
-      <p><em>Diabetes. 2018.</em></p>
-      <p>This study investigated how ER stress can elicit modifying enzymes that generate epitopes selectively recognized by CD4+ T cells in patients with type 1 diabetes.</p>
-    </div>
+  <a href="#production-2">
+    Production 2<br>
+    <strong>T Cell Metabolism</strong>
   </a>
 
-  <a class="publication-card-link" href="https://pubmed.ncbi.nlm.nih.gov/?term=Inherent+endoplasmic+reticulum+stress+pancreatic+islet+beta+cells+causes+self-recognition+by+autoreactive+T+cells+Piganelli" target="_blank">
-    <div class="card">
-      <h3>Inherent ER stress in pancreatic islet beta cells</h3>
-      <p><strong>Marré ML, et al.; Piganelli JD.</strong></p>
-      <p><em>Journal of Autoimmunity. 2016.</em></p>
-      <p>This work linked pancreatic beta-cell ER stress to immunogenicity and autoimmune diabetes progression.</p>
-    </div>
+  <a href="#production-3">
+    Production 3<br>
+    <strong>Beta Cell Stress</strong>
   </a>
 
-  <a class="publication-card-link" href="https://pubmed.ncbi.nlm.nih.gov/?term=Human+pancreatic+islets+and+enterovirus+infection+cytokine+chemokine+Piganelli" target="_blank">
-    <div class="card">
-      <h3>Human pancreatic islets and enterovirus infection</h3>
-      <p><strong>Schulte BM, et al.; Piganelli JD.</strong></p>
-      <p><em>Diabetes. 2012.</em></p>
-      <p>This study examined cytokine and chemokine production by human pancreatic islets following enterovirus infection.</p>
-    </div>
+  <a href="#production-4">
+    Production 4<br>
+    <strong>Early Biomarkers</strong>
   </a>
 
-  <a class="publication-card-link" href="https://pubmed.ncbi.nlm.nih.gov/?term=Modulation+of+redox+balance+leaves+murine+diabetogenic+TH1+T+cells+LAG-3+Piganelli" target="_blank">
-    <div class="card">
-      <h3>Redox modulation and diabetogenic T cells</h3>
-      <p><strong>Delmastro MM, Styche AJ, Trucco MM, Workman CJ, Vignali DAA, Piganelli JD.</strong></p>
-      <p><em>Diabetes. 2012.</em></p>
-      <p>This study explored how modulation of redox balance affects murine diabetogenic TH1 T cells and LAG-3-associated immune regulation.</p>
-    </div>
+  <a href="#production-5">
+    Production 5<br>
+    <strong>Antigen-Specific T Cells</strong>
   </a>
 
-  <a class="publication-card-link" href="https://pubmed.ncbi.nlm.nih.gov/?term=Negative+vaccination+islet+allograft+hyporesponsiveness+Sklavos+Coudriet+Piganelli" target="_blank">
-    <div class="card">
-      <h3>Negative vaccination and islet allograft hyporesponsiveness</h3>
-      <p><strong>Sklavos MM, Coudriet GM, Delmastro MM, Bertera S, Coneybeer JT, He J, Trucco M, Piganelli JD.</strong></p>
-      <p><em>Cell Transplantation. 2013.</em></p>
-      <p>This work investigated a negative vaccination strategy to induce hyporesponsiveness to islet allografts.</p>
-    </div>
+  <a href="#production-6">
+    Production 6<br>
+    <strong>Translational Models</strong>
   </a>
 
-  <a class="publication-card-link" href="https://pubmed.ncbi.nlm.nih.gov/?term=Superoxide+production+macrophages+T+cells+autoreactivity+type+1+diabetes+Piganelli+Mathews" target="_blank">
-    <div class="card">
-      <h3>Superoxide production and type 1 diabetes</h3>
-      <p><strong>Thayer TC, Delano M, Liu C, Chen J, Padgett LE, Tse HM, Annamali M, Piganelli JD, Moldawer LL, Mathews CE.</strong></p>
-      <p><em>Diabetes. 2011.</em></p>
-      <p>This study examined how superoxide production by macrophages and T cells contributes to autoreactivity and type 1 diabetes.</p>
-    </div>
+</nav>
+
+
+<!-- ======================================================
+     PRODUCTION 1
+     ====================================================== -->
+
+<section
+  id="production-1"
+  class="publication-v2-production"
+>
+
+  <div class="publication-v2-production-badge">
+    Production 1
+  </div>
+
+  <div class="publication-v2-production-heading">
+
+    <h2>
+      Redox Immunology
+    </h2>
+
+    <p>
+      Publications examining reactive oxygen species, redox-sensitive immune signaling,
+      inflammatory activation, and redox-based strategies in type 1 diabetes.
+    </p>
+
+  </div>
+
+
+  <div class="publication-v2-grid">
+
+    <article class="publication-v2-card">
+
+      <span class="publication-v2-type">
+        Research Article
+      </span>
+
+      <h3>
+        Reactive oxygen species are required for driving efficient and sustained aerobic glycolysis during CD4+ T cell activation
+      </h3>
+
+      <p class="publication-v2-authors">
+        Previte DM, O'Connor EC, Novak EA, Martins CP, Mollen KP, Piganelli JD
+      </p>
+
+      <p class="publication-v2-journal">
+        PLOS ONE · 2017
+      </p>
+
+      <a
+        href="https://doi.org/10.1371/journal.pone.0175549"
+        target="_blank"
+        rel="noopener"
+      >
+        DOI: 10.1371/journal.pone.0175549 ↗
+      </a>
+
+    </article>
+
+
+    <article class="publication-v2-card">
+
+      <span class="publication-v2-type publication-v2-type-review">
+        Review
+      </span>
+
+      <h3>
+        Reactive Oxygen Species and Their Implications on CD4+ T Cells in Type 1 Diabetes
+      </h3>
+
+      <p class="publication-v2-authors">
+        Previte DM, Piganelli JD
+      </p>
+
+      <p class="publication-v2-journal">
+        Antioxidants &amp; Redox Signaling · 2018
+      </p>
+
+      <a
+        href="https://doi.org/10.1089/ars.2017.7357"
+        target="_blank"
+        rel="noopener"
+      >
+        DOI: 10.1089/ars.2017.7357 ↗
+      </a>
+
+    </article>
+
+
+    <article class="publication-v2-card">
+
+      <span class="publication-v2-type">
+        Research Article
+      </span>
+
+      <h3>
+        Disruption of innate-mediated proinflammatory cytokine and reactive oxygen species third signal leads to antigen-specific hyporesponsiveness
+      </h3>
+
+      <p class="publication-v2-authors">
+        Tse HM, Milton MJ, Schreiner S, Profozich JL, Trucco M, Piganelli JD
+      </p>
+
+      <p class="publication-v2-journal">
+        The Journal of Immunology · 2007
+      </p>
+
+      <a
+        href="https://doi.org/10.4049/jimmunol.178.2.908"
+        target="_blank"
+        rel="noopener"
+      >
+        DOI: 10.4049/jimmunol.178.2.908 ↗
+      </a>
+
+    </article>
+
+
+    <article class="publication-v2-card">
+
+      <span class="publication-v2-type">
+        Research Article
+      </span>
+
+      <h3>
+        A Metalloporphyrin-Based Superoxide Dismutase Mimic Inhibits Adoptive Transfer of Autoimmune Diabetes by a Diabetogenic T-Cell Clone
+      </h3>
+
+      <p class="publication-v2-authors">
+        Piganelli JD et al.
+      </p>
+
+      <p class="publication-v2-journal">
+        Diabetes · 2002
+      </p>
+
+      <a
+        href="https://doi.org/10.2337/diabetes.51.2.347"
+        target="_blank"
+        rel="noopener"
+      >
+        DOI: 10.2337/diabetes.51.2.347 ↗
+      </a>
+
+    </article>
+
+  </div>
+</section>
+
+
+<!-- ======================================================
+     PRODUCTION 2
+     ====================================================== -->
+
+<section
+  id="production-2"
+  class="publication-v2-production"
+>
+
+  <div class="publication-v2-production-badge">
+    Production 2
+  </div>
+
+  <div class="publication-v2-production-heading">
+
+    <h2>
+      T Cell Metabolism
+    </h2>
+
+    <p>
+      Publications defining the metabolic requirements of autoreactive T cells and exploring
+      immunometabolism as a therapeutic vulnerability in autoimmunity.
+    </p>
+
+  </div>
+
+
+  <div class="publication-v2-grid">
+
+    <article class="publication-v2-card">
+
+      <span class="publication-v2-type">
+        Research Article
+      </span>
+
+      <h3>
+        Glycolysis Inhibition Induces Functional and Metabolic Exhaustion of CD4+ T Cells in Type 1 Diabetes
+      </h3>
+
+      <p class="publication-v2-authors">
+        Martins CP, New LA, O'Connor EC, Previte DM, Cargill KR, Tse IL, Sims-Lucas S, Piganelli JD
+      </p>
+
+      <p class="publication-v2-journal">
+        Frontiers in Immunology · 2021
+      </p>
+
+      <a
+        href="https://doi.org/10.3389/fimmu.2021.669456"
+        target="_blank"
+        rel="noopener"
+      >
+        DOI: 10.3389/fimmu.2021.669456 ↗
+      </a>
+
+    </article>
+
+
+    <article class="publication-v2-card">
+
+      <span class="publication-v2-type">
+        Research Article
+      </span>
+
+      <h3>
+        Reactive oxygen species are required for driving efficient and sustained aerobic glycolysis during CD4+ T cell activation
+      </h3>
+
+      <p class="publication-v2-authors">
+        Previte DM, O'Connor EC, Novak EA, Martins CP, Mollen KP, Piganelli JD
+      </p>
+
+      <p class="publication-v2-journal">
+        PLOS ONE · 2017
+      </p>
+
+      <a
+        href="https://doi.org/10.1371/journal.pone.0175549"
+        target="_blank"
+        rel="noopener"
+      >
+        DOI: 10.1371/journal.pone.0175549 ↗
+      </a>
+
+    </article>
+
+
+    <article class="publication-v2-card">
+
+      <span class="publication-v2-type publication-v2-type-review">
+        Review
+      </span>
+
+      <h3>
+        Targeting T cell Metabolism to Combat Autoimmunity: Implications for the Future of Type 1 Diabetes Therapeutics
+      </h3>
+
+      <p class="publication-v2-authors">
+        Martins CP, Piganelli JD
+      </p>
+
+      <p class="publication-v2-journal">
+        Immunometabolism · 2020
+      </p>
+
+      <a
+        href="https://doi.org/10.20900/immunometab20200010"
+        target="_blank"
+        rel="noopener"
+      >
+        DOI: 10.20900/immunometab20200010 ↗
+      </a>
+
+    </article>
+
+  </div>
+</section>
+
+
+<!-- ======================================================
+     PRODUCTION 3
+     ====================================================== -->
+
+<section
+  id="production-3"
+  class="publication-v2-production"
+>
+
+  <div class="publication-v2-production-badge">
+    Production 3
+  </div>
+
+  <div class="publication-v2-production-heading">
+
+    <h2>
+      Beta Cell Stress
+    </h2>
+
+    <p>
+      Publications connecting endoplasmic reticulum stress, autophagy, inflammatory stress,
+      neo-epitope formation, and increased beta cell immune visibility.
+    </p>
+
+  </div>
+
+
+  <div class="publication-v2-grid">
+
+    <article class="publication-v2-card">
+
+      <span class="publication-v2-type">
+        Research Article
+      </span>
+
+      <h3>
+        Dysfunctional β-cell autophagy induces β-cell stress and enhances islet immunogenicity
+      </h3>
+
+      <p class="publication-v2-authors">
+        Austin MC, Muralidharan C, Roy S, Crowder JJ, Piganelli JD, Linnemann AK
+      </p>
+
+      <p class="publication-v2-journal">
+        Frontiers in Immunology · 2025
+      </p>
+
+      <a
+        href="https://doi.org/10.3389/fimmu.2025.1504583"
+        target="_blank"
+        rel="noopener"
+      >
+        DOI: 10.3389/fimmu.2025.1504583 ↗
+      </a>
+
+    </article>
+
+
+    <article class="publication-v2-card">
+
+      <span class="publication-v2-type publication-v2-type-review">
+        Review
+      </span>
+
+      <h3>
+        The Role of β Cell Stress and Neo-Epitopes in the Immunopathology of Type 1 Diabetes
+      </h3>
+
+      <p class="publication-v2-authors">
+        Piganelli JD, Mamula MJ, James EA
+      </p>
+
+      <p class="publication-v2-journal">
+        Frontiers in Endocrinology · 2021
+      </p>
+
+      <a
+        href="https://doi.org/10.3389/fendo.2020.624590"
+        target="_blank"
+        rel="noopener"
+      >
+        DOI: 10.3389/fendo.2020.624590 ↗
+      </a>
+
+    </article>
+
+
+    <article class="publication-v2-card">
+
+      <span class="publication-v2-type publication-v2-type-review">
+        Review
+      </span>
+
+      <h3>
+        Environmental Factors Contribute to β Cell Endoplasmic Reticulum Stress and Neo-Antigen Formation in Type 1 Diabetes
+      </h3>
+
+      <p class="publication-v2-authors">
+        Marré ML, Piganelli JD
+      </p>
+
+      <p class="publication-v2-journal">
+        Frontiers in Endocrinology · 2017
+      </p>
+
+      <a
+        href="https://doi.org/10.3389/fendo.2017.00262"
+        target="_blank"
+        rel="noopener"
+      >
+        DOI: 10.3389/fendo.2017.00262 ↗
+      </a>
+
+    </article>
+
+
+    <article class="publication-v2-card">
+
+      <span class="publication-v2-type publication-v2-type-review">
+        Review
+      </span>
+
+      <h3>
+        β cell ER stress and the implications for immunogenicity in type 1 diabetes
+      </h3>
+
+      <p class="publication-v2-authors">
+        Marré ML, James EA, Piganelli JD
+      </p>
+
+      <p class="publication-v2-journal">
+        Frontiers in Cell and Developmental Biology · 2015
+      </p>
+
+      <a
+        href="https://doi.org/10.3389/fcell.2015.00067"
+        target="_blank"
+        rel="noopener"
+      >
+        DOI: 10.3389/fcell.2015.00067 ↗
+      </a>
+
+    </article>
+
+  </div>
+</section>
+
+
+<!-- ======================================================
+     PRODUCTION 4
+     ====================================================== -->
+
+<section
+  id="production-4"
+  class="publication-v2-production"
+>
+
+  <div class="publication-v2-production-badge">
+    Production 4
+  </div>
+
+  <div class="publication-v2-production-heading">
+
+    <h2>
+      Early Biomarkers
+    </h2>
+
+    <p>
+      Publications focused on detecting immune activation and disease-relevant biology before or
+      during early stages of type 1 diabetes progression.
+    </p>
+
+  </div>
+
+
+  <div class="publication-v2-grid">
+
+    <article class="publication-v2-card publication-v2-card-featured">
+
+      <span class="publication-v2-type publication-v2-type-preprint">
+        Preprint
+      </span>
+
+      <h3>
+        Soluble LAG-3 Identifies a Dynamic Early T Cell Activation Window in self-reactivity, Type 1 Diabetes, and Broader Immune Responses
+      </h3>
+
+      <p class="publication-v2-authors">
+        Roy S, Proffer ML, Syed F, Smithmyer ME, Das Sharma A, Twoy A,
+        Soo-Hoo E, Rana J, Spaeth JM, Meyer E, Jensen KP, Speake C,
+        Hagopian W, Piganelli JD
+      </p>
+
+      <p class="publication-v2-journal">
+        bioRxiv · 2026
+      </p>
+
+      <a
+        href="https://doi.org/10.64898/2026.02.10.705171"
+        target="_blank"
+        rel="noopener"
+      >
+        DOI: 10.64898/2026.02.10.705171 ↗
+      </a>
+
+    </article>
+
+  </div>
+</section>
+
+
+<!-- ======================================================
+     PRODUCTION 5
+     ====================================================== -->
+
+<section
+  id="production-5"
+  class="publication-v2-production"
+>
+
+  <div class="publication-v2-production-badge">
+    Production 5
+  </div>
+
+  <div class="publication-v2-production-heading">
+
+    <h2>
+      Antigen-Specific T Cells
+    </h2>
+
+    <p>
+      Publications using antigen-specific T cell systems to dissect activation, tolerance,
+      diabetogenic function, and autoimmune progression.
+    </p>
+
+  </div>
+
+
+  <div class="publication-v2-grid">
+
+    <article class="publication-v2-card publication-v2-card-featured">
+
+      <span class="publication-v2-type publication-v2-type-preprint">
+        Preprint
+      </span>
+
+      <h3>
+        Soluble LAG-3 Identifies a Dynamic Early T Cell Activation Window in self-reactivity, Type 1 Diabetes, and Broader Immune Responses
+      </h3>
+
+      <p class="publication-v2-authors">
+        Roy S et al.
+      </p>
+
+      <p class="publication-v2-journal">
+        bioRxiv · 2026
+      </p>
+
+      <a
+        href="https://doi.org/10.64898/2026.02.10.705171"
+        target="_blank"
+        rel="noopener"
+      >
+        DOI: 10.64898/2026.02.10.705171 ↗
+      </a>
+
+    </article>
+
+
+    <article class="publication-v2-card">
+
+      <span class="publication-v2-type">
+        Research Article
+      </span>
+
+      <h3>
+        Disruption of innate-mediated proinflammatory cytokine and reactive oxygen species third signal leads to antigen-specific hyporesponsiveness
+      </h3>
+
+      <p class="publication-v2-authors">
+        Tse HM, Milton MJ, Schreiner S, Profozich JL, Trucco M, Piganelli JD
+      </p>
+
+      <p class="publication-v2-journal">
+        The Journal of Immunology · 2007
+      </p>
+
+      <a
+        href="https://doi.org/10.4049/jimmunol.178.2.908"
+        target="_blank"
+        rel="noopener"
+      >
+        DOI: 10.4049/jimmunol.178.2.908 ↗
+      </a>
+
+    </article>
+
+
+    <article class="publication-v2-card">
+
+      <span class="publication-v2-type publication-v2-type-method">
+        Methods
+      </span>
+
+      <h3>
+        Generation, maintenance, and adoptive transfer of diabetogenic T-cell lines/clones from the nonobese diabetic mouse
+      </h3>
+
+      <p class="publication-v2-authors">
+        Milton MJ, Poulin M, Mathews C, Piganelli JD
+      </p>
+
+      <p class="publication-v2-journal">
+        Methods in Molecular Medicine · 2004
+      </p>
+
+      <a
+        href="https://doi.org/10.1385/1-59259-805-6:213"
+        target="_blank"
+        rel="noopener"
+      >
+        DOI: 10.1385/1-59259-805-6:213 ↗
+      </a>
+
+    </article>
+
+
+    <article class="publication-v2-card">
+
+      <span class="publication-v2-type">
+        Research Article
+      </span>
+
+      <h3>
+        A Metalloporphyrin-Based Superoxide Dismutase Mimic Inhibits Adoptive Transfer of Autoimmune Diabetes by a Diabetogenic T-Cell Clone
+      </h3>
+
+      <p class="publication-v2-authors">
+        Piganelli JD et al.
+      </p>
+
+      <p class="publication-v2-journal">
+        Diabetes · 2002
+      </p>
+
+      <a
+        href="https://doi.org/10.2337/diabetes.51.2.347"
+        target="_blank"
+        rel="noopener"
+      >
+        DOI: 10.2337/diabetes.51.2.347 ↗
+      </a>
+
+    </article>
+
+  </div>
+</section>
+
+
+<!-- ======================================================
+     PRODUCTION 6
+     ====================================================== -->
+
+<section
+  id="production-6"
+  class="publication-v2-production"
+>
+
+  <div class="publication-v2-production-badge">
+    Production 6
+  </div>
+
+  <div class="publication-v2-production-heading">
+
+    <h2>
+      Translational Models
+    </h2>
+
+    <p>
+      Publications testing interventions, human islet biology, adoptive-transfer models,
+      transplantation, and other systems that bridge mechanism with translational application.
+    </p>
+
+  </div>
+
+
+  <div class="publication-v2-grid">
+
+    <article class="publication-v2-card">
+
+      <span class="publication-v2-type">
+        Research Article
+      </span>
+
+      <h3>
+        Glycolysis Inhibition Induces Functional and Metabolic Exhaustion of CD4+ T Cells in Type 1 Diabetes
+      </h3>
+
+      <p class="publication-v2-authors">
+        Martins CP et al.
+      </p>
+
+      <p class="publication-v2-journal">
+        Frontiers in Immunology · 2021
+      </p>
+
+      <a
+        href="https://doi.org/10.3389/fimmu.2021.669456"
+        target="_blank"
+        rel="noopener"
+      >
+        DOI: 10.3389/fimmu.2021.669456 ↗
+      </a>
+
+    </article>
+
+
+    <article class="publication-v2-card">
+
+      <span class="publication-v2-type">
+        Research Article
+      </span>
+
+      <h3>
+        Redox modulation protects islets from transplant-related injury
+      </h3>
+
+      <p class="publication-v2-authors">
+        Sklavos MM et al.
+      </p>
+
+      <p class="publication-v2-journal">
+        Diabetes · 2010
+      </p>
+
+      <a
+        href="https://doi.org/10.2337/db09-0588"
+        target="_blank"
+        rel="noopener"
+      >
+        DOI: 10.2337/db09-0588 ↗
+      </a>
+
+    </article>
+
+
+    <article class="publication-v2-card">
+
+      <span class="publication-v2-type">
+        Research Article
+      </span>
+
+      <h3>
+        Response of human islets to isolation stress and the effect of antioxidant treatment
+      </h3>
+
+      <p class="publication-v2-authors">
+        Bottino R, Balamurugan AN, Tse H, et al., Piganelli JD
+      </p>
+
+      <p class="publication-v2-journal">
+        Diabetes · 2004
+      </p>
+
+      <a
+        href="https://doi.org/10.2337/diabetes.53.10.2559"
+        target="_blank"
+        rel="noopener"
+      >
+        DOI: 10.2337/diabetes.53.10.2559 ↗
+      </a>
+
+    </article>
+
+
+    <article class="publication-v2-card">
+
+      <span class="publication-v2-type">
+        Research Article
+      </span>
+
+      <h3>
+        Preservation of Human Islet Cell Functional Mass by Anti-Oxidative Action of a Novel SOD Mimic Compound
+      </h3>
+
+      <p class="publication-v2-authors">
+        Piganelli JD and collaborators
+      </p>
+
+      <p class="publication-v2-journal">
+        Diabetes · 2002
+      </p>
+
+      <a
+        href="https://doi.org/10.2337/diabetes.51.8.2561"
+        target="_blank"
+        rel="noopener"
+      >
+        DOI: 10.2337/diabetes.51.8.2561 ↗
+      </a>
+
+    </article>
+
+
+    <article class="publication-v2-card">
+
+      <span class="publication-v2-type">
+        Research Article
+      </span>
+
+      <h3>
+        Dysfunctional β-cell autophagy induces β-cell stress and enhances islet immunogenicity
+      </h3>
+
+      <p class="publication-v2-authors">
+        Austin MC, Muralidharan C, Roy S, Crowder JJ, Piganelli JD, Linnemann AK
+      </p>
+
+      <p class="publication-v2-journal">
+        Frontiers in Immunology · 2025
+      </p>
+
+      <a
+        href="https://doi.org/10.3389/fimmu.2025.1504583"
+        target="_blank"
+        rel="noopener"
+      >
+        DOI: 10.3389/fimmu.2025.1504583 ↗
+      </a>
+
+    </article>
+
+  </div>
+</section>
+
+
+<section class="publication-v2-footer-card">
+
+  <div>
+
+    <span class="publication-v2-eyebrow">
+      Complete record
+    </span>
+
+    <h2>
+      Looking for additional Piganelli Lab publications?
+    </h2>
+
+    <p>
+      These production sections highlight papers that map directly onto the laboratory's current
+      research themes. Use PubMed for a broader author-based publication search.
+    </p>
+
+  </div>
+
+  <a
+    class="publication-v2-primary-button"
+    href="https://pubmed.ncbi.nlm.nih.gov/?term=Piganelli+JD%5BAuthor%5D"
+    target="_blank"
+    rel="noopener"
+  >
+    Search PubMed ↗
   </a>
 
-  <a class="publication-card-link" href="https://pubmed.ncbi.nlm.nih.gov/?term=Piganelli+Flores+Cruz+metalloporphyrin+superoxide+dismutase+mimic+adoptive+transfer+autoimmune+diabetes" target="_blank">
-    <div class="card">
-      <h3>SOD mimetic and autoimmune diabetes</h3>
-      <p><strong>Piganelli JD, Flores SC, Cruz C, et al.</strong></p>
-      <p><em>Diabetes. 2002.</em></p>
-      <p>This early redox-focused study tested a metalloporphyrin-based superoxide dismutase mimic in adoptive transfer of autoimmune diabetes.</p>
-    </div>
-  </a>
-
-</div>
-
----
-
-## Reviews and Perspectives
-
-<div class="card-grid">
-
-  <a class="publication-card-link" href="https://pubmed.ncbi.nlm.nih.gov/?term=Unraveling+the+interplay+between+beta+cells+and+type+1+diabetes+Roy+Pokharel+Piganelli" target="_blank">
-    <div class="card">
-      <h3>Unraveling the interplay between beta cells and type 1 diabetes</h3>
-      <p><strong>Roy S, Pokharel P, Piganelli JD.</strong></p>
-      <p><em>2024.</em></p>
-      <p>A comprehensive review of how beta cells and immune responses interact during type 1 diabetes pathogenesis.</p>
-    </div>
-  </a>
-
-  <a class="publication-card-link" href="https://pubmed.ncbi.nlm.nih.gov/33679609/" target="_blank">
-    <div class="card">
-      <h3>The role of beta-cell stress and neo-epitopes in type 1 diabetes</h3>
-      <p><strong>Piganelli JD, Mamula MJ, James EA.</strong></p>
-      <p><em>Frontiers in Endocrinology. 2021.</em></p>
-      <p>This review discusses how beta-cell stress may contribute to neo-epitope formation and autoimmune recognition in type 1 diabetes.</p>
-    </div>
-  </a>
-
-  <a class="publication-card-link" href="https://pubmed.ncbi.nlm.nih.gov/?term=Targeting+T+cell+metabolism+to+combat+autoimmunity+Martins+Piganelli" target="_blank">
-    <div class="card">
-      <h3>Targeting T cell metabolism to combat autoimmunity</h3>
-      <p><strong>Martins CP, Piganelli JD.</strong></p>
-      <p><em>2020.</em></p>
-      <p>This review discusses how T cell metabolism may be targeted therapeutically in autoimmune disease, with implications for type 1 diabetes.</p>
-    </div>
-  </a>
-
-  <a class="publication-card-link" href="https://pubmed.ncbi.nlm.nih.gov/?term=Environmental+factors+ER+stress+neo-antigen+formation+type+1+diabetes+Marre+Piganelli" target="_blank">
-    <div class="card">
-      <h3>Environmental factors, ER stress, and neo-antigen formation</h3>
-      <p><strong>Marré ML, Piganelli JD.</strong></p>
-      <p><em>Frontiers in Endocrinology. 2017.</em></p>
-      <p>This review discusses how environmental factors may contribute to beta-cell ER stress and neo-antigen formation in type 1 diabetes.</p>
-    </div>
-  </a>
-
-  <a class="publication-card-link" href="https://pubmed.ncbi.nlm.nih.gov/?term=Beta-cell+ER+stress+immunogenicity+Marr%C3%A9+James+Piganelli" target="_blank">
-    <div class="card">
-      <h3>Beta-cell ER stress and immunogenicity</h3>
-      <p><strong>Marré ML, James EA, Piganelli JD.</strong></p>
-      <p><em>Frontiers in Cell and Developmental Biology. 2015.</em></p>
-      <p>This review discusses how beta-cell ER stress may increase immunogenicity in type 1 diabetes.</p>
-    </div>
-  </a>
-
-  <a class="publication-card-link" href="https://pubmed.ncbi.nlm.nih.gov/?term=Effects+of+metalloporphyrins+on+reducing+inflammation+and+autoimmunity+Delmastro-Greenwood+Tse+Piganelli" target="_blank">
-    <div class="card">
-      <h3>Effects of metalloporphyrins on inflammation and autoimmunity</h3>
-      <p><strong>Delmastro-Greenwood MM, Tse HM, Piganelli JD.</strong></p>
-      <p><em>Antioxidants & Redox Signaling. 2014.</em></p>
-      <p>This review discusses metalloporphyrins and their potential to reduce inflammation and autoimmunity.</p>
-    </div>
-  </a>
-
-  <a class="publication-card-link" href="https://pubmed.ncbi.nlm.nih.gov/?term=Oxidative+stress+redox+modulation+potential+type+1+diabetes+Delmastro+Piganelli" target="_blank">
-    <div class="card">
-      <h3>Oxidative stress and redox modulation potential in type 1 diabetes</h3>
-      <p><strong>Delmastro MM, Piganelli JD.</strong></p>
-      <p><em>Clinical and Developmental Immunology. 2011.</em></p>
-      <p>This review summarizes oxidative stress and redox modulation as therapeutic concepts in type 1 diabetes.</p>
-    </div>
-  </a>
-
-</div>
-
----
-
-## Complete Publication Record
-
-For the most complete and current publication record, visit Dr. Jon D. Piganelli’s indexed PubMed publication page.
-
-<p>
-  <a class="button" href="https://pubmed.ncbi.nlm.nih.gov/?term=Piganelli+JD&cauthor_id=33679609" target="_blank">View Jon D. Piganelli’s PubMed Record</a>
-</p>
-
----
-
-## Note
-
-This page highlights selected research articles and reviews from the Piganelli Lab. PubMed should be used as the most current source for the complete publication record.
+</section>
