@@ -146,3 +146,8 @@
   updateButtons();
 
 })();
+
+
+  updateButtons();
+
+})();
