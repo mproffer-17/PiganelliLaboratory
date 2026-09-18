@@ -1,11 +1,591 @@
 /* ==========================================================
-   PIGANELLI LAB — COMPLETE HOME PAGE STYLING
-   Keep this block at the VERY BOTTOM of style.css
+   THE PIGANELLI LAB
+   COMPLETE SHARED WEBSITE STYLESHEET
+
+   Used by:
+   - Home
+   - Research
+   - People
+   - Publications
+   - Gallery
+   - Lab Values
+   - Contact
+   - Location
+
+   Arcade has its own additional stylesheet:
+   assets/game/arcade.css
+
+   Sajid's portfolio has its own stylesheet:
+   assets/sajid/sajid.css
    ========================================================== */
 
 
 /* ==========================================================
-   HOME COLOR SYSTEM
+   1. GLOBAL DESIGN SYSTEM
+   ========================================================== */
+
+:root {
+  --site-blue: #517ef4;
+  --site-blue-dark: #3158c7;
+  --site-blue-deep: #183a8a;
+  --site-cyan: #079fc9;
+
+  --site-yellow: #fde401;
+  --site-yellow-soft: #fff6a8;
+
+  --site-ink: #111111;
+  --site-text: #263246;
+  --site-muted: #68758e;
+
+  --site-white: #ffffff;
+  --site-page: #f7f9fd;
+  --site-pale: #eef5ff;
+
+  --site-gray: #cbd2dc;
+  --site-gray-light: #e3e8ef;
+
+  --site-border: #111111;
+
+  --site-radius-small: 14px;
+  --site-radius: 22px;
+  --site-radius-large: 30px;
+
+  --site-shadow-gray:
+    7px 7px 0 #cbd2dc;
+
+  --site-shadow-yellow:
+    7px 7px 0 #fde401;
+
+  --site-content-width: 1320px;
+}
+
+
+/* ==========================================================
+   2. RESET + BASE
+   ========================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+
+html {
+  scroll-behavior: smooth;
+}
+
+
+body {
+  background: var(--site-page);
+
+  color: var(--site-text);
+
+  font-family:
+    "Trebuchet MS",
+    "Segoe UI",
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  line-height: 1.6;
+
+  margin: 0;
+
+  min-height: 100vh;
+
+  overflow-x: hidden;
+}
+
+
+img {
+  display: block;
+
+  max-width: 100%;
+}
+
+
+a {
+  color: var(--site-blue);
+
+  text-decoration-thickness: 1.5px;
+
+  text-underline-offset: 3px;
+}
+
+
+a:hover,
+a:focus-visible {
+  color: var(--site-blue-dark);
+}
+
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--site-ink);
+
+  font-weight: 900;
+
+  line-height: 1.18;
+}
+
+
+h1 {
+  font-size:
+    clamp(
+      2.4rem,
+      5vw,
+      4.2rem
+    );
+}
+
+
+h2 {
+  font-size:
+    clamp(
+      1.75rem,
+      3vw,
+      2.55rem
+    );
+}
+
+
+h3 {
+  font-size:
+    clamp(
+      1.1rem,
+      2vw,
+      1.4rem
+    );
+}
+
+
+p {
+  margin-top: 0;
+}
+
+
+hr {
+  border: 0;
+
+  border-top:
+    3px solid
+    var(--site-ink);
+
+  margin:
+    3.5rem
+    auto;
+}
+
+
+::selection {
+  background: var(--site-yellow);
+
+  color: var(--site-ink);
+}
+
+
+/* ==========================================================
+   3. GLOBAL SITE HEADER
+   ========================================================== */
+
+.site-header {
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.96
+    );
+
+  border-bottom:
+    4px solid
+    var(--site-ink);
+
+  box-shadow:
+    0 5px 0
+    rgba(
+      203,
+      210,
+      220,
+      0.7
+    );
+
+  position: sticky;
+
+  top: 0;
+
+  width: 100%;
+
+  z-index: 900;
+}
+
+
+.top-nav {
+  align-items: center;
+
+  display: flex;
+
+  gap: 1.4rem;
+
+  justify-content: space-between;
+
+  margin: 0 auto;
+
+  max-width: var(--site-content-width);
+
+  min-height: 86px;
+
+  padding:
+    0.65rem
+    1.25rem;
+}
+
+
+.brand {
+  align-items: center;
+
+  color: var(--site-ink);
+
+  display: flex;
+
+  flex: 0 0 auto;
+
+  font-size: 1.02rem;
+
+  font-weight: 900;
+
+  gap: 0.65rem;
+
+  text-decoration: none;
+}
+
+
+.brand:hover,
+.brand:focus-visible {
+  color: var(--site-blue);
+}
+
+
+.brand img {
+  height: 58px;
+
+  object-fit: contain;
+
+  width: 58px;
+}
+
+
+.brand span {
+  white-space: nowrap;
+}
+
+
+.nav-tabs {
+  align-items: center;
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 0.35rem;
+
+  justify-content: flex-end;
+}
+
+
+.nav-tabs a {
+  border:
+    2px solid
+    transparent;
+
+  border-radius: 999px;
+
+  color: var(--site-ink);
+
+  font-size: 0.78rem;
+
+  font-weight: 900;
+
+  padding:
+    0.45rem
+    0.66rem;
+
+  text-decoration: none;
+
+  transition:
+    background 130ms ease,
+    border-color 130ms ease,
+    color 130ms ease,
+    transform 130ms ease;
+}
+
+
+.nav-tabs a:hover,
+.nav-tabs a:focus-visible {
+  background: var(--site-yellow);
+
+  border-color: var(--site-ink);
+
+  color: var(--site-ink);
+
+  outline: none;
+
+  transform: translateY(-1px);
+}
+
+
+/* ==========================================================
+   4. MAIN PAGE CONTAINER
+   ========================================================== */
+
+main {
+  margin: 0 auto;
+
+  max-width: var(--site-content-width);
+
+  padding:
+    2.25rem
+    1.25rem
+    4.5rem;
+
+  width: 100%;
+}
+
+
+/*
+ Standard Markdown pages such as Contact, Gallery,
+ and Lab Values use direct child headings.
+*/
+
+main > h1 {
+  background:
+    linear-gradient(
+      135deg,
+      var(--site-pale),
+      #ffffff
+    );
+
+  border:
+    5px solid
+    var(--site-ink);
+
+  border-radius: var(--site-radius-large);
+
+  box-shadow: var(--site-shadow-gray);
+
+  color: var(--site-blue);
+
+  margin:
+    0
+    0
+    1.8rem;
+
+  padding:
+    clamp(
+      1.3rem,
+      4vw,
+      2.2rem
+    );
+
+  text-align: center;
+
+  text-shadow:
+    2px 2px 0
+    var(--site-yellow);
+}
+
+
+main > h2 {
+  color: var(--site-blue);
+
+  margin-top: 2.75rem;
+}
+
+
+/* ==========================================================
+   5. GENERAL BUTTONS
+   ========================================================== */
+
+.button,
+a.button {
+  background: var(--site-blue);
+
+  border:
+    3px solid
+    var(--site-ink);
+
+  border-radius: 999px;
+
+  box-shadow:
+    4px 4px 0
+    var(--site-yellow);
+
+  color: #ffffff;
+
+  display: inline-block;
+
+  font-size: 0.78rem;
+
+  font-weight: 900;
+
+  padding:
+    0.58rem
+    0.9rem;
+
+  text-decoration: none;
+
+  text-transform: uppercase;
+
+  transition:
+    background 140ms ease,
+    color 140ms ease,
+    transform 140ms ease;
+}
+
+
+.button:hover,
+.button:focus-visible,
+a.button:hover,
+a.button:focus-visible {
+  background: var(--site-yellow);
+
+  color: var(--site-ink);
+
+  outline: none;
+
+  transform: translateY(-2px);
+}
+
+
+/* ==========================================================
+   6. GENERIC CARD SYSTEM
+   Contact + Lab Values
+   ========================================================== */
+
+.card-grid {
+  display: grid;
+
+  gap: 1.25rem;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  margin:
+    1.6rem
+    0
+    2.4rem;
+}
+
+
+.card {
+  background: #ffffff;
+
+  border:
+    3px solid
+    var(--site-ink);
+
+  border-radius: var(--site-radius);
+
+  box-shadow:
+    6px 6px 0
+    var(--site-gray);
+
+  min-width: 0;
+
+  padding: 1.25rem;
+}
+
+
+.card h3 {
+  color: var(--site-blue);
+
+  margin:
+    0
+    0
+    0.65rem;
+}
+
+
+.card p:last-child {
+  margin-bottom: 0;
+}
+
+
+/* ==========================================================
+   7. GLOBAL FOOTER
+   ========================================================== */
+
+.site-footer {
+  padding:
+    0
+    1.25rem
+    2rem;
+}
+
+
+.footer-card {
+  background: var(--site-ink);
+
+  border:
+    4px solid
+    var(--site-ink);
+
+  border-radius: 22px;
+
+  box-shadow:
+    7px 7px 0
+    var(--site-yellow);
+
+  color: #ffffff;
+
+  margin: 0 auto;
+
+  max-width: var(--site-content-width);
+
+  padding:
+    1.35rem
+    1.5rem;
+
+  text-align: center;
+}
+
+
+.footer-card p {
+  margin:
+    0.25rem
+    0;
+}
+
+
+.footer-card strong {
+  color: var(--site-yellow);
+}
+
+
+/* ==========================================================
+   8. HOME PAGE — SHARED COLOR SYSTEM
    ========================================================== */
 
 .home-hero,
@@ -25,7 +605,7 @@
 
 
 /* ==========================================================
-   HERO
+   9. HOME — HERO
    ========================================================== */
 
 .home-hero {
@@ -34,12 +614,22 @@
   background:
     radial-gradient(
       circle at 10% 15%,
-      rgba(253, 228, 1, 0.62) 0 8%,
+      rgba(
+        253,
+        228,
+        1,
+        0.62
+      ) 0 8%,
       transparent 8.4%
     ),
     radial-gradient(
       circle at 91% 18%,
-      rgba(81, 126, 244, 0.18) 0 14%,
+      rgba(
+        81,
+        126,
+        244,
+        0.18
+      ) 0 14%,
       transparent 14.5%
     ),
     linear-gradient(
@@ -48,14 +638,14 @@
       #ffffff
     );
 
-  border: 5px solid var(--home-ink);
+  border:
+    5px solid
+    var(--home-ink);
 
   border-radius: 32px;
 
   box-shadow:
-    10px
-    10px
-    0
+    10px 10px 0
     var(--home-gray);
 
   display: flex;
@@ -129,13 +719,9 @@
     0.7rem;
 
   text-shadow:
-    3px
-    3px
-    0
+    3px 3px 0
     var(--home-yellow),
-    5px
-    5px
-    0
+    5px 5px 0
     var(--home-ink);
 }
 
@@ -188,7 +774,9 @@
 
 .home-primary-button,
 .home-secondary-button {
-  border: 3px solid var(--home-ink);
+  border:
+    3px solid
+    var(--home-ink);
 
   border-radius: 999px;
 
@@ -214,9 +802,7 @@
   background: var(--home-blue);
 
   box-shadow:
-    4px
-    4px
-    0
+    4px 4px 0
     var(--home-yellow);
 
   color: #ffffff;
@@ -227,9 +813,7 @@
   background: #ffffff;
 
   box-shadow:
-    4px
-    4px
-    0
+    4px 4px 0
     var(--home-gray);
 
   color: var(--home-ink);
@@ -251,7 +835,7 @@
 
 
 /* ==========================================================
-   INTRODUCTION
+   10. HOME — INTRO
    ========================================================== */
 
 .home-intro {
@@ -260,8 +844,14 @@
   gap: 2rem;
 
   grid-template-columns:
-    minmax(220px, 0.72fr)
-    minmax(0, 1.28fr);
+    minmax(
+      220px,
+      0.72fr
+    )
+    minmax(
+      0,
+      1.28fr
+    );
 
   margin:
     4rem auto;
@@ -318,12 +908,13 @@
 
 
 /* ==========================================================
-   RESEARCH PRODUCTIONS
+   11. HOME — RESEARCH PRODUCTIONS
    ========================================================== */
 
 .home-v3-productions {
   margin:
-    4.5rem auto;
+    4.5rem
+    auto;
 }
 
 
@@ -363,7 +954,10 @@
   grid-template-columns:
     repeat(
       3,
-      minmax(0, 1fr)
+      minmax(
+        0,
+        1fr
+      )
     );
 
   row-gap: 3.75rem;
@@ -393,9 +987,7 @@
   border-radius: 999px;
 
   box-shadow:
-    4px
-    4px
-    0
+    4px 4px 0
     var(--home-ink);
 
   color: var(--home-ink);
@@ -414,11 +1006,15 @@
     0.42rem
     0.95rem;
 
+  position: relative;
+
   text-align: center;
 
   text-transform: uppercase;
 
   width: max-content;
+
+  z-index: 2;
 }
 
 
@@ -434,9 +1030,7 @@
   border-radius: 24px;
 
   box-shadow:
-    7px
-    7px
-    0
+    7px 7px 0
     var(--home-gray);
 
   display: flex;
@@ -453,16 +1047,14 @@
   text-align: center;
 
   transition:
-    transform 160ms ease,
-    box-shadow 160ms ease;
+    box-shadow 160ms ease,
+    transform 160ms ease;
 }
 
 
 .home-v3-production-card:hover {
   box-shadow:
-    7px
-    7px
-    0
+    7px 7px 0
     var(--home-yellow);
 
   transform:
@@ -500,13 +1092,16 @@
       var(--home-pale)
     );
 
-  border: 2px solid #d7e1f0;
+  border:
+    2px solid
+    #d7e1f0;
 
   border-radius: 18px;
 
   display: flex;
 
-  flex: 1 1 auto;
+  flex:
+    1 1 auto;
 
   justify-content: center;
 
@@ -547,14 +1142,14 @@
 .home-v3-production-button {
   background: var(--home-blue);
 
-  border: 3px solid var(--home-ink);
+  border:
+    3px solid
+    var(--home-ink);
 
   border-radius: 999px;
 
   box-shadow:
-    4px
-    4px
-    0
+    4px 4px 0
     var(--home-yellow);
 
   color: #ffffff;
@@ -584,7 +1179,7 @@
 
 
 /* ==========================================================
-   RESEARCH PHILOSOPHY
+   12. HOME — MECHANISM / TRANSLATION
    ========================================================== */
 
 .home-philosophy {
@@ -604,9 +1199,7 @@
   border-radius: 28px;
 
   box-shadow:
-    8px
-    8px
-    0
+    8px 8px 0
     var(--home-yellow);
 
   display: grid;
@@ -614,8 +1207,14 @@
   gap: 3rem;
 
   grid-template-columns:
-    minmax(0, 1fr)
-    minmax(320px, 0.85fr);
+    minmax(
+      0,
+      1fr
+    )
+    minmax(
+      320px,
+      0.85fr
+    );
 
   margin:
     5rem auto;
@@ -696,7 +1295,10 @@
 
   grid-template-columns:
     48px
-    minmax(0, 1fr);
+    minmax(
+      0,
+      1fr
+    );
 
   padding: 1rem;
 }
@@ -745,12 +1347,13 @@
 
 
 /* ==========================================================
-   EXPLORE THE LAB
+   13. HOME — EXPLORE LAB
    ========================================================== */
 
 .home-explore {
   margin:
-    5rem auto;
+    5rem
+    auto;
 }
 
 
@@ -784,7 +1387,10 @@
   grid-template-columns:
     repeat(
       3,
-      minmax(0, 1fr)
+      minmax(
+        0,
+        1fr
+      )
     );
 }
 
@@ -799,9 +1405,7 @@
   border-radius: 22px;
 
   box-shadow:
-    6px
-    6px
-    0
+    6px 6px 0
     var(--home-gray);
 
   color: var(--home-ink);
@@ -817,22 +1421,23 @@
   text-decoration: none;
 
   transition:
-    transform 150ms ease,
-    box-shadow 150ms ease;
+    box-shadow 150ms ease,
+    transform 150ms ease;
 }
 
 
 .home-explore-card:hover,
 .home-explore-card:focus-visible {
   box-shadow:
-    6px
-    6px
-    0
+    6px 6px 0
     var(--home-yellow);
+
+  color: var(--home-ink);
 
   outline: none;
 
-  transform: translateY(-3px);
+  transform:
+    translateY(-3px);
 }
 
 
@@ -877,7 +1482,7 @@
 
 
 /* ==========================================================
-   FINAL CTA
+   14. HOME — FINAL CTA
    ========================================================== */
 
 .home-final-cta {
@@ -892,9 +1497,7 @@
   border-radius: 26px;
 
   box-shadow:
-    8px
-    8px
-    0
+    8px 8px 0
     var(--home-yellow);
 
   color: #ffffff;
@@ -954,15 +1557,1149 @@
 
 
 /* ==========================================================
-   PEOPLE PAGE — NEW SECTIONS
+   15. RESEARCH + PUBLICATION COLOR SYSTEM
+   ========================================================== */
+
+.research-v2-hero,
+.research-v2-section,
+.research-v2-publication-cta,
+.publication-v2-hero,
+.publication-v2-production,
+.publication-v2-footer-card,
+.publication-v2-jump-nav {
+  --rp-blue: #0b5d80;
+  --rp-cyan: #079fc9;
+  --rp-site-blue: #517ef4;
+  --rp-yellow: #fde401;
+  --rp-ink: #111111;
+  --rp-soft: #ebf3fe;
+  --rp-gray: #cbd2dc;
+  --rp-white: #ffffff;
+}
+
+
+/* ==========================================================
+   16. RESEARCH — HERO
+   ========================================================== */
+
+.research-v2-hero {
+  background:
+    radial-gradient(
+      circle at 10% 16%,
+      rgba(
+        253,
+        228,
+        1,
+        0.55
+      ) 0 8%,
+      transparent 8.4%
+    ),
+    radial-gradient(
+      circle at 91% 18%,
+      rgba(
+        81,
+        126,
+        244,
+        0.16
+      ) 0 13%,
+      transparent 13.4%
+    ),
+    linear-gradient(
+      135deg,
+      #eef6ff,
+      #ffffff
+    );
+
+  border:
+    5px solid
+    var(--rp-ink);
+
+  border-radius: 30px;
+
+  box-shadow:
+    9px 9px 0
+    var(--rp-gray);
+
+  margin-bottom: 3.3rem;
+
+  padding:
+    clamp(
+      1.8rem,
+      4vw,
+      3.4rem
+    );
+
+  text-align: center;
+}
+
+
+.research-v2-eyebrow,
+.publication-v2-eyebrow,
+.research-v2-section-kicker {
+  color: var(--rp-site-blue);
+
+  display: inline-block;
+
+  font-size: 0.8rem;
+
+  font-weight: 900;
+
+  letter-spacing: 0.12em;
+
+  text-transform: uppercase;
+}
+
+
+.research-v2-hero .research-v2-eyebrow {
+  font-size: 0.98rem;
+}
+
+
+.research-v2-hero h1,
+.publication-v2-hero h1 {
+  color: var(--rp-site-blue);
+
+  font-size:
+    clamp(
+      2.7rem,
+      6vw,
+      4.8rem
+    );
+
+  margin:
+    0.45rem
+    0
+    0.7rem;
+
+  text-shadow:
+    2px 2px 0
+    var(--rp-yellow);
+}
+
+
+.research-v2-hero p,
+.publication-v2-hero p {
+  font-size: 1.05rem;
+
+  line-height: 1.7;
+
+  margin: 0 auto;
+
+  max-width: 900px;
+}
+
+
+.research-v2-section {
+  margin:
+    0 auto
+    4.5rem;
+}
+
+
+/* ==========================================================
+   17. RESEARCH — PRODUCTION GRID
+   ========================================================== */
+
+.research-v2-production-intro {
+  margin:
+    0 auto
+    2.2rem;
+
+  max-width: 760px;
+
+  text-align: center;
+}
+
+
+.research-v2-production-intro p {
+  margin: 0;
+}
+
+
+.research-v2-production-grid {
+  align-items: stretch;
+
+  column-gap: 1.5rem;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(
+        0,
+        1fr
+      )
+    );
+
+  row-gap: 4rem;
+}
+
+
+.research-v2-production-module {
+  align-items: stretch;
+
+  display: flex;
+
+  flex-direction: column;
+
+  min-width: 0;
+
+  position: relative;
+}
+
+
+.research-v2-production-badge,
+.publication-v2-production-badge {
+  align-self: center;
+
+  background: var(--rp-yellow);
+
+  border:
+    3px solid
+    var(--rp-ink);
+
+  border-radius: 999px;
+
+  box-shadow:
+    4px 4px 0
+    var(--rp-ink);
+
+  color: var(--rp-ink);
+
+  font-size: 0.82rem;
+
+  font-weight: 900;
+
+  letter-spacing: 0.07em;
+
+  margin:
+    0 auto
+    0.9rem;
+
+  padding:
+    0.42rem
+    0.95rem;
+
+  position: relative;
+
+  text-align: center;
+
+  text-transform: uppercase;
+
+  transform: none;
+
+  width: max-content;
+
+  z-index: 2;
+}
+
+
+.research-v2-production-card {
+  align-items: center;
+
+  background: #ffffff;
+
+  border:
+    4px solid
+    var(--rp-ink);
+
+  border-radius: 24px;
+
+  box-shadow:
+    7px 7px 0
+    var(--rp-gray);
+
+  color: var(--rp-ink);
+
+  display: flex;
+
+  flex:
+    1 1 auto;
+
+  flex-direction: column;
+
+  justify-content: flex-start;
+
+  margin: 0;
+
+  min-height: 100%;
+
+  padding:
+    1.55rem
+    1.35rem;
+
+  position: relative;
+
+  text-align: center;
+
+  text-decoration: none;
+
+  top: auto;
+
+  transform: none;
+
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    transform 150ms ease;
+}
+
+
+.research-v2-production-card:hover,
+.research-v2-production-card:focus-visible {
+  border-color: var(--rp-site-blue);
+
+  box-shadow:
+    7px 7px 0
+    var(--rp-yellow);
+
+  color: var(--rp-ink);
+
+  outline: none;
+
+  transform:
+    translateY(-3px);
+}
+
+
+.research-v2-production-card h3 {
+  color: var(--rp-site-blue);
+
+  font-size:
+    clamp(
+      1.2rem,
+      2vw,
+      1.55rem
+    );
+
+  margin:
+    0
+    0
+    0.8rem;
+
+  text-align: center;
+}
+
+
+.research-v2-production-card p {
+  line-height: 1.6;
+
+  margin:
+    0
+    0
+    0.75rem;
+
+  text-align: center;
+}
+
+
+.research-v2-production-link {
+  color: var(--rp-site-blue);
+
+  font-size: 0.82rem;
+
+  font-weight: 900;
+
+  letter-spacing: 0.03em;
+
+  margin-top: auto;
+
+  padding-top: 0.7rem;
+
+  text-transform: uppercase;
+}
+
+
+/* ==========================================================
+   18. RESEARCH — APPROACHES
+   ========================================================== */
+
+.research-v2-approaches-section {
+  background: #f6f9ff;
+
+  border:
+    4px solid
+    var(--rp-ink);
+
+  border-radius: 28px;
+
+  box-shadow:
+    8px 8px 0
+    var(--rp-gray);
+
+  overflow: hidden;
+
+  padding:
+    clamp(
+      1.25rem,
+      3vw,
+      2rem
+    );
+}
+
+
+.research-v2-approaches-heading {
+  align-items: center;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 0.25rem;
+
+  justify-content: center;
+
+  margin:
+    0 auto
+    1.7rem;
+
+  text-align: center;
+}
+
+
+.research-v2-approaches-heading
+.research-v2-section-kicker {
+  display: block;
+
+  margin: 0 auto;
+
+  text-align: center;
+}
+
+
+.research-v2-approaches-heading h2 {
+  margin:
+    0.25rem
+    auto
+    0;
+
+  text-align: center;
+}
+
+
+.research-v2-approach-track {
+  display: grid;
+
+  gap: 1.1rem;
+
+  grid-auto-columns:
+    minmax(
+      285px,
+      31%
+    );
+
+  grid-auto-flow: column;
+
+  max-width: 100%;
+
+  overflow-x: auto;
+
+  overflow-y: hidden;
+
+  overscroll-behavior-inline: contain;
+
+  padding:
+    0.3rem
+    0.25rem
+    0.45rem;
+
+  scroll-behavior: smooth;
+
+  scroll-snap-type:
+    x mandatory;
+
+  scrollbar-width: none;
+}
+
+
+.research-v2-approach-track::-webkit-scrollbar {
+  display: none;
+
+  height: 0;
+
+  width: 0;
+}
+
+
+.research-v2-approach-card {
+  align-items: center;
+
+  background: #ffffff;
+
+  border:
+    3px solid
+    var(--rp-ink);
+
+  border-radius: 22px;
+
+  box-shadow:
+    6px 6px 0
+    var(--rp-yellow);
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: flex-start;
+
+  min-height: 420px;
+
+  padding: 1.25rem;
+
+  scroll-snap-align: start;
+
+  text-align: center;
+}
+
+
+.research-v2-icon-wrap {
+  align-items: center;
+
+  background: #ffffff;
+
+  border:
+    2px solid
+    #d8e4ef;
+
+  border-radius: 18px;
+
+  display: flex;
+
+  flex:
+    0 0
+    175px;
+
+  height: 175px;
+
+  justify-content: center;
+
+  margin:
+    0 auto
+    1rem;
+
+  overflow: hidden;
+
+  padding: 0.55rem;
+
+  width: 100%;
+}
+
+
+.research-v2-approach-image {
+  display: block;
+
+  height: 150px;
+
+  margin: auto;
+
+  max-height: 150px;
+
+  max-width: 94%;
+
+  object-fit: contain;
+
+  object-position: center;
+
+  width: auto;
+}
+
+
+.research-v2-approach-card h3 {
+  color: var(--rp-site-blue);
+
+  font-size: 1.2rem;
+
+  line-height: 1.25;
+
+  margin:
+    0.15rem
+    auto
+    0.65rem;
+
+  min-height: 2.5em;
+
+  text-align: center;
+
+  width: 100%;
+}
+
+
+.research-v2-approach-card p {
+  line-height: 1.6;
+
+  margin:
+    0
+    auto;
+
+  text-align: center;
+
+  width: 100%;
+}
+
+
+.research-v2-scroll-controls {
+  display: flex;
+
+  gap: 0.75rem;
+}
+
+
+.research-v2-scroll-controls-bottom {
+  align-items: center;
+
+  justify-content: center;
+
+  margin:
+    1.3rem
+    auto
+    0.1rem;
+
+  width: 100%;
+}
+
+
+.research-v2-scroll-button {
+  align-items: center;
+
+  appearance: none;
+
+  background: var(--rp-yellow);
+
+  border:
+    3px solid
+    var(--rp-ink);
+
+  border-radius: 50%;
+
+  box-shadow:
+    3px 3px 0
+    var(--rp-ink);
+
+  color: var(--rp-ink);
+
+  cursor: pointer;
+
+  display: inline-flex;
+
+  font-size: 1.4rem;
+
+  font-weight: 900;
+
+  height: 50px;
+
+  justify-content: center;
+
+  line-height: 1;
+
+  padding: 0;
+
+  width: 50px;
+}
+
+
+.research-v2-scroll-button:hover,
+.research-v2-scroll-button:focus-visible {
+  background: var(--rp-site-blue);
+
+  color: #ffffff;
+
+  outline: none;
+
+  transform:
+    translateY(-2px);
+}
+
+
+.research-v2-scroll-button:disabled {
+  cursor: default;
+
+  opacity: 0.28;
+
+  transform: none;
+}
+
+
+/* ==========================================================
+   19. RESEARCH — PUBLICATIONS CTA
+   ========================================================== */
+
+.research-v2-publication-cta,
+.publication-v2-footer-card {
+  align-items: center;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ebf3fe,
+      #ffffff
+    );
+
+  border:
+    4px solid
+    var(--rp-ink);
+
+  border-radius: 24px;
+
+  box-shadow:
+    7px 7px 0
+    var(--rp-yellow);
+
+  display: flex;
+
+  gap: 2rem;
+
+  justify-content: space-between;
+
+  margin:
+    3rem auto
+    1rem;
+
+  padding:
+    clamp(
+      1.25rem,
+      3vw,
+      2rem
+    );
+}
+
+
+.research-v2-publication-cta > div,
+.publication-v2-footer-card > div {
+  max-width: 790px;
+}
+
+
+.research-v2-publication-cta h2 {
+  margin:
+    0.3rem
+    0
+    0;
+}
+
+
+.research-v2-primary-button,
+.publication-v2-primary-button,
+.publication-v2-back-link {
+  background: var(--rp-site-blue);
+
+  border:
+    3px solid
+    var(--rp-ink);
+
+  border-radius: 999px;
+
+  box-shadow:
+    4px 4px 0
+    var(--rp-yellow);
+
+  color: #ffffff;
+
+  display: inline-block;
+
+  flex:
+    0 0 auto;
+
+  font-weight: 900;
+
+  padding:
+    0.7rem
+    1rem;
+
+  text-decoration: none;
+
+  text-transform: uppercase;
+}
+
+
+.research-v2-primary-button:hover,
+.research-v2-primary-button:focus-visible,
+.publication-v2-primary-button:hover,
+.publication-v2-primary-button:focus-visible,
+.publication-v2-back-link:hover,
+.publication-v2-back-link:focus-visible {
+  background: var(--rp-yellow);
+
+  color: var(--rp-ink);
+
+  outline: none;
+}
+
+
+/* ==========================================================
+   20. PUBLICATIONS — HERO
+   ========================================================== */
+
+.publication-v2-hero {
+  background:
+    radial-gradient(
+      circle at 10% 15%,
+      rgba(
+        253,
+        228,
+        1,
+        0.48
+      ) 0 8%,
+      transparent 8.4%
+    ),
+    linear-gradient(
+      135deg,
+      #eef6ff,
+      #ffffff
+    );
+
+  border:
+    5px solid
+    var(--rp-ink);
+
+  border-radius: 30px;
+
+  box-shadow:
+    9px 9px 0
+    var(--rp-gray);
+
+  margin-bottom: 2.2rem;
+
+  padding:
+    clamp(
+      1.8rem,
+      4vw,
+      3rem
+    );
+
+  text-align: center;
+}
+
+
+.publication-v2-back-link {
+  margin-top: 1.25rem;
+}
+
+
+/* ==========================================================
+   21. PUBLICATIONS — JUMP NAV
+   ========================================================== */
+
+.publication-v2-jump-nav {
+  display: grid;
+
+  gap: 0.7rem;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(
+        0,
+        1fr
+      )
+    );
+
+  margin:
+    0 auto
+    3.2rem;
+}
+
+
+.publication-v2-jump-nav a {
+  background: #ffffff;
+
+  border:
+    3px solid
+    var(--rp-ink);
+
+  border-radius: 16px;
+
+  box-shadow:
+    4px 4px 0
+    var(--rp-gray);
+
+  color: var(--rp-ink);
+
+  font-size: 0.77rem;
+
+  font-weight: 800;
+
+  line-height: 1.35;
+
+  padding:
+    0.75rem
+    0.8rem;
+
+  text-align: center;
+
+  text-decoration: none;
+
+  text-transform: uppercase;
+}
+
+
+.publication-v2-jump-nav a strong {
+  color: var(--rp-site-blue);
+
+  display: inline-block;
+
+  font-size: 0.86rem;
+
+  margin-top: 0.12rem;
+}
+
+
+.publication-v2-jump-nav a:hover,
+.publication-v2-jump-nav a:focus-visible {
+  background: var(--rp-yellow);
+
+  box-shadow:
+    4px 4px 0
+    var(--rp-site-blue);
+
+  color: var(--rp-ink);
+
+  outline: none;
+}
+
+
+/* ==========================================================
+   22. PUBLICATIONS — PRODUCTION SECTIONS
+   ========================================================== */
+
+.publication-v2-production {
+  margin:
+    0 auto
+    4.3rem;
+
+  scroll-margin-top: 120px;
+}
+
+
+.publication-v2-production-badge {
+  margin-left: auto;
+
+  margin-right: auto;
+}
+
+
+.publication-v2-production-heading {
+  margin:
+    0 auto
+    1.6rem;
+
+  max-width: 850px;
+
+  text-align: center;
+}
+
+
+.publication-v2-production-heading h2 {
+  color: var(--rp-site-blue);
+
+  font-size:
+    clamp(
+      1.7rem,
+      3vw,
+      2.35rem
+    );
+
+  margin:
+    0.35rem
+    0
+    0.65rem;
+
+  text-align: center;
+}
+
+
+.publication-v2-production-heading p {
+  line-height: 1.65;
+
+  margin-left: auto;
+
+  margin-right: auto;
+
+  max-width: 780px;
+
+  text-align: center;
+}
+
+
+.publication-v2-grid {
+  display: grid;
+
+  gap: 1.2rem;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(
+        0,
+        1fr
+      )
+    );
+}
+
+
+.publication-v2-card {
+  background: #ffffff;
+
+  border:
+    3px solid
+    var(--rp-ink);
+
+  border-radius: 20px;
+
+  box-shadow:
+    6px 6px 0
+    var(--rp-gray);
+
+  display: flex;
+
+  flex-direction: column;
+
+  min-width: 0;
+
+  padding:
+    1.2rem
+    1.2rem
+    1.1rem;
+}
+
+
+.publication-v2-card-featured {
+  box-shadow:
+    6px 6px 0
+    var(--rp-yellow);
+}
+
+
+.publication-v2-type {
+  align-self: flex-start;
+
+  background: var(--rp-site-blue);
+
+  border-radius: 999px;
+
+  color: #ffffff;
+
+  font-size: 0.65rem;
+
+  font-weight: 900;
+
+  letter-spacing: 0.07em;
+
+  margin-bottom: 0.65rem;
+
+  padding:
+    0.3rem
+    0.55rem;
+
+  text-transform: uppercase;
+}
+
+
+.publication-v2-type-review {
+  background: var(--rp-blue);
+}
+
+
+.publication-v2-type-preprint {
+  background: #b33e88;
+}
+
+
+.publication-v2-type-method {
+  background: #427c2b;
+}
+
+
+.publication-v2-card h3 {
+  color: var(--rp-ink);
+
+  font-size: 1.05rem;
+
+  line-height: 1.38;
+
+  margin:
+    0
+    0
+    0.65rem;
+}
+
+
+.publication-v2-authors {
+  color: #3d4659;
+
+  font-size: 0.87rem;
+
+  line-height: 1.45;
+
+  margin:
+    0
+    0
+    0.45rem;
+}
+
+
+.publication-v2-journal {
+  color: #68758e;
+
+  font-size: 0.8rem;
+
+  font-weight: 800;
+
+  margin:
+    0
+    0
+    0.85rem;
+}
+
+
+.publication-v2-card > a {
+  color: var(--rp-site-blue);
+
+  font-size: 0.82rem;
+
+  font-weight: 900;
+
+  margin-top: auto;
+
+  overflow-wrap: anywhere;
+
+  text-decoration: none;
+}
+
+
+.publication-v2-card > a:hover,
+.publication-v2-card > a:focus-visible {
+  color: var(--rp-blue);
+
+  text-decoration: underline;
+}
+
+
+/* ==========================================================
+   23. PEOPLE — INTRO
    ========================================================== */
 
 .people-intro {
   background:
     radial-gradient(
       circle at 10% 18%,
-      rgba(253, 228, 1, 0.52) 0 8%,
+      rgba(
+        253,
+        228,
+        1,
+        0.52
+      ) 0 8%,
       transparent 8.5%
+    ),
+    radial-gradient(
+      circle at 91% 20%,
+      rgba(
+        81,
+        126,
+        244,
+        0.15
+      ) 0 13%,
+      transparent 13.5%
     ),
     linear-gradient(
       135deg,
@@ -970,15 +2707,15 @@
       #ffffff
     );
 
-  border: 5px solid #111111;
+  border:
+    5px solid
+    var(--site-ink);
 
   border-radius: 30px;
 
   box-shadow:
-    9px
-    9px
-    0
-    #cbd2dc;
+    9px 9px 0
+    var(--site-gray);
 
   margin-bottom: 3rem;
 
@@ -1003,7 +2740,7 @@
 .people-intro-kicker,
 .people-section-kicker,
 .people-crew-label {
-  color: #517ef4;
+  color: var(--site-blue);
 
   display: block;
 
@@ -1018,7 +2755,7 @@
 
 
 .people-intro h1 {
-  color: #517ef4;
+  color: var(--site-blue);
 
   font-size:
     clamp(
@@ -1033,10 +2770,8 @@
     1rem;
 
   text-shadow:
-    2px
-    2px
-    0
-    #fde401;
+    2px 2px 0
+    var(--site-yellow);
 }
 
 
@@ -1050,6 +2785,10 @@
   max-width: 820px;
 }
 
+
+/* ==========================================================
+   24. PEOPLE — MEMBER CARDS
+   ========================================================== */
 
 .people-section {
   margin:
@@ -1073,29 +2812,135 @@
 }
 
 
+.people-grid {
+  display: grid;
+
+  gap: 2rem;
+
+  grid-template-columns: 1fr;
+}
+
+
+/*
+ Base People-card styling is also used on Contact.
+*/
+
+.people-card {
+  background: #ffffff;
+
+  border:
+    4px solid
+    var(--site-ink);
+
+  border-radius: 24px;
+
+  box-shadow:
+    7px 7px 0
+    var(--site-gray);
+
+  overflow: hidden;
+
+  padding:
+    1.4rem;
+}
+
+
+/*
+ Only actual member cards inside .people-grid become
+ the two-column portrait + bio layout.
+*/
+
+.people-grid .people-card {
+  align-items: start;
+
+  display: grid;
+
+  gap: 1.8rem;
+
+  grid-template-columns:
+    245px
+    minmax(
+      0,
+      1fr
+    );
+}
+
+
+.people-headshot {
+  background: var(--site-pale);
+
+  border:
+    3px solid
+    var(--site-ink);
+
+  border-radius: 20px;
+
+  height: 310px;
+
+  object-fit: cover;
+
+  object-position:
+    center top;
+
+  width: 100%;
+}
+
+
+.people-info {
+  min-width: 0;
+}
+
+
+.people-info h3 {
+  color: var(--site-blue);
+
+  font-size:
+    clamp(
+      1.4rem,
+      2.5vw,
+      1.85rem
+    );
+
+  margin:
+    0.15rem
+    0
+    0.2rem;
+}
+
+
+.people-info > p {
+  line-height: 1.62;
+
+  margin-bottom: 0.6rem;
+}
+
+
 .people-crew-label {
   color: #7b879c;
 
   font-size: 0.66rem;
 
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.15rem;
 }
 
 
 .people-crew-title {
-  color: #517ef4;
+  color: var(--site-blue);
 
   font-size: 1.03rem;
 
-  margin-top: 0.2rem;
+  margin:
+    0.15rem
+    0
+    0.45rem;
 }
 
 
 .people-info h4 {
-  color: #517ef4;
+  color: var(--site-blue);
 
   margin:
-    1.25rem
+    1.3rem
     0
     0.45rem;
 }
@@ -1120,9 +2965,14 @@
 }
 
 
+/* ==========================================================
+   25. PEOPLE — JOIN SECTION
+   ========================================================== */
+
 .people-join-section {
   margin:
-    4rem auto;
+    4rem
+    auto;
 }
 
 
@@ -1138,23 +2988,27 @@
 
   border:
     4px solid
-    #111111;
+    var(--site-ink);
 
   border-radius: 26px;
 
   box-shadow:
-    8px
-    8px
-    0
-    #fde401;
+    8px 8px 0
+    var(--site-yellow);
 
   display: grid;
 
   gap: 2rem;
 
   grid-template-columns:
-    minmax(180px, 0.35fr)
-    minmax(0, 1fr);
+    minmax(
+      180px,
+      0.35fr
+    )
+    minmax(
+      0,
+      1fr
+    );
 
   padding:
     clamp(
@@ -1209,7 +3063,7 @@
 
   border:
     2px solid
-    #111111;
+    var(--site-ink);
 
   border-radius: 999px;
 
@@ -1226,7 +3080,7 @@
 .people-production-footer {
   border-top:
     3px solid
-    #111111;
+    var(--site-ink);
 
   margin-top: 4rem;
 
@@ -1246,17 +3100,230 @@
 
 
 /* ==========================================================
-   RESPONSIVE HOME + PEOPLE
+   26. GALLERY
    ========================================================== */
 
-@media (max-width: 980px) {
+.gallery-grid {
+  display: grid;
 
-  .home-v3-production-grid,
-  .home-explore-grid {
+  gap: 1.35rem;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(
+        0,
+        1fr
+      )
+    );
+
+  margin:
+    1.5rem
+    0
+    3rem;
+}
+
+
+.gallery-grid > div {
+  background: #ffffff;
+
+  border:
+    3px solid
+    var(--site-ink);
+
+  border-radius: 20px;
+
+  box-shadow:
+    6px 6px 0
+    var(--site-gray);
+
+  overflow: hidden;
+
+  padding: 0.8rem;
+
+  transition:
+    box-shadow 150ms ease,
+    transform 150ms ease;
+}
+
+
+.gallery-grid > div:hover {
+  box-shadow:
+    6px 6px 0
+    var(--site-yellow);
+
+  transform:
+    translateY(-2px);
+}
+
+
+.gallery-grid img {
+  background: var(--site-pale);
+
+  border-radius: 13px;
+
+  height: 250px;
+
+  object-fit: cover;
+
+  width: 100%;
+}
+
+
+.gallery-grid p {
+  color: var(--site-ink);
+
+  margin:
+    0.8rem
+    0
+    0.2rem;
+
+  text-align: center;
+}
+
+
+/* ==========================================================
+   27. CONTACT + BASIC MARKDOWN PAGES
+   ========================================================== */
+
+main > p {
+  line-height: 1.7;
+}
+
+
+main > ul,
+main > ol {
+  line-height: 1.7;
+}
+
+
+main > h2 + .card-grid {
+  margin-top: 1.2rem;
+}
+
+
+main > .people-card {
+  margin:
+    1.3rem
+    0
+    2rem;
+}
+
+
+main > .people-card h3 {
+  color: var(--site-blue);
+
+  margin-top: 0;
+}
+
+
+/* ==========================================================
+   28. TABLES / UTILITY MARKUP
+   ========================================================== */
+
+table {
+  border-collapse: collapse;
+
+  margin:
+    1.5rem
+    0;
+
+  width: 100%;
+}
+
+
+th,
+td {
+  border:
+    2px solid
+    var(--site-ink);
+
+  padding:
+    0.7rem;
+
+  text-align: left;
+
+  vertical-align: top;
+}
+
+
+th {
+  background: var(--site-pale);
+
+  color: var(--site-blue);
+
+  font-weight: 900;
+}
+
+
+code {
+  background: #edf1f7;
+
+  border-radius: 5px;
+
+  padding:
+    0.1rem
+    0.3rem;
+}
+
+
+blockquote {
+  background: var(--site-pale);
+
+  border-left:
+    5px solid
+    var(--site-blue);
+
+  margin:
+    1.5rem
+    0;
+
+  padding:
+    1rem
+    1.2rem;
+}
+
+
+/* ==========================================================
+   29. RESPONSIVE — 1100PX
+   ========================================================== */
+
+@media (max-width: 1100px) {
+
+  .top-nav {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 0.65rem;
+  }
+
+
+  .nav-tabs {
+    justify-content: flex-start;
+
+    width: 100%;
+  }
+
+
+  .research-v2-production-grid,
+  .home-v3-production-grid {
     grid-template-columns:
       repeat(
         2,
-        minmax(0, 1fr)
+        minmax(
+          0,
+          1fr
+        )
+      );
+  }
+
+
+  .research-v2-approach-track {
+    grid-auto-columns:
+      minmax(
+        280px,
+        44%
       );
   }
 
@@ -1266,16 +3333,204 @@
     grid-template-columns: 1fr;
   }
 
+
+  .gallery-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+  }
+
 }
 
 
-@media (max-width: 720px) {
+/* ==========================================================
+   30. RESPONSIVE — 900PX
+   ========================================================== */
 
-  .home-final-cta {
-    align-items: stretch;
+@media (max-width: 900px) {
+
+  main {
+    padding-top: 1.5rem;
+  }
+
+
+  .card-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+  }
+
+
+  .home-explore-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+  }
+
+
+  .people-grid .people-card {
+    grid-template-columns:
+      210px
+      minmax(
+        0,
+        1fr
+      );
+  }
+
+
+  .people-headshot {
+    height: 280px;
+  }
+
+
+  .publication-v2-jump-nav {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+  }
+
+}
+
+
+/* ==========================================================
+   31. RESPONSIVE — 760PX
+   ========================================================== */
+
+@media (max-width: 760px) {
+
+  .site-header {
+    position: sticky;
+  }
+
+
+  .top-nav {
+    min-height: auto;
+
+    padding:
+      0.65rem
+      0.85rem;
+  }
+
+
+  .brand img {
+    height: 48px;
+
+    width: 48px;
+  }
+
+
+  .nav-tabs {
+    flex-wrap: nowrap;
+
+    justify-content: flex-start;
+
+    overflow-x: auto;
+
+    padding-bottom: 0.35rem;
+
+    scrollbar-width: none;
+  }
+
+
+  .nav-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+
+  .nav-tabs a {
+    flex: 0 0 auto;
+  }
+
+
+  main {
+    padding:
+      1.25rem
+      0.85rem
+      3.5rem;
+  }
+
+
+  .home-final-cta,
+  .research-v2-publication-cta,
+  .publication-v2-footer-card {
+    align-items: center;
 
     flex-direction: column;
 
+    text-align: center;
+  }
+
+
+  .research-v2-approach-track {
+    grid-auto-columns:
+      minmax(
+        270px,
+        78%
+      );
+  }
+
+
+  .publication-v2-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .people-grid .people-card {
+    display: block;
+  }
+
+
+  .people-headshot {
+    height: auto;
+
+    margin:
+      0 auto
+      1.25rem;
+
+    max-height: 430px;
+
+    max-width: 320px;
+
+    object-fit: cover;
+  }
+
+
+  .people-info {
+    text-align: center;
+  }
+
+
+  .people-member-links {
+    justify-content: center;
+  }
+
+
+  .people-info > p {
+    text-align: left;
+  }
+
+
+  .people-info h4 {
     text-align: center;
   }
 
@@ -1287,7 +3542,6 @@
   }
 
 
-  .people-member-links,
   .people-join-tags {
     justify-content: center;
   }
@@ -1295,11 +3549,42 @@
 }
 
 
-@media (max-width: 580px) {
+/* ==========================================================
+   32. RESPONSIVE — 600PX
+   ========================================================== */
+
+@media (max-width: 600px) {
+
+  .card-grid,
+  .home-v3-production-grid,
+  .home-explore-grid,
+  .research-v2-production-grid,
+  .publication-v2-jump-nav,
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+
 
   .home-v3-production-grid,
-  .home-explore-grid {
-    grid-template-columns: 1fr;
+  .research-v2-production-grid {
+    row-gap: 3rem;
+  }
+
+
+  .home-hero,
+  .research-v2-hero,
+  .publication-v2-hero,
+  .people-intro {
+    border-radius: 22px;
+
+    padding:
+      1.5rem
+      1rem;
+  }
+
+
+  .home-hero {
+    min-height: auto;
   }
 
 
@@ -1317,17 +3602,6 @@
   }
 
 
-  .home-hero {
-    border-radius: 22px;
-
-    min-height: auto;
-
-    padding:
-      2rem
-      1rem;
-  }
-
-
   .home-v3-production-image-wrap {
     min-height: 210px;
   }
@@ -1339,16 +3613,58 @@
     max-height: 195px;
   }
 
+
+  .research-v2-approach-track {
+    grid-auto-columns: 88%;
+  }
+
+
+  .research-v2-approach-card {
+    min-height: 400px;
+  }
+
+
+  .gallery-grid img {
+    height: auto;
+
+    max-height: 380px;
+  }
+
+
+  .footer-card {
+    border-radius: 17px;
+  }
+
 }
 
 
+/* ==========================================================
+   33. ACCESSIBILITY / REDUCED MOTION
+   ========================================================== */
+
 @media (prefers-reduced-motion: reduce) {
 
-  .home-primary-button,
-  .home-secondary-button,
-  .home-v3-production-card,
-  .home-explore-card {
-    transition: none;
+  html {
+    scroll-behavior: auto;
+  }
+
+
+  *,
+  *::before,
+  *::after {
+    transition-duration:
+      0.001ms !important;
+
+    animation-duration:
+      0.001ms !important;
+
+    animation-iteration-count:
+      1 !important;
+  }
+
+
+  .research-v2-approach-track {
+    scroll-behavior: auto;
   }
 
 }
