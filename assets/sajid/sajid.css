@@ -947,3 +947,15 @@ body.sajid-site a {
   }
 
 }
+/* Fixed navigation once the user begins scrolling */
+
+.sajid-header.is-scrolled {
+  background: rgba(7, 45, 69, 0.96);
+  box-shadow: 0 6px 22px rgba(0,0,0,0.12);
+  position: fixed;
+}
+
+
+.sajid-header.is-scrolled .sajid-nav {
+  border-bottom-color: transparent;
+}
