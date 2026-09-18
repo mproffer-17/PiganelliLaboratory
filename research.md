@@ -375,7 +375,7 @@ title: Research
 
         <img
           class="research-v2-approach-image"
-          src="{{ site.baseurl }}/assets/images/tetramer.png"
+          src="{{ site.baseurl }}/assets/images/Tetramer.png"
           alt="Simplified tetramer analysis icon"
         >
 
