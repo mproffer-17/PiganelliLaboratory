@@ -2475,3 +2475,409 @@ border-bottom: 4px solid var(--black);
   }
 
 }
+/* ==========================================================
+   HOME PAGE — VISUAL RESEARCH PRODUCTIONS
+   September 2026
+   ========================================================== */
+
+.home-v3-productions {
+  --home-blue: #517ef4;
+  --home-yellow: #fde401;
+  --home-ink: #111111;
+  --home-gray: #cbd2dc;
+  --home-pale: #eef5ff;
+
+  margin:
+    4rem auto;
+}
+
+
+.home-v3-production-heading {
+  margin:
+    0 auto
+    2rem;
+
+  text-align:
+    center;
+}
+
+
+.home-v3-kicker {
+  color:
+    var(--home-blue);
+
+  display:
+    block;
+
+  font-size:
+    0.8rem;
+
+  font-weight:
+    900;
+
+  letter-spacing:
+    0.12em;
+
+  margin-bottom:
+    0.3rem;
+
+  text-transform:
+    uppercase;
+}
+
+
+.home-v3-production-heading h2 {
+  margin:
+    0;
+
+  text-align:
+    center;
+}
+
+
+/*
+ Same three-across arrangement as Research.
+*/
+
+.home-v3-production-grid {
+  align-items:
+    stretch;
+
+  column-gap:
+    1.5rem;
+
+  display:
+    grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  row-gap:
+    3.5rem;
+}
+
+
+.home-v3-production-module {
+  align-items:
+    stretch;
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  min-width:
+    0;
+}
+
+
+/*
+ Yellow Production labels sit ABOVE their boxes,
+ matching the Research page.
+*/
+
+.home-v3-production-badge {
+  align-self:
+    center;
+
+  background:
+    var(--home-yellow);
+
+  border:
+    3px solid
+    var(--home-ink);
+
+  border-radius:
+    999px;
+
+  box-shadow:
+    4px
+    4px
+    0
+    var(--home-ink);
+
+  color:
+    var(--home-ink);
+
+  font-size:
+    0.82rem;
+
+  font-weight:
+    900;
+
+  letter-spacing:
+    0.07em;
+
+  margin:
+    0 auto
+    0.9rem;
+
+  padding:
+    0.42rem
+    0.95rem;
+
+  position:
+    relative;
+
+  text-align:
+    center;
+
+  text-transform:
+    uppercase;
+
+  width:
+    max-content;
+
+  z-index:
+    2;
+}
+
+
+.home-v3-production-card {
+  align-items:
+    center;
+
+  background:
+    #ffffff;
+
+  border:
+    4px solid
+    var(--home-ink);
+
+  border-radius:
+    24px;
+
+  box-shadow:
+    7px
+    7px
+    0
+    var(--home-gray);
+
+  display:
+    flex;
+
+  flex:
+    1 1 auto;
+
+  flex-direction:
+    column;
+
+  overflow:
+    hidden;
+
+  padding:
+    1.35rem;
+
+  text-align:
+    center;
+
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+
+.home-v3-production-card:hover {
+  box-shadow:
+    7px
+    7px
+    0
+    var(--home-yellow);
+
+  transform:
+    translateY(-3px);
+}
+
+
+.home-v3-production-card h3 {
+  color:
+    var(--home-blue);
+
+  font-size:
+    clamp(
+      1.15rem,
+      2vw,
+      1.5rem
+    );
+
+  margin:
+    0
+    auto
+    1rem;
+
+  min-height:
+    2.4em;
+
+  text-align:
+    center;
+}
+
+
+.home-v3-production-image-wrap {
+  align-items:
+    center;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f7faff,
+      var(--home-pale)
+    );
+
+  border:
+    2px solid
+    #d7e1f0;
+
+  border-radius:
+    18px;
+
+  display:
+    flex;
+
+  flex:
+    1 1 auto;
+
+  justify-content:
+    center;
+
+  min-height:
+    245px;
+
+  overflow:
+    hidden;
+
+  padding:
+    0.7rem;
+
+  width:
+    100%;
+}
+
+
+.home-v3-production-image {
+  display:
+    block;
+
+  height:
+    230px;
+
+  max-height:
+    230px;
+
+  max-width:
+    100%;
+
+  object-fit:
+    contain;
+
+  object-position:
+    center;
+
+  width:
+    100%;
+}
+
+
+.home-v3-production-action {
+  margin-top:
+    2.6rem;
+
+  text-align:
+    center;
+}
+
+
+.home-v3-production-button {
+  background:
+    var(--home-blue);
+
+  border:
+    3px solid
+    var(--home-ink);
+
+  border-radius:
+    999px;
+
+  box-shadow:
+    4px
+    4px
+    0
+    var(--home-yellow);
+
+  color:
+    #ffffff;
+
+  display:
+    inline-block;
+
+  font-weight:
+    900;
+
+  padding:
+    0.72rem
+    1.1rem;
+
+  text-decoration:
+    none;
+
+  text-transform:
+    uppercase;
+}
+
+
+.home-v3-production-button:hover,
+.home-v3-production-button:focus-visible {
+  background:
+    var(--home-yellow);
+
+  color:
+    var(--home-ink);
+
+  outline:
+    none;
+}
+
+
+@media (max-width: 980px) {
+
+  .home-v3-production-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+}
+
+
+@media (max-width: 580px) {
+
+  .home-v3-production-grid {
+    grid-template-columns:
+      1fr;
+
+    row-gap:
+      3rem;
+  }
+
+
+  .home-v3-production-image-wrap {
+    min-height:
+      220px;
+  }
+
+
+  .home-v3-production-image {
+    height:
+      205px;
+
+    max-height:
+      205px;
+  }
+
+}
