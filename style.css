@@ -2881,3 +2881,18 @@ border-bottom: 4px solid var(--black);
   }
 
 }
+/* ==========================================================
+   PEOPLE PAGE — SAJID PORTFOLIO LINKS
+   ========================================================== */
+
+.people-member-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin: 0.8rem 0 1rem;
+}
+
+
+.people-member-links .button {
+  margin: 0;
+}
