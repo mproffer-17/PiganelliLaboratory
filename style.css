@@ -1912,3 +1912,566 @@ border-bottom: 4px solid var(--black);
   }
 
 }
+/* ==========================================================
+   RESEARCH PAGE REFINEMENTS — SEPTEMBER 2026
+
+   This block should remain at the VERY BOTTOM of style.css
+   so these rules override the earlier Research V2 rules.
+   ========================================================== */
+
+
+/* ==========================================================
+   1. HERO — ENLARGE "PIGANELLI LABORATORY"
+   ========================================================== */
+
+.research-v2-hero .research-v2-eyebrow {
+  font-size: 0.96rem;
+  letter-spacing: 0.13em;
+  font-weight: 900;
+}
+
+
+/* ==========================================================
+   2. PRODUCTION SECTION
+   Remove redundant heading spacing and prevent rows from
+   overlapping.
+   ========================================================== */
+
+.research-v2-production-intro {
+  margin: 0 auto 2rem;
+  max-width: 760px;
+  text-align: center;
+}
+
+.research-v2-production-intro p {
+  margin: 0;
+}
+
+
+/*
+ Use a larger vertical row gap.
+
+ This specifically prevents the Production IV, V and VI
+ yellow badges from touching or overlapping the first-row
+ Production cards.
+*/
+
+.research-v2-production-grid {
+  align-items: stretch;
+
+  column-gap: 1.5rem;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  row-gap: 3.75rem;
+}
+
+
+/*
+ Each badge + card is treated as one complete grid item.
+*/
+
+.research-v2-production-module {
+  align-items: stretch;
+
+  display: flex;
+
+  flex-direction: column;
+
+  height: 100%;
+
+  min-width: 0;
+
+  position: relative;
+
+  isolation: isolate;
+}
+
+
+/*
+ Make sure the yellow badge never uses a negative offset
+ inherited from any older Production styles.
+*/
+
+.research-v2-production-badge {
+  align-self: center;
+
+  margin:
+    0
+    auto
+    0.9rem;
+
+  position: relative;
+
+  top: auto;
+
+  transform: none;
+
+  z-index: 2;
+}
+
+
+/*
+ Keep each white Production box below its own badge.
+*/
+
+.research-v2-production-card {
+  flex: 1 1 auto;
+
+  height: auto;
+
+  margin: 0;
+
+  min-height: 100%;
+
+  position: relative;
+
+  top: auto;
+
+  transform: none;
+
+  z-index: 1;
+}
+
+
+/*
+ Preserve hover movement without affecting normal placement.
+*/
+
+.research-v2-production-card:hover,
+.research-v2-production-card:focus-visible {
+  transform: translateY(-3px);
+}
+
+
+/* ==========================================================
+   3. APPROACHES HEADING
+   Center both lines.
+   ========================================================== */
+
+.research-v2-approaches-heading {
+  align-items: center;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 0.25rem;
+
+  justify-content: center;
+
+  margin:
+    0 auto
+    1.5rem;
+
+  text-align: center;
+}
+
+
+.research-v2-approaches-heading
+.research-v2-section-kicker {
+  display: block;
+
+  margin: 0 auto;
+
+  text-align: center;
+}
+
+
+.research-v2-approaches-heading h2 {
+  margin:
+    0.25rem
+    auto
+    0;
+
+  text-align: center;
+}
+
+
+/* ==========================================================
+   4. HORIZONTAL APPROACH CARDS
+   ========================================================== */
+
+.research-v2-approach-track {
+  display: grid;
+
+  gap: 1.1rem;
+
+  grid-auto-columns:
+    minmax(
+      285px,
+      31%
+    );
+
+  grid-auto-flow: column;
+
+  overflow-x: auto;
+
+  overflow-y: hidden;
+
+  padding:
+    0.3rem
+    0.25rem
+    0.45rem;
+
+  scroll-behavior: smooth;
+
+  scroll-snap-type:
+    x mandatory;
+
+  /*
+   Firefox:
+   hide the blue scrollbar while preserving scrolling.
+  */
+
+  scrollbar-width: none;
+
+  /*
+   Prevent the horizontal cards from making the page
+   itself wider than the browser.
+  */
+
+  max-width: 100%;
+}
+
+
+/*
+ Chrome / Edge / Safari:
+ hide the scrollbar completely.
+*/
+
+.research-v2-approach-track::-webkit-scrollbar {
+  display: none;
+
+  height: 0;
+
+  width: 0;
+}
+
+
+/* ==========================================================
+   5. APPROACH CARDS + NEW PNG ICONS
+   ========================================================== */
+
+.research-v2-approach-card {
+  align-items: center;
+
+  background: #ffffff;
+
+  border: 3px solid #111111;
+
+  border-radius: 22px;
+
+  box-shadow:
+    6px
+    6px
+    0
+    #fde401;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: flex-start;
+
+  min-height: 420px;
+
+  padding: 1.25rem;
+
+  scroll-snap-align: start;
+
+  text-align: center;
+}
+
+
+/*
+ All image areas get exactly the same dimensions,
+ regardless of the source PNG dimensions.
+*/
+
+.research-v2-icon-wrap {
+  align-items: center;
+
+  background: #ffffff;
+
+  border: 2px solid #d8e4ef;
+
+  border-radius: 18px;
+
+  display: flex;
+
+  flex: 0 0 175px;
+
+  height: 175px;
+
+  justify-content: center;
+
+  margin:
+    0 auto
+    1rem;
+
+  overflow: hidden;
+
+  padding: 0.55rem;
+
+  width: 100%;
+}
+
+
+/*
+ Every uploaded PNG is centered and contained instead of
+ stretched or cropped.
+*/
+
+.research-v2-approach-image {
+  display: block;
+
+  height: 150px;
+
+  margin: auto;
+
+  max-height: 150px;
+
+  max-width: 94%;
+
+  object-fit: contain;
+
+  object-position: center;
+
+  width: auto;
+}
+
+
+.research-v2-approach-card h3 {
+  color: #517ef4;
+
+  font-size: 1.2rem;
+
+  line-height: 1.25;
+
+  margin:
+    0.15rem
+    auto
+    0.65rem;
+
+  min-height: 2.5em;
+
+  text-align: center;
+
+  width: 100%;
+}
+
+
+.research-v2-approach-card p {
+  line-height: 1.6;
+
+  margin:
+    0
+    auto;
+
+  text-align: center;
+
+  width: 100%;
+}
+
+
+/* ==========================================================
+   6. YELLOW SCROLL ARROWS — NOW BELOW THE CARDS
+   ========================================================== */
+
+.research-v2-scroll-controls-bottom {
+  align-items: center;
+
+  display: flex;
+
+  gap: 0.75rem;
+
+  justify-content: center;
+
+  margin:
+    1.25rem
+    auto
+    0.15rem;
+
+  width: 100%;
+}
+
+
+.research-v2-scroll-controls-bottom
+.research-v2-scroll-button {
+  align-items: center;
+
+  appearance: none;
+
+  background: #fde401;
+
+  border: 3px solid #111111;
+
+  border-radius: 50%;
+
+  box-shadow:
+    3px
+    3px
+    0
+    #111111;
+
+  color: #111111;
+
+  cursor: pointer;
+
+  display: inline-flex;
+
+  font-size: 1.4rem;
+
+  font-weight: 900;
+
+  height: 50px;
+
+  justify-content: center;
+
+  line-height: 1;
+
+  padding: 0;
+
+  width: 50px;
+}
+
+
+.research-v2-scroll-controls-bottom
+.research-v2-scroll-button:hover,
+.research-v2-scroll-controls-bottom
+.research-v2-scroll-button:focus-visible {
+  background: #517ef4;
+
+  color: #ffffff;
+
+  outline: none;
+
+  transform: translateY(-2px);
+}
+
+
+.research-v2-scroll-controls-bottom
+.research-v2-scroll-button:disabled {
+  cursor: default;
+
+  opacity: 0.28;
+
+  transform: none;
+}
+
+
+/* ==========================================================
+   7. PUBLICATION CTA
+   Remove old paragraph spacing since that sentence is gone.
+   ========================================================== */
+
+.research-v2-publication-cta {
+  align-items: center;
+}
+
+
+.research-v2-publication-cta > div {
+  max-width: 760px;
+}
+
+
+.research-v2-publication-cta h2 {
+  margin-bottom: 0;
+}
+
+
+/* ==========================================================
+   RESPONSIVE FIXES
+   ========================================================== */
+
+@media (max-width: 980px) {
+
+  .research-v2-production-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+
+    row-gap: 3.5rem;
+  }
+
+
+  .research-v2-approach-track {
+    grid-auto-columns:
+      minmax(
+        280px,
+        44%
+      );
+  }
+
+}
+
+
+@media (max-width: 760px) {
+
+  .research-v2-approach-track {
+    grid-auto-columns:
+      minmax(
+        270px,
+        78%
+      );
+  }
+
+
+  .research-v2-approach-card {
+    min-height: 400px;
+  }
+
+
+  .research-v2-publication-cta {
+    align-items: center;
+
+    flex-direction: column;
+
+    text-align: center;
+  }
+
+}
+
+
+@media (max-width: 560px) {
+
+  .research-v2-production-grid {
+    grid-template-columns: 1fr;
+
+    row-gap: 3rem;
+  }
+
+
+  .research-v2-approach-track {
+    grid-auto-columns: 88%;
+  }
+
+
+  .research-v2-hero
+  .research-v2-eyebrow {
+    font-size: 0.9rem;
+  }
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+  .research-v2-approach-track,
+  .research-v2-scroll-button,
+  .research-v2-production-card {
+    scroll-behavior: auto;
+
+    transition: none;
+  }
+
+}
