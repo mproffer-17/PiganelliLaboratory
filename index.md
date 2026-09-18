@@ -4,6 +4,76 @@ layout: default
 title: Home
 ---
 
+<style>
+/* Home-only additions. The shared site design remains unchanged. */
+.home-production-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 1.4rem;
+  row-gap: 3.4rem;
+  align-items: stretch;
+}
+
+.home-production-module {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.home-production-module > .production-number {
+  align-self: center;
+  margin: 0 auto 0.8rem;
+}
+
+.home-production-card {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100%;
+  text-align: center;
+}
+
+.home-production-card h3 {
+  width: 100%;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.home-production-image {
+  display: block;
+  width: 100%;
+  height: 235px;
+  margin: 0 auto 0.8rem;
+  object-fit: contain;
+  object-position: center;
+  background: white;
+  border: 2px solid var(--gray);
+  border-radius: 16px;
+}
+
+.home-production-card a {
+  margin-top: auto;
+}
+
+@media screen and (max-width: 980px) {
+  .home-production-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media screen and (max-width: 620px) {
+  .home-production-grid {
+    grid-template-columns: 1fr;
+    row-gap: 2.8rem;
+  }
+
+  .home-production-image {
+    height: 215px;
+  }
+}
+</style>
+
 <section class="lab-hero">
   <img src="assets/images/LabLOGO.png" alt="Piganelli Lab logo">
 
