@@ -3,6 +3,92 @@ layout: default
 title: People
 ---
 
+<style>
+/* People-page-only refinements. Shared site styling is unchanged. */
+.scientist-card {
+  grid-template-columns: 300px minmax(0, 1fr);
+}
+
+.scientist-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+}
+
+.scientist-sidebar .people-headshot {
+  display: block !important;
+  width: 235px !important;
+  height: 305px !important;
+  min-width: 235px !important;
+  max-width: 235px !important;
+  min-height: 305px !important;
+  max-height: 305px !important;
+  aspect-ratio: auto !important;
+  margin: 0 auto 1rem !important;
+  object-fit: cover !important;
+  border: 4px solid var(--black) !important;
+  border-radius: 18px !important;
+  background: var(--pale-blue) !important;
+  box-shadow: 6px 6px 0 var(--yellow) !important;
+}
+
+.scientist-name {
+  text-transform: none;
+}
+
+.scientist-crew-title {
+  margin: 0.25rem 0 0.45rem;
+  color: var(--blue);
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.scientist-role {
+  margin-top: 0.35rem;
+}
+
+.scientist-links {
+  width: 100%;
+}
+
+.scientist-description {
+  min-width: 0;
+}
+
+.join-card .people-headshot {
+  width: 190px !important;
+  height: 190px !important;
+  min-width: 190px !important;
+  max-width: 190px !important;
+  min-height: 190px !important;
+  max-height: 190px !important;
+  object-fit: contain !important;
+  border-radius: 22px !important;
+}
+
+@media screen and (max-width: 850px) {
+  .scientist-card {
+    grid-template-columns: 1fr;
+  }
+
+  .scientist-sidebar {
+    border-right: none;
+    border-bottom: 4px solid var(--black);
+  }
+}
+
+@media screen and (max-width: 620px) {
+  .scientist-sidebar .people-headshot {
+    width: min(235px, 85vw) !important;
+    height: 305px !important;
+  }
+}
+</style>
+
 # Production Crew
 
 The Piganelli Lab is a collaborative research group at Indiana University School of Medicine studying type 1 diabetes, redox immunology, T cell metabolism, beta cell stress, and early immune biomarkers.
@@ -246,7 +332,7 @@ The Piganelli Lab is a collaborative research group at Indiana University School
 
 <h2 class="section-title">Join Us</h2>
 
-<div class="scientist-card">
+<div class="scientist-card join-card">
   <div class="scientist-sidebar">
     <img class="people-headshot" src="{{ site.baseurl }}/assets/images/LabLOGO.png" alt="Piganelli Lab logo" style="object-position: center center;">
 
