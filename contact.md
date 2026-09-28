@@ -13,26 +13,57 @@ For questions about the Piganelli Lab, research collaborations, trainee opportun
 
 ## Principal Investigator
 
-<div class="card-grid contact-pi-grid">
+<div class="contact-pi-grid">
 
   <div class="card contact-pi-card">
     <h3>Jon D. Piganelli, PhD</h3>
     <p><strong>Principal Investigator</strong></p>
     <p>Professor of Medicine</p>
     <p>Professor of Biochemistry, Molecular Biology &amp; Pharmacology</p>
-    <p><strong>Primary Department:</strong> Endocrinology, Department of Medicine</p>
-    <p><strong>Secondary Department:</strong> Microbiology and Immunology</p>
-    <p>Indiana University School of Medicine</p>
     <p class="contact-email"><strong>Email:</strong> <a href="mailto:jdpigane@iu.edu">jdpigane@iu.edu</a></p>
+  </div>
+
+  <div class="card contact-institution-card">
+    <a
+      class="contact-institution-logo-link"
+      href="https://medicine.iu.edu/graduate-degrees/phd/indianapolis"
+      target="_blank"
+      rel="noopener"
+      aria-label="Visit IU School of Medicine PhD programs in Indianapolis"
+    >
+      <img
+        class="contact-institution-logo"
+        src="{{ site.baseurl }}/assets/images/iui-iusm-indianapolis.svg"
+        alt="Indiana University School of Medicine logo"
+      >
+    </a>
+
+    <div class="contact-department-tabs" aria-label="Department links">
+      <a
+        href="https://medicine.iu.edu/internal-medicine/specialties/endocrinology"
+        target="_blank"
+        rel="noopener"
+      >
+        Dept. ENDC
+      </a>
+
+      <a
+        href="https://medicine.iu.edu/microbiology-immunology/education/graduate-degrees/phd"
+        target="_blank"
+        rel="noopener"
+      >
+        Dept. MCIM
+      </a>
+    </div>
   </div>
 
 </div>
 
 ---
 
-## Lab Contacts
+## Laboratory Personnel
 
-<div class="card-grid">
+<div class="card-grid contact-personnel-grid">
 
   <div class="card">
     <h3>Saptarshi Roy, PhD</h3>
@@ -65,50 +96,6 @@ For questions about the Piganelli Lab, research collaborations, trainee opportun
   </div>
 
 </div>
-
----
-
-## Location & Research Community
-
-<div class="contact-location-copy">
-  <p><strong>Indiana University School of Medicine</strong></p>
-  <p>Department of Medicine / Endocrinology</p>
-  <p>Department of Microbiology and Immunology</p>
-  <p>Indianapolis, Indiana</p>
-</div>
-
-<div class="gallery-grid contact-community-grid">
-
-  <a href="https://medicine.iu.edu/" target="_blank" rel="noopener" aria-label="Visit Indiana University School of Medicine">
-    <div>
-      <img src="{{ site.baseurl }}/assets/images/IUSM.png" alt="Indiana University School of Medicine">
-      <p><strong>Indiana University School of Medicine</strong></p>
-    </div>
-  </a>
-
-  <a href="https://www.indianabiosciences.org/" target="_blank" rel="noopener" aria-label="Visit Indiana Biosciences Research Institute">
-    <div>
-      <img src="{{ site.baseurl }}/assets/images/IBRI.png" alt="Indiana Biosciences Research Institute">
-      <p><strong>Indiana Biosciences Research Institute</strong></p>
-    </div>
-  </a>
-
-  <a href="https://medicine.iu.edu/research-centers/diabetes-metabolic-diseases" target="_blank" rel="noopener" aria-label="Visit the Center for Diabetes and Metabolic Diseases">
-    <div>
-      <img src="{{ site.baseurl }}/assets/images/cdmd.png" alt="Center for Diabetes and Metabolic Diseases">
-      <p><strong>Center for Diabetes and Metabolic Diseases</strong></p>
-    </div>
-  </a>
-
-</div>
-
----
-
-## Interested in Joining the Lab?
-
-Prospective graduate students, postdoctoral fellows, undergraduate researchers, and collaborators are encouraged to contact the lab to learn more about current research opportunities.
-
-Please include a brief description of your research interests, training background, and why you are interested in type 1 diabetes, redox biology, immunology, beta-cell stress, or translational biomarker research.
 
 ---
 
@@ -177,3 +164,44 @@ Please include a brief description of your research interests, training backgrou
 <p class="affiliation-note">
   Organization names and logos are shown for identification and navigation to their official sites and do not imply endorsement. HADC is displayed as a text mark because its published linking terms require a trademark license agreement before its logo or artwork may be used as a link.
 </p>
+
+---
+
+## Interested in Joining the Lab?
+
+<p class="contact-join-copy">
+  Prospective graduate students, postdoctoral fellows, undergraduate researchers, and collaborators are encouraged to contact the lab to learn more about current research opportunities.
+</p>
+
+<p class="contact-join-copy">
+  Please include a brief description of your research interests, training background, and why you are interested in type 1 diabetes, redox biology, immunology, beta-cell stress, or translational biomarker research.
+</p>
+
+---
+
+## Location & Research Community
+
+<div class="gallery-grid contact-community-grid">
+
+  <a href="https://medicine.iu.edu/" target="_blank" rel="noopener" aria-label="Visit Indiana University School of Medicine">
+    <div>
+      <img src="{{ site.baseurl }}/assets/images/IUSM.png" alt="Indiana University School of Medicine">
+      <p><strong>Indiana University School of Medicine</strong></p>
+    </div>
+  </a>
+
+  <a href="https://www.indianabiosciences.org/" target="_blank" rel="noopener" aria-label="Visit Indiana Biosciences Research Institute">
+    <div>
+      <img src="{{ site.baseurl }}/assets/images/IBRI.png" alt="Indiana Biosciences Research Institute">
+      <p><strong>Indiana Biosciences Research Institute</strong></p>
+    </div>
+  </a>
+
+  <a href="https://medicine.iu.edu/research-centers/diabetes" target="_blank" rel="noopener" aria-label="Visit the Center for Diabetes and Metabolic Diseases">
+    <div>
+      <img src="{{ site.baseurl }}/assets/images/cdmd.png" alt="Center for Diabetes and Metabolic Diseases">
+      <p><strong>Center for Diabetes and Metabolic Diseases</strong></p>
+    </div>
+  </a>
+
+</div>
