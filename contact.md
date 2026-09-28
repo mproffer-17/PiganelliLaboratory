@@ -1,10 +1,11 @@
 ---
-
 layout: default
-title: Contact
+title: Contacts
 ---
 
-# Contact
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/contact.css">
+
+# Contacts
 
 For questions about the Piganelli Lab, research collaborations, trainee opportunities, or general inquiries, please contact the lab through Indiana University School of Medicine.
 
@@ -12,18 +13,18 @@ For questions about the Piganelli Lab, research collaborations, trainee opportun
 
 ## Principal Investigator
 
-<div class="people-card">
+<div class="card-grid contact-pi-grid">
 
-### Jon D. Piganelli, PhD
-
-**Principal Investigator**
-**Professor of Medicine**
-**Professor of Biochemistry, Molecular Biology & Pharmacology**
-**Primary Department:** Endocrinology, Department of Medicine
-**Secondary Department:** Microbiology and Immunology
-**Indiana University School of Medicine**
-
-**Email:** [jdpigane@iu.edu](mailto:jdpigane@iu.edu)
+  <div class="card contact-pi-card">
+    <h3>Jon D. Piganelli, PhD</h3>
+    <p><strong>Principal Investigator</strong></p>
+    <p>Professor of Medicine</p>
+    <p>Professor of Biochemistry, Molecular Biology &amp; Pharmacology</p>
+    <p><strong>Primary Department:</strong> Endocrinology, Department of Medicine</p>
+    <p><strong>Secondary Department:</strong> Microbiology and Immunology</p>
+    <p>Indiana University School of Medicine</p>
+    <p class="contact-email"><strong>Email:</strong> <a href="mailto:jdpigane@iu.edu">jdpigane@iu.edu</a></p>
+  </div>
 
 </div>
 
@@ -35,7 +36,7 @@ For questions about the Piganelli Lab, research collaborations, trainee opportun
 
   <div class="card">
     <h3>Saptarshi Roy, PhD</h3>
-    <p><strong>Postdoctoral Fellow</strong></p>
+    <p><strong>Assistant Research Professor</strong></p>
     <p><a href="mailto:roysapt@iu.edu">roysapt@iu.edu</a></p>
   </div>
 
@@ -67,12 +68,39 @@ For questions about the Piganelli Lab, research collaborations, trainee opportun
 
 ---
 
-## Location
+## Location & Research Community
 
-**Indiana University School of Medicine**
-Department of Medicine / Endocrinology
-Department of Microbiology and Immunology
-Indianapolis, Indiana
+<div class="contact-location-copy">
+  <p><strong>Indiana University School of Medicine</strong></p>
+  <p>Department of Medicine / Endocrinology</p>
+  <p>Department of Microbiology and Immunology</p>
+  <p>Indianapolis, Indiana</p>
+</div>
+
+<div class="gallery-grid contact-community-grid">
+
+  <a href="https://medicine.iu.edu/" target="_blank" rel="noopener" aria-label="Visit Indiana University School of Medicine">
+    <div>
+      <img src="{{ site.baseurl }}/assets/images/IUSM.png" alt="Indiana University School of Medicine">
+      <p><strong>Indiana University School of Medicine</strong></p>
+    </div>
+  </a>
+
+  <a href="https://www.indianabiosciences.org/" target="_blank" rel="noopener" aria-label="Visit Indiana Biosciences Research Institute">
+    <div>
+      <img src="{{ site.baseurl }}/assets/images/IBRI.png" alt="Indiana Biosciences Research Institute">
+      <p><strong>Indiana Biosciences Research Institute</strong></p>
+    </div>
+  </a>
+
+  <a href="https://medicine.iu.edu/research-centers/diabetes-metabolic-diseases" target="_blank" rel="noopener" aria-label="Visit the Center for Diabetes and Metabolic Diseases">
+    <div>
+      <img src="{{ site.baseurl }}/assets/images/cdmd.png" alt="Center for Diabetes and Metabolic Diseases">
+      <p><strong>Center for Diabetes and Metabolic Diseases</strong></p>
+    </div>
+  </a>
+
+</div>
 
 ---
 
@@ -86,10 +114,66 @@ Please include a brief description of your research interests, training backgrou
 
 ## Affiliations
 
-* Indiana University Indianapolis (IUI)
-* Indiana University School of Medicine (IUSM)
-* Department of Medicine / Endocrinology (Dept. ENDC)
-* Department of Microbiology and Immunology (Dept. MCIM)
-* Center for Diabetes and Metabolic Diseases (CDMD)
-* Indiana Biosciences Research Institute (IBRI)
-* Clinical and Translational Sciences Institute (CTSI) SEED/STEM program at IUI
+<p class="affiliation-intro">
+  Professional, scientific, and diabetes-community organizations connected with the research interests and activities represented by the Piganelli Lab. Select a logo to visit the organization's official website.
+</p>
+
+<div class="affiliation-grid">
+
+  <a class="affiliation-card" href="https://www.breakthrought1d.org/" target="_blank" rel="noopener">
+    <div class="affiliation-logo-wrap">
+      <img src="https://www.breakthrought1d.org/wp-content/uploads/2024/07/PNG-Color-BreakthroughT1D-Logo.png" alt="Breakthrough T1D logo">
+    </div>
+    <p class="affiliation-name">Breakthrough T1D <small>formerly JDRF</small></p>
+  </a>
+
+  <a class="affiliation-card" href="https://diabetes.org/" target="_blank" rel="noopener">
+    <div class="affiliation-logo-wrap affiliation-logo-wide">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/b/b4/American_Diabetes_Association_logo.svg" alt="American Diabetes Association logo">
+    </div>
+    <p class="affiliation-name">American Diabetes Association <small>ADA</small></p>
+  </a>
+
+  <a class="affiliation-card" href="https://www.helpadiabeticchild.org/" target="_blank" rel="noopener">
+    <div class="affiliation-logo-wrap">
+      <div class="affiliation-logo-placeholder" aria-label="Help A Diabetic Child">
+        <strong>HADC</strong>
+        <span>Help A Diabetic Child</span>
+      </div>
+    </div>
+    <p class="affiliation-name">Help A Diabetic Child <small>HADC</small></p>
+  </a>
+
+  <a class="affiliation-card" href="https://www.immunologyofdiabetessociety.com/" target="_blank" rel="noopener">
+    <div class="affiliation-logo-wrap">
+      <img src="https://pbs.twimg.com/profile_banners/1779887150487490560/1724682257" alt="Immunology of Diabetes Society logo">
+    </div>
+    <p class="affiliation-name">Immunology of Diabetes Society <small>IDS</small></p>
+  </a>
+
+  <a class="affiliation-card" href="https://www.aai.org/" target="_blank" rel="noopener">
+    <div class="affiliation-logo-wrap">
+      <img src="https://static.prod01.ue1.p.pcomm.net/immunology25/user_content/organizations/photos/116/913d802c44731aecf20ac4d078759b06-huge-image_orgphoto.png" alt="American Association of Immunologists logo">
+    </div>
+    <p class="affiliation-name">The American Association of Immunologists <small>AAI</small></p>
+  </a>
+
+  <a class="affiliation-card" href="https://sfrbm.org/" target="_blank" rel="noopener">
+    <div class="affiliation-logo-wrap affiliation-logo-wide">
+      <img src="https://sfrbm.org/site/assets/files/1809/sfrbm_logo_rgb-300x59.jpg" alt="Society for Redox Biology and Medicine logo">
+    </div>
+    <p class="affiliation-name">Society for Redox Biology and Medicine <small>SfRBM</small></p>
+  </a>
+
+  <a class="affiliation-card" href="https://www.spp-jpp.org/" target="_blank" rel="noopener">
+    <div class="affiliation-logo-wrap">
+      <img src="https://www.spp-jpp.org/wp-content/uploads/SPP_slide.jpg" alt="Society of Porphyrins and Phthalocyanines logo">
+    </div>
+    <p class="affiliation-name">Society of Porphyrins and Phthalocyanines <small>SPP</small></p>
+  </a>
+
+</div>
+
+<p class="affiliation-note">
+  Organization names and logos are shown for identification and navigation to their official sites and do not imply endorsement. HADC is displayed as a text mark because its published linking terms require a trademark license agreement before its logo or artwork may be used as a link.
+</p>
