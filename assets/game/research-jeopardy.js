@@ -6,66 +6,246 @@
       production: "Production I",
       name: "Redox Immunology",
       questions: [
-        { value: 100, prompt: "In immunology, what does ROS stand for?", choices: ["Reactive oxygen species", "Regulatory oxidative signaling", "Redox-organized suppressors", "Reactive osmotic sensors"], correct: "Reactive oxygen species", explanation: "Reactive oxygen species are oxygen-containing molecules involved in redox signaling. The lab studies how ROS and redox-sensitive pathways affect immune activation and beta cell biology." },
-        { value: 200, prompt: "Which process is a major focus of the lab's Redox Immunology research?", choices: ["How redox cues influence inflammatory signaling and immune activation", "How skeletal muscle produces force", "How neurons generate action potentials", "How kidney filtration changes after exercise"], correct: "How redox cues influence inflammatory signaling and immune activation", explanation: "Production I examines how redox cues shape inflammatory signaling, T cell activation, immune tolerance, and beta cell vulnerability." },
-        { value: 300, prompt: "Which laboratory approach most directly measures or manipulates redox-sensitive pathways?", choices: ["Redox biology", "Tetramer analysis", "Human pedigree analysis", "Histological photography alone"], correct: "Redox biology", explanation: "The Redox Biology approach is used to investigate how reactive oxygen species and redox-sensitive pathways influence immune activation and beta cell health." },
-        { value: 400, prompt: "Why can oxidative stress matter in type 1 diabetes research?", choices: ["It can alter beta cell function and immune vulnerability", "It permanently prevents all T cell activation", "It is only relevant to skeletal muscle", "It eliminates antigen presentation"], correct: "It can alter beta cell function and immune vulnerability", explanation: "Oxidative stress can affect both immune signaling and beta cell biology, making it relevant to autoimmune inflammation." },
-        { value: 500, prompt: "Which combination best captures Production I in the Piganelli Lab?", choices: ["Redox signaling plus innate and adaptive immune activation", "Bone development plus calcium metabolism", "Cardiac electrophysiology plus blood pressure", "Neural development plus synaptic plasticity"], correct: "Redox signaling plus innate and adaptive immune activation", explanation: "The lab studies how redox-sensitive signaling shapes innate and adaptive immune responses in type 1 diabetes." }
+        {
+          value: 100,
+          prompt: "What is fundamentally transferred during an oxidation-reduction (redox) reaction?",
+          choices: ["Electrons", "Amino acids", "Phosphate groups only", "Whole proteins"],
+          correct: "Electrons",
+          explanation: "Redox reactions involve electron transfer. Oxidation is loss of electrons and reduction is gain of electrons, making redox chemistry central to ROS-dependent signaling."
+        },
+        {
+          value: 200,
+          prompt: "Which statement best distinguishes physiological ROS signaling from oxidative stress?",
+          choices: ["Physiological ROS are controlled and can signal, whereas oxidative stress reflects an imbalance that overwhelms redox control", "Physiological ROS occur only in bacteria, whereas oxidative stress occurs only in mammals", "Physiological ROS always damage DNA, whereas oxidative stress never does", "Physiological ROS are extracellular, whereas oxidative stress is exclusively nuclear"],
+          correct: "Physiological ROS are controlled and can signal, whereas oxidative stress reflects an imbalance that overwhelms redox control",
+          explanation: "Low or regulated ROS can function as second messengers, while oxidative stress occurs when oxidant production exceeds the capacity of antioxidant and repair systems."
+        },
+        {
+          value: 300,
+          prompt: "Why can reversible oxidation of catalytic cysteines in protein tyrosine phosphatases amplify immune-receptor signaling?",
+          choices: ["It can transiently inhibit phosphatase activity and prolong phosphorylation", "It permanently activates every phosphatase", "It prevents kinases from using ATP", "It removes peptide-MHC complexes from antigen-presenting cells"],
+          correct: "It can transiently inhibit phosphatase activity and prolong phosphorylation",
+          explanation: "Many phosphatases contain redox-sensitive catalytic cysteines. Reversible oxidation can temporarily reduce phosphatase activity, allowing kinase-driven phosphorylation signals to persist longer."
+        },
+        {
+          value: 400,
+          prompt: "A T cell experiences a moderate ROS increase immediately after receptor stimulation. Which outcome is most consistent with redox-sensitive signaling rather than nonspecific oxidative damage?",
+          choices: ["A transient increase in phosphorylation of signaling proteins followed by recovery", "Immediate irreversible oxidation of most cellular proteins", "Complete loss of mitochondrial membrane integrity", "Permanent elimination of intracellular antioxidants"],
+          correct: "A transient increase in phosphorylation of signaling proteins followed by recovery",
+          explanation: "Redox signaling is typically reversible and spatially controlled. A transient change in phosphorylation that resolves is more consistent with signaling than widespread irreversible oxidative injury."
+        },
+        {
+          value: 500,
+          prompt: "In an activated T cell, an oxidant pulse leaves kinase activity unchanged but transiently inhibits a redox-sensitive phosphatase. What is the most likely immediate effect on that phosphatase's signaling targets?",
+          choices: ["Their phosphorylated state is prolonged until phosphatase activity recovers", "They become dephosphorylated more rapidly", "Their phosphorylation becomes independent of kinases", "They are converted directly into reactive oxygen species"],
+          correct: "Their phosphorylated state is prolonged until phosphatase activity recovers",
+          explanation: "If kinase input continues while the opposing phosphatase is transiently inhibited, phosphorylation accumulates or persists. This is a classic mechanism by which redox changes can tune signaling amplitude and duration."
+        }
       ]
     },
     {
       production: "Production II",
-      name: "T Cell Metabolism",
+      name: "T Cell Metabolism & Activation",
       questions: [
-        { value: 100, prompt: "Which metabolic pathway is specifically highlighted in the lab's T cell metabolism research?", choices: ["Glycolysis", "Keratin synthesis", "Bile production", "Bone mineralization"], correct: "Glycolysis", explanation: "The lab studies glycolysis and related pathways as potential points for restraining pathogenic T cell responses." },
-        { value: 200, prompt: "Metabolic reprogramming can help support which T cell functions?", choices: ["Activation, persistence, and effector function", "Only DNA repair", "Only cell adhesion", "Only antibody secretion"], correct: "Activation, persistence, and effector function", explanation: "Production II focuses on how nutrient use and metabolic reprogramming support autoreactive T cell activation, persistence, and effector function." },
-        { value: 300, prompt: "Which organelle is especially important when studying cellular energy metabolism?", choices: ["Mitochondrion", "Nucleolus only", "Centromere", "Primary cilium only"], correct: "Mitochondrion", explanation: "The lab's immunometabolism approaches include mitochondrial activity together with glycolysis and nutrient availability." },
-        { value: 400, prompt: "Why might researchers target glycolysis in autoreactive T cells?", choices: ["To selectively restrain pathogenic T cell responses", "To increase every immune response equally", "To stop antigen presentation by all cells", "To convert T cells into beta cells"], correct: "To selectively restrain pathogenic T cell responses", explanation: "A goal of the lab's metabolism research is to identify metabolic vulnerabilities that can restrain pathogenic autoreactive T cell activity." },
-        { value: 500, prompt: "Which group of measurements best fits a T cell immunometabolism experiment?", choices: ["Glycolysis, mitochondrial activity, and nutrient availability", "Hair color, height, and body temperature", "Bone density, heart rate, and lung volume", "Retinal thickness, hearing range, and skin hydration"], correct: "Glycolysis, mitochondrial activity, and nutrient availability", explanation: "Those are core metabolic features highlighted in the lab's T Cell Immunometabolism approach." }
+        {
+          value: 100,
+          prompt: "Activated effector T cells commonly increase their use of which pathway to rapidly support growth and biosynthesis?",
+          choices: ["Glycolysis", "Ketone-body synthesis", "Urea-cycle flux", "Bile-acid synthesis"],
+          correct: "Glycolysis",
+          explanation: "Activated T cells frequently increase glycolytic flux to rapidly generate metabolic intermediates and energy needed for proliferation and effector function."
+        },
+        {
+          value: 200,
+          prompt: "What is the main role of CD28 during conventional T cell activation?",
+          choices: ["Provide a co-stimulatory signal that complements TCR recognition", "Replace the T cell receptor as the antigen-binding receptor", "Directly cleave peptide antigens into epitopes", "Function as the major glucose transporter on T cells"],
+          correct: "Provide a co-stimulatory signal that complements TCR recognition",
+          explanation: "TCR engagement provides antigen-specific signaling, while CD28 supplies an important co-stimulatory signal that supports survival, proliferation, cytokine production, and metabolic reprogramming."
+        },
+        {
+          value: 300,
+          prompt: "Which signaling axis is most directly associated with CD28-driven anabolic metabolism and increased protein synthesis in activated T cells?",
+          choices: ["PI3K-AKT-mTORC1", "JAK-STAT1 only", "cGAS-STING only", "SMAD2/3 only"],
+          correct: "PI3K-AKT-mTORC1",
+          explanation: "CD28 can reinforce PI3K-AKT-mTORC1 signaling, which promotes nutrient uptake, anabolic metabolism, and biosynthetic programs needed for T cell growth and activation."
+        },
+        {
+          value: 400,
+          prompt: "PDCD4 restrains translation partly by binding eIF4A. What would PDCD4 degradation be expected to do?",
+          choices: ["Release eIF4A and favor translation initiation", "Permanently inhibit ribosome assembly", "Block all TCR phosphorylation", "Prevent glucose from entering the cell"],
+          correct: "Release eIF4A and favor translation initiation",
+          explanation: "PDCD4 is a translation inhibitor that can bind eIF4A. Its phosphorylation, ubiquitination, and degradation can release eIF4A, supporting increased translation during activation."
+        },
+        {
+          value: 500,
+          prompt: "A drug simultaneously suppresses PI3K-AKT-mTORC1 and RAS-ERK-RSK signaling in an activated T cell. If PDCD4 phosphorylation depends on downstream S6K1/RSK activity, which molecular pattern is most likely?",
+          choices: ["Reduced PDCD4 phosphorylation, greater PDCD4 persistence, and less eIF4A release", "Increased PDCD4 degradation, more eIF4A release, and higher translation", "Unchanged PDCD4 with complete loss of TCR expression", "Direct conversion of PDCD4 into a glycolytic enzyme"],
+          correct: "Reduced PDCD4 phosphorylation, greater PDCD4 persistence, and less eIF4A release",
+          explanation: "Reducing S6K1/RSK input should decrease PDCD4 phosphorylation and subsequent degradation, allowing PDCD4 to continue restraining eIF4A-dependent translation."
+        }
       ]
     },
     {
       production: "Production III",
       name: "Beta Cell Stress",
       questions: [
-        { value: 100, prompt: "What does ER stand for in the phrase 'ER stress'?", choices: ["Endoplasmic reticulum", "Endocrine receptor", "Energy reserve", "Enzymatic response"], correct: "Endoplasmic reticulum", explanation: "Endoplasmic reticulum stress is one of the cellular stress pathways studied in beta cell biology." },
-        { value: 200, prompt: "Which process is listed among factors that can contribute to beta cell stress?", choices: ["Autophagy defects", "Increased bone remodeling", "Reduced skin pigmentation", "Enhanced visual acuity"], correct: "Autophagy defects", explanation: "The lab studies ER stress, oxidative stress, autophagy defects, and inflammatory signaling as contributors to altered beta cell function and immune visibility." },
-        { value: 300, prompt: "A stressed beta cell may become more visible to the immune system partly by doing what?", choices: ["Generating or exposing altered antigens", "Removing every surface protein", "Stopping all protein synthesis permanently", "Becoming an antibody-producing cell"], correct: "Generating or exposing altered antigens", explanation: "A major theme is how stressed beta cells may generate or expose altered antigens that intensify autoimmune recognition." },
-        { value: 400, prompt: "Which group of measurements fits the lab's Beta Cell Stress & Tissue Analysis approach?", choices: ["Islet inflammation, antigen presentation, survival, and immune infiltration", "Bone growth, cartilage thickness, and muscle mass", "Vision, hearing, and taste thresholds", "Hair growth, nail growth, and skin moisture"], correct: "Islet inflammation, antigen presentation, survival, and immune infiltration", explanation: "This approach connects beta cell stress with islet inflammation, antigen presentation, cell survival, and immune infiltration." },
-        { value: 500, prompt: "Why is beta cell stress important to the lab's model of autoimmune diabetes?", choices: ["Stress may change beta cell function and increase immune recognition", "Stress prevents immune cells from entering pancreatic tissue", "Stress eliminates every beta cell antigen", "Stress makes beta cells permanently invisible to T cells"], correct: "Stress may change beta cell function and increase immune recognition", explanation: "The lab studies beta cell stress as a process that can alter both function and the signals encountered by the immune system." }
+        {
+          value: 100,
+          prompt: "What is a defining feature of endoplasmic reticulum (ER) stress?",
+          choices: ["Accumulation of unfolded or misfolded proteins in the ER", "Loss of all nuclear DNA", "Permanent inhibition of glucose uptake", "Absence of mitochondrial proteins"],
+          correct: "Accumulation of unfolded or misfolded proteins in the ER",
+          explanation: "ER stress occurs when protein-folding demand exceeds ER capacity, leading to accumulation of unfolded or misfolded proteins and activation of the unfolded protein response."
+        },
+        {
+          value: 200,
+          prompt: "What is the initial purpose of the unfolded protein response (UPR) during ER stress?",
+          choices: ["Restore protein-folding homeostasis and reduce ER burden", "Increase production of misfolded proteins", "Eliminate all antigen presentation", "Convert beta cells into immune cells"],
+          correct: "Restore protein-folding homeostasis and reduce ER burden",
+          explanation: "The UPR initially acts adaptively by reducing protein-folding load, increasing chaperone capacity, and promoting recovery. Persistent unresolved stress can instead contribute to dysfunction or death."
+        },
+        {
+          value: 300,
+          prompt: "How can defective autophagy intensify cellular stress in a beta cell?",
+          choices: ["Damaged organelles and proteins can accumulate instead of being efficiently cleared", "Every cytosolic protein is immediately secreted", "MHC molecules are completely removed from the cell", "Insulin is converted directly into DNA"],
+          correct: "Damaged organelles and proteins can accumulate instead of being efficiently cleared",
+          explanation: "Autophagy helps maintain proteostasis and organelle quality. Impaired clearance can increase oxidative and ER stress and compromise beta cell function."
+        },
+        {
+          value: 400,
+          prompt: "Why can post-translational modification of beta cell proteins matter in autoimmunity?",
+          choices: ["It can create altered peptide determinants that were not efficiently tolerated as native self", "It guarantees deletion of all autoreactive T cells", "It prevents proteins from ever being processed by antigen-presenting cells", "It makes all beta cell proteins identical to microbial proteins"],
+          correct: "It can create altered peptide determinants that were not efficiently tolerated as native self",
+          explanation: "Stress-associated modifications can generate neoepitopes or altered self determinants, potentially changing which peptides are processed, presented, and recognized by autoreactive lymphocytes."
+        },
+        {
+          value: 500,
+          prompt: "In a stressed islet, investigators observe increased beta cell death, more antigen-bearing material in local antigen-presenting cells, and broader T cell reactivity. Which interpretation is best supported?",
+          choices: ["Tissue stress could increase antigen availability and thereby facilitate diversification of the autoimmune response", "Beta cell death proves that every new T cell specificity arose by mutation of the original TCR", "More antigen-bearing material demonstrates that oxidative stress is the only cause of diabetes", "Broader reactivity means beta cell stress has restored immune tolerance"],
+          correct: "Tissue stress could increase antigen availability and thereby facilitate diversification of the autoimmune response",
+          explanation: "Greater tissue injury can increase the quantity and diversity of self antigens available for presentation. That can support epitope diversification, although the observation alone does not establish the exact receptor-level mechanism."
+        }
       ]
     },
     {
       production: "Production IV",
       name: "Early Biomarkers",
       questions: [
-        { value: 100, prompt: "Which soluble immune molecule is highlighted on the lab website as an early T cell activation biomarker?", choices: ["Soluble LAG-3", "Hemoglobin", "Albumin", "Collagen"], correct: "Soluble LAG-3", explanation: "Current Piganelli Lab research includes soluble LAG-3 as a potential readout of early T cell activation." },
-        { value: 200, prompt: "What is one major goal of the lab's early biomarker research?", choices: ["Detect immune activation before overt type 1 diabetes", "Measure only late-stage complications", "Replace all clinical diagnostic testing", "Predict eye color from blood samples"], correct: "Detect immune activation before overt type 1 diabetes", explanation: "Production IV focuses on identifying signals that may reveal immune activation during earlier windows of disease progression." },
-        { value: 300, prompt: "Which laboratory method is commonly used to measure soluble proteins such as immune biomarkers?", choices: ["ELISA", "Tetramer staining alone", "Gram staining", "Karyotyping"], correct: "ELISA", explanation: "The lab's Soluble Biomarker & Molecular Assays approach includes ELISA and related molecular measurements." },
-        { value: 400, prompt: "Why are longitudinal human samples useful for biomarker research?", choices: ["They allow researchers to examine how immune signals change over time", "They guarantee every participant develops diabetes", "They eliminate biological variation", "They provide only a single time point"], correct: "They allow researchers to examine how immune signals change over time", explanation: "Longitudinal sampling helps identify dynamic changes associated with autoantibody status, progression, and evolving immune states." },
-        { value: 500, prompt: "What does a 'dynamic early activation window' imply for a biomarker?", choices: ["Its level may rise and fall as immune activation changes over time", "Its concentration is identical in every person", "It can only be measured after clinical diabetes", "It is unrelated to immune activation"], correct: "Its level may rise and fall as immune activation changes over time", explanation: "A dynamic biomarker can be useful because it identifies a particular period of immune activity rather than remaining permanently elevated." }
+        {
+          value: 100,
+          prompt: "What is the main purpose of an early disease biomarker?",
+          choices: ["Detect a biological change before or near the earliest clinically apparent disease stages", "Replace every mechanistic experiment", "Measure only irreversible end-stage damage", "Identify a signal that never changes over time"],
+          correct: "Detect a biological change before or near the earliest clinically apparent disease stages",
+          explanation: "An early biomarker is most useful when it reveals biology during a window that precedes or accompanies early progression, rather than only after advanced disease is established."
+        },
+        {
+          value: 200,
+          prompt: "Soluble LAG-3 can be generated from cell-surface LAG-3 by which type of process?",
+          choices: ["Proteolytic ectodomain shedding", "DNA replication", "Mitochondrial fission", "Peptide-MHC tetramerization"],
+          correct: "Proteolytic ectodomain shedding",
+          explanation: "Cell-surface LAG-3 can be cleaved by metalloproteases such as ADAM10 and ADAM17, releasing soluble LAG-3 into the extracellular space."
+        },
+        {
+          value: 300,
+          prompt: "Why is longitudinal sampling especially valuable when evaluating a transient immune-activation biomarker?",
+          choices: ["It can reveal when the marker rises and falls within the same disease course", "It eliminates all between-person biological variability", "It guarantees that the marker is disease-specific", "It removes the need for appropriate comparison groups"],
+          correct: "It can reveal when the marker rises and falls within the same disease course",
+          explanation: "Repeated sampling can identify a time-limited biomarker peak that a single cross-sectional measurement could easily miss."
+        },
+        {
+          value: 400,
+          prompt: "A candidate biomarker rises before overt diabetes and later returns toward baseline. Which interpretation is most appropriate?",
+          choices: ["It may mark a transient biological window rather than cumulative disease burden", "It cannot be a biomarker because useful biomarkers must increase monotonically", "The early rise proves the marker is specific only to beta cells", "The decline proves the initial measurements were necessarily technical artifacts"],
+          correct: "It may mark a transient biological window rather than cumulative disease burden",
+          explanation: "A useful biomarker can be dynamic. A rise followed by decline may identify a specific stage of immune activation rather than track total disease severity continuously."
+        },
+        {
+          value: 500,
+          prompt: "A soluble activation marker is higher in progressors and in earlier autoantibody-positive stages, but lower in established disease. What is the strongest interpretation?",
+          choices: ["The marker may report an early, state-dependent immune activation window rather than simply increasing with disease duration", "The marker is necessarily a direct measure of beta cell mass", "The marker must be uniquely specific to type 1 diabetes", "Established disease should be excluded because biomarker values can never decline biologically"],
+          correct: "The marker may report an early, state-dependent immune activation window rather than simply increasing with disease duration",
+          explanation: "This pattern is most consistent with a temporally restricted activation signal. It supports stage association, but by itself does not prove disease specificity or direct measurement of beta cell mass."
+        }
       ]
     },
     {
       production: "Production V",
       name: "Antigen-Specific T Cells",
       questions: [
-        { value: 100, prompt: "Which tool does the lab use to identify T cells that recognize specific peptide-MHC complexes?", choices: ["Peptide-MHC tetramers", "A blood pressure cuff", "A spectrophotometer alone", "A Gram stain"], correct: "Peptide-MHC tetramers", explanation: "Tetramer analysis allows researchers to identify and track antigen-reactive T cell populations." },
-        { value: 200, prompt: "In Autoimmune Arcade, which beta cell antigen is represented by the yellow dots?", choices: ["IAPP-HIP", "ChgA-HIP", "InsB:9-23", "LAG-3"], correct: "IAPP-HIP", explanation: "The arcade uses yellow for IAPP-HIP, pink for ChgA-HIP, and blue for InsB:9-23." },
-        { value: 300, prompt: "What is the purpose of an adoptive-transfer model in the lab's research?", choices: ["Transfer defined diabetogenic T cell populations into recipient mice for longitudinal study", "Transfer beta cells between culture dishes only", "Replace every immune cell in a mouse", "Measure human blood pressure"], correct: "Transfer defined diabetogenic T cell populations into recipient mice for longitudinal study", explanation: "Adoptive transfer lets the lab follow timing, phenotype, antigen reactivity, and tissue localization of defined autoreactive T cell populations." },
-        { value: 400, prompt: "Which set of features can longitudinal tetramer analysis help researchers follow?", choices: ["Specificity, co-reactivity, expansion, and diversification", "Height, weight, vision, and hearing", "Heart rhythm, blood pressure, and lung volume", "Bone density, skin color, and hair growth"], correct: "Specificity, co-reactivity, expansion, and diversification", explanation: "The lab uses tetramers over time and across tissues to investigate how antigen-reactive T cell populations change during autoimmune progression." },
-        { value: 500, prompt: "Why does tissue localization matter when studying autoreactive T cells?", choices: ["T cell activation and enrichment can differ between blood, lymphoid tissue, and pancreas", "Every tissue contains identical immune populations at all times", "Only blood can contain T cells", "Tissue location has no relationship to autoimmune disease"], correct: "T cell activation and enrichment can differ between blood, lymphoid tissue, and pancreas", explanation: "Autoreactive T cell abundance and phenotype can differ across anatomical compartments, so tissue context matters." }
+        {
+          value: 100,
+          prompt: "What does a peptide-MHC tetramer allow researchers to identify by flow cytometry?",
+          choices: ["T cells whose receptors bind a particular peptide-MHC complex", "All cells that secrete insulin", "Only antigen-presenting cells", "Every T cell regardless of specificity"],
+          correct: "T cells whose receptors bind a particular peptide-MHC complex",
+          explanation: "Tetramers multimerize a defined peptide-MHC complex, increasing avidity enough to label T cells carrying receptors that recognize that complex."
+        },
+        {
+          value: 200,
+          prompt: "What is a hybrid insulin peptide (HIP)?",
+          choices: ["A peptide formed by covalently joining fragments from two peptide sources, one of which can be insulin-derived", "An insulin molecule bound to glucose", "A peptide encoded by a viral genome", "A fluorescent antibody used to detect insulin"],
+          correct: "A peptide formed by covalently joining fragments from two peptide sources, one of which can be insulin-derived",
+          explanation: "HIPs are fusion peptides generated by covalent joining of peptide fragments. Some can create neoepitopes recognized by diabetogenic T cells."
+        },
+        {
+          value: 300,
+          prompt: "What does classical epitope spreading describe during an autoimmune response?",
+          choices: ["Recruitment or expansion of lymphocytes recognizing determinants distinct from the initiating epitope", "One receptor binding the same epitope with higher affinity", "Loss of all antigen specificity after activation", "Only an increase in the number of antigen-presenting cells"],
+          correct: "Recruitment or expansion of lymphocytes recognizing determinants distinct from the initiating epitope",
+          explanation: "Epitope spreading is a population-level broadening of immune recognition to additional determinants as disease evolves."
+        },
+        {
+          value: 400,
+          prompt: "Why does dual binding to two peptide-MHC tetramers not, by itself, prove epitope spreading?",
+          choices: ["A single TCR can sometimes cross-react with more than one peptide-MHC complex", "Tetramers cannot bind T cell receptors", "Epitope spreading occurs only in B cells", "Dual staining always indicates technical failure"],
+          correct: "A single TCR can sometimes cross-react with more than one peptide-MHC complex",
+          explanation: "Dual tetramer binding can reflect receptor cross-reactivity. Demonstrating classical spreading requires evidence that distinct lymphocyte populations recognizing new determinants are being recruited or expanded."
+        },
+        {
+          value: 500,
+          prompt: "A study begins with a defined autoreactive TCR population. Later, some cells stain with both the original tetramer and a second beta cell tetramer. What additional evidence would most strongly support true epitope spreading rather than cross-reactivity?",
+          choices: ["Emergence or expansion of distinct clonotypes or mutually exclusive populations specific for the new determinant", "A higher fluorescence intensity for the original tetramer", "More total CD4 T cells in the spleen", "Detection of the original antigen in pancreatic tissue"],
+          correct: "Emergence or expansion of distinct clonotypes or mutually exclusive populations specific for the new determinant",
+          explanation: "True epitope spreading is best supported by distinct lymphocyte populations directed against a new determinant. Dual binding within the original population can instead be explained by TCR cross-reactivity."
+        }
       ]
     },
     {
       production: "Production VI",
       name: "Translational Models",
       questions: [
-        { value: 100, prompt: "Which combination best describes the lab's translational strategy?", choices: ["Preclinical systems plus human samples", "Only computer simulations", "Only human questionnaires", "Only purified proteins"], correct: "Preclinical systems plus human samples", explanation: "The lab combines mechanistic preclinical models with human samples to connect basic findings with disease-relevant questions." },
-        { value: 200, prompt: "Human translational studies on the Research page include which groups or disease features?", choices: ["First-degree relatives, autoantibody status, and disease progression", "Only healthy athletes", "Only newborn screening data", "Only transplant recipients"], correct: "First-degree relatives, autoantibody status, and disease progression", explanation: "The lab uses human plasma and longitudinal samples to relate mechanistic findings to autoantibody status, first-degree relatives, and progression." },
-        { value: 300, prompt: "What is the purpose of preclinical therapeutic studies?", choices: ["Test candidate interventions in mechanistic and disease models", "Replace every laboratory experiment with a survey", "Measure only gene sequence length", "Determine the color of immune cells"], correct: "Test candidate interventions in mechanistic and disease models", explanation: "Candidate interventions are tested to determine whether they can alter pathogenic immunity or preserve beta cell function." },
-        { value: 400, prompt: "Which outcome fits the lab's therapeutic goals?", choices: ["Protect beta cells or redirect pathogenic immunity", "Increase autoimmune damage", "Eliminate every immune cell", "Prevent all cellular metabolism"], correct: "Protect beta cells or redirect pathogenic immunity", explanation: "The translational goal is to preserve beta cell function or alter pathogenic immune responses rather than broadly destroying immunity." },
-        { value: 500, prompt: "What does 'translational' mean in the context of the lab's research portfolio?", choices: ["Connecting mechanistic discoveries with clinically relevant questions and models", "Translating papers into another language", "Moving samples between refrigerators", "Studying only human genetics"], correct: "Connecting mechanistic discoveries with clinically relevant questions and models", explanation: "Production VI bridges mechanistic immunology and beta cell biology with preclinical interventions and human disease relevance." }
+        {
+          value: 100,
+          prompt: "Why are NOD mice widely used in type 1 diabetes research?",
+          choices: ["They spontaneously develop autoimmune diabetes with key immunological features of the disease", "They lack all lymphocytes from birth", "They cannot develop pancreatic inflammation", "They are genetically identical to humans"],
+          correct: "They spontaneously develop autoimmune diabetes with key immunological features of the disease",
+          explanation: "NOD mice spontaneously develop autoimmune insulitis and diabetes, making them a useful model for studying disease initiation and progression."
+        },
+        {
+          value: 200,
+          prompt: "Why are NOD.scid mice useful as recipients in adoptive-transfer experiments?",
+          choices: ["Their severe immunodeficiency reduces competing endogenous adaptive lymphocytes", "They spontaneously generate more endogenous T cells than NOD mice", "They cannot receive transferred lymphocytes", "They are resistant to all forms of beta cell injury"],
+          correct: "Their severe immunodeficiency reduces competing endogenous adaptive lymphocytes",
+          explanation: "NOD.scid recipients lack functional endogenous T and B cells, allowing transferred lymphocyte populations to be studied in a cleaner immunological background."
+        },
+        {
+          value: 300,
+          prompt: "What is a major experimental advantage of transferring a defined autoreactive T cell population into recipient mice?",
+          choices: ["It provides a more synchronized starting point for following activation and disease progression", "It recreates every feature of spontaneous human disease", "It removes the need for control groups", "It ensures that no tissue-specific effects can occur"],
+          correct: "It provides a more synchronized starting point for following activation and disease progression",
+          explanation: "Adoptive transfer lets investigators start with a defined cell population and timing, making longitudinal changes easier to resolve than in fully spontaneous disease."
+        },
+        {
+          value: 400,
+          prompt: "Why is an infection model such as CVB3 useful when evaluating a soluble T cell activation marker in autoimmune diabetes research?",
+          choices: ["It can test whether the marker also rises during non-autoimmune immune activation", "It proves that any marker increase is beta cell-specific", "It eliminates the need to study autoimmune models", "It directly measures antigen-specific TCR affinity"],
+          correct: "It can test whether the marker also rises during non-autoimmune immune activation",
+          explanation: "An infection control helps separate a general activation-associated signal from one that is uniquely associated with autoimmune diabetes."
+        },
+        {
+          value: 500,
+          prompt: "A candidate marker rises before diabetes in an autoimmune model but also rises transiently after vaccination and viral infection. Which conclusion is most defensible?",
+          choices: ["The marker likely reflects immune activation and may still be useful for timing disease-related activation, but it is not inherently disease-specific", "The marker is useless because any response outside diabetes invalidates it", "The marker directly identifies beta cell-specific TCR clonotypes", "The marker proves viral infection causes every case of type 1 diabetes"],
+          correct: "The marker likely reflects immune activation and may still be useful for timing disease-related activation, but it is not inherently disease-specific",
+          explanation: "A marker can be biologically valuable without being disease-specific. Transient responses in vaccination or infection support an activation-associated interpretation, so disease context and longitudinal patterns become important for translation."
+        }
       ]
     }
   ];
@@ -79,7 +259,7 @@
         <span class="rq-kicker">Game 02 • Research Trivia</span>
         <h2 id="rq-title">Piganelli Research Challenge</h2>
         <p class="rq-subtitle">Jeopardy-style lab science</p>
-        <p class="rq-description">Test what you know about the six major research productions of the Piganelli Lab. Choose a research category and point value, answer the question, and learn more about the science behind each topic.</p>
+        <p class="rq-description">Test your knowledge of the science behind the Piganelli Lab's six research areas. Questions progress from foundational concepts at 100 points to mechanistic and experimental reasoning at 500 points.</p>
       </div>
       <aside class="rq-hero-note">
         <strong>How to Play</strong>
@@ -178,6 +358,7 @@
   const finishRestart = document.getElementById("rq-finish-restart");
 
   const TOTAL_QUESTIONS = CATEGORIES.reduce((sum, category) => sum + category.questions.length, 0);
+
   let score = 0;
   let answered = 0;
   let correctCount = 0;
