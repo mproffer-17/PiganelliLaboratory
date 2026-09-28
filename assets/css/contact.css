@@ -1,12 +1,49 @@
 /* ==========================================================
    CONTACTS PAGE — PIGANELLI LAB
-   Scoped to contact-specific classes so the rest of the site
-   keeps its existing design.
+   This stylesheet is loaded only by contact.md.
+   ========================================================== */
+
+/* Center all Contacts-page content without affecting other pages. */
+main {
+  text-align: center;
+}
+
+main > p {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+main > hr {
+  max-width: 100%;
+}
+
+/* ==========================================================
+   PRINCIPAL INVESTIGATOR + IU SCHOOL OF MEDICINE PANEL
    ========================================================== */
 
 .contact-pi-grid {
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  max-width: 760px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.4rem;
+  align-items: stretch;
+  max-width: 960px;
+  margin: 2rem auto 0;
+}
+
+.contact-pi-grid .card {
+  height: 100%;
+}
+
+.contact-pi-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-pi-card h3 {
+  margin-bottom: 0.85rem;
 }
 
 .contact-pi-card p {
@@ -14,55 +51,111 @@
 }
 
 .contact-pi-card .contact-email {
-  margin-top: 0.9rem;
+  margin-top: 1rem;
 }
 
-.contact-location-copy {
-  max-width: 820px;
-  margin-bottom: 1.25rem;
+.contact-institution-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
 }
 
-.contact-location-copy p {
-  margin: 0.25rem 0;
-}
-
-.contact-community-grid {
-  margin-top: 1.5rem;
-}
-
-.contact-community-grid > a {
-  color: inherit;
+.contact-institution-logo-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 260px;
+  padding: 1rem;
+  background: #000000;
+  border: 3px solid var(--black);
+  border-radius: 18px;
   text-decoration: none;
-}
-
-.contact-community-grid > a > div {
-  height: 100%;
+  overflow: hidden;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.contact-community-grid > a:hover > div,
-.contact-community-grid > a:focus-visible > div {
-  transform: translateY(-3px);
-  box-shadow: 6px 6px 0 var(--yellow);
+.contact-institution-logo-link:hover,
+.contact-institution-logo-link:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 5px 5px 0 var(--yellow);
+  outline: none;
 }
 
-.contact-community-grid img {
-  aspect-ratio: 16 / 9;
+.contact-institution-logo {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: 245px;
+  max-height: 245px;
   object-fit: contain;
-  padding: 0.8rem;
-  background: white;
+  object-position: center;
 }
+
+.contact-department-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.65rem;
+  width: 100%;
+}
+
+.contact-department-tabs a {
+  display: inline-block;
+  padding: 0.55rem 0.9rem;
+  background: var(--pale-blue);
+  color: var(--black);
+  border: 2.5px solid var(--black);
+  border-radius: 999px;
+  box-shadow: 3px 3px 0 var(--gray);
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.contact-department-tabs a:hover,
+.contact-department-tabs a:focus-visible {
+  background: var(--yellow);
+  color: var(--black);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+/* ==========================================================
+   LABORATORY PERSONNEL
+   ========================================================== */
+
+.contact-personnel-grid {
+  max-width: 1080px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.contact-personnel-grid .card {
+  text-align: center;
+}
+
+.contact-personnel-grid .card p:last-child {
+  margin-bottom: 0;
+}
+
+/* ==========================================================
+   AFFILIATIONS
+   ========================================================== */
 
 .affiliation-intro {
   max-width: 880px;
-  margin-bottom: 1.5rem;
+  margin: 0 auto 1.5rem;
+  text-align: center;
 }
 
 .affiliation-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   gap: 1.25rem;
-  margin-top: 1.5rem;
+  margin: 1.5rem auto 0;
+  max-width: 1120px;
 }
 
 .affiliation-card {
@@ -158,17 +251,94 @@
 }
 
 .affiliation-note {
-  margin-top: 1.25rem;
+  max-width: 980px;
+  margin: 1.25rem auto 0;
   padding: 0.85rem 1rem;
   background: var(--pale-blue);
-  border-left: 5px solid var(--blue);
-  border-radius: 10px;
+  border: 2px solid var(--blue);
+  border-radius: 12px;
   font-size: 0.88rem;
+  text-align: center;
+}
+
+/* ==========================================================
+   JOIN THE LAB
+   ========================================================== */
+
+.contact-join-copy {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+/* ==========================================================
+   LOCATION & RESEARCH COMMUNITY
+   ========================================================== */
+
+.contact-community-grid {
+  max-width: 1050px;
+  margin: 1.5rem auto 0;
+}
+
+.contact-community-grid > a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.contact-community-grid > a > div {
+  height: 100%;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.contact-community-grid > a:hover > div,
+.contact-community-grid > a:focus-visible > div {
+  transform: translateY(-3px);
+  box-shadow: 6px 6px 0 var(--yellow);
+}
+
+.contact-community-grid img {
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  padding: 0.8rem;
+  background: white;
+}
+
+.contact-community-grid p {
+  text-align: center;
+}
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media screen and (max-width: 820px) {
+  .contact-pi-grid {
+    grid-template-columns: 1fr;
+    max-width: 620px;
+  }
+
+  .contact-institution-logo-link {
+    min-height: 230px;
+  }
+
+  .contact-institution-logo {
+    height: 215px;
+    max-height: 215px;
+  }
 }
 
 @media screen and (max-width: 700px) {
-  .contact-pi-grid,
   .affiliation-grid {
     grid-template-columns: 1fr;
+  }
+
+  .contact-department-tabs {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .contact-department-tabs a {
+    min-width: 150px;
   }
 }
