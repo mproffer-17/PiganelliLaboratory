@@ -164,27 +164,3 @@ A behind-the-scenes look at the Piganelli Lab — our science, our people, our a
   </div>
 
 </div>
-
----
-
-## Institutes, Programs, and Scientific Community
-
-<div class="gallery-grid">
-
-  <div>
-    <img src="assets/images/IUSM.png" alt="Indiana University School of Medicine">
-    <p><strong>Indiana University School of Medicine</strong></p>
-  </div>
-
-  <div>
-    <img src="assets/images/IBRI.png" alt="Indiana Biosciences Research Institute">
-    <p><strong>Indiana Bioscience Research Institute</strong></p>
-  </div>
-
-  <div>
-    <img src="assets/images/cdmd.png" alt="Center for Diabetes and Metabolic Diseases">
-    <p><strong>Center of Diabetes & Metabolic Diseases</strong></p>
-  </div>
-</div>
-
-
